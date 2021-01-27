@@ -10,7 +10,7 @@ namespace SAC_VALES.Web.Data.Entities
     {
         public int id { get; set; }
 
-        [StringLength(6, MinimumLength = 6, ErrorMessage = "The {0} field must have {1} characters.")]
+        [StringLength(30, MinimumLength = 3, ErrorMessage = "The {0} field must have {1} characters.")]
         [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string Nombre { get; set; }
 

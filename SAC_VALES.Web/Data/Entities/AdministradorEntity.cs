@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace SAC_VALES.Web.Data.Entities
 {
@@ -10,9 +11,24 @@ namespace SAC_VALES.Web.Data.Entities
     {
         public int id { get; set; }
 
-        [StringLength(30, MinimumLength = 3, ErrorMessage = "The {0} field must have {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Nombre { get; set; }
+
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        public string ApellidoP { get; set; }
+
+        [StringLength(30, MinimumLength = 2, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        public string ApellidoM { get; set; }
+
+        [StringLength(17, MinimumLength = 5, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio")]
+        public string Telefono { get; set; }
+
+        public bool status { get; set; }
+
 
     }
 }

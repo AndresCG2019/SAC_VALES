@@ -54,7 +54,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Nombre")] AdministradorEntity administradorEntity)
+        public async Task<IActionResult> Create([Bind("id,Nombre, ApellidoP, ApellidoM,Telefono")] AdministradorEntity administradorEntity)
         {
             if (ModelState.IsValid)
             {

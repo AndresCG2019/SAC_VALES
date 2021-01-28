@@ -21,4 +21,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SAC_VALES.Common\SAC_VALES.Common.csproj" />
+  </ItemGroup>
+
 </Project>

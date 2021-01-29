@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data.Entities;
 using SAC_VALES.Web.Models;
 using System;
@@ -32,9 +33,37 @@ namespace SAC_VALES.Web.Helpers
             return await _userManager.CreateAsync(user, password);
         }
 
+        public async Task<UsuarioEntity> AddUserAsync(AddUserViewModel model, string path)
+        {
+            UsuarioEntity userEntity = new UsuarioEntity
+            {
+                Address = model.Address,
+                Document = model.Document,
+                Email = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                PicturePath = path,
+                PhoneNumber = model.PhoneNumber,
+                UserName = model.Username,
+                // si se elige 1 es Admin, si se elige 2 es distribuidor
+                UserType = model.UserTypeId == 1 ? UserType.Admin : UserType.Distribuidor
+            };
+
+            IdentityResult result = await _userManager.CreateAsync(userEntity, model.Password);
+            if (result != IdentityResult.Success)
+            {
+                return null;
+            }
+
+            UsuarioEntity newUser = await GetUserByEmailAsync(model.Username);
+            await AddUserToRoleAsync(newUser, userEntity.UserType.ToString());
+            return newUser;
+        }
+
+
         public async Task AddUserToRoleAsync(UsuarioEntity user, string roleName)
         {
-            await _userManager.AddToRoleAsync(user, roleName);
+            await _userManager.AddToRoleAsync(user, roleName); 
         }
 
         public async Task CheckRoleAsync(string roleName)

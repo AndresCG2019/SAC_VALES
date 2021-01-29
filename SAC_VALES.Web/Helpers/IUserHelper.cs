@@ -25,6 +25,6 @@ namespace SAC_VALES.Web.Helpers
 
         Task LogoutAsync();
 
-
+        Task<UsuarioEntity> AddUserAsync(AddUserViewModel model, string path);
     }
 }

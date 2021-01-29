@@ -25,7 +25,7 @@ namespace SAC_VALES.Web.Data
             await CheckAdminsAsync();
             await CheckRolesAsync();
 
-            await CheckUserAsync("1010", "Juan", "Zuluaga", "jzuluaga55@gmail.com", "350 634 2747", "Calle Luna Calle Sol", UserType.Admin);
+            await CheckUserAsync("1010", "Juan", "Zuluaga", "jzuluaga55@gmail.com", "350 634 2747", "Calle Luna Calle Pereyra", UserType.Admin);
 
         }
 
@@ -64,6 +64,7 @@ namespace SAC_VALES.Web.Data
         private async Task CheckRolesAsync()
         {
             await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Distribuidor.ToString());
         }
 
         private async Task CheckAdminsAsync()

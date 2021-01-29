@@ -7,8 +7,7 @@ namespace SAC_VALES.Common.Enums
    public enum UserType
     {
         Admin,
-        Usuario,
-        Distribuidor
-
+        Distribuidor,
+        Usuario
     }
 }

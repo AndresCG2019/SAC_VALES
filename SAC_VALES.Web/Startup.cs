@@ -36,6 +36,13 @@ namespace SAC_VALES.Web
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.LoginPath = "/Account/NotAuthorized";
+                options.AccessDeniedPath = "/Account/NotAuthorized";
+            });
+
+
             services.AddIdentity<UsuarioEntity, IdentityRole>(cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
@@ -54,6 +61,8 @@ namespace SAC_VALES.Web
             });
 
             services.AddScoped<IUserHelper, UserHelper>();
+            services.AddScoped<ICombosHelper, CombosHelper>();
+
             services.AddTransient<SeedDb>();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
@@ -75,6 +84,7 @@ namespace SAC_VALES.Web
             app.UseStaticFiles();
             app.UseAuthentication();
             app.UseCookiePolicy();
+            app.UseStatusCodePagesWithReExecute("/error/{0}");
 
             app.UseMvc(routes =>
             {

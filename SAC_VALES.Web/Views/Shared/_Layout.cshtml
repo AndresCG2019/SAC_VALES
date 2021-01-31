@@ -36,6 +36,7 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li><a asp-area="" asp-controller="Administradores" asp-action="Index">Gestionar</a></li>
+                        <li><a asp-controller="Account" asp-action="Register">Registrar nuevo Usuario</a></li>
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

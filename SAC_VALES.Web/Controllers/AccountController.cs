@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using SAC_VALES.Web.Data;
+using SAC_VALES.Web.Data.Entities;
 using SAC_VALES.Web.Helpers;
 using SAC_VALES.Web.Models;
 using System;
@@ -12,11 +15,13 @@ namespace SAC_VALES.Web.Controllers
     {
         private readonly IUserHelper _userHelper;
         private readonly ICombosHelper _combosHelper;
+        private readonly DataContext _dataContext;
 
-        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper)
+        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper, DataContext dataContext)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
+            _dataContext = dataContext;
         }
 
         public IActionResult Login()
@@ -61,6 +66,7 @@ namespace SAC_VALES.Web.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public IActionResult Register()
         {
             AddUserViewModel model = new AddUserViewModel
@@ -85,22 +91,110 @@ namespace SAC_VALES.Web.Controllers
                     return View(model);
                 }
 
-                LoginViewModel loginViewModel = new LoginViewModel
+                if ((int)user.UserType == 0)
                 {
-                    Password = model.Password,
-                    RememberMe = false,
-                    Username = model.Username
-                };
+                    _dataContext.Administrador.Add(new AdministradorEntity
+                    {
+                        status = true,
+                        Nombre = "omar",
+                        ApellidoP = "gomez",
+                        ApellidoM = "arreola",
+                        Telefono = "6184192931",
+                        Usuario = user
+                    });
 
-                Microsoft.AspNetCore.Identity.SignInResult result2 = await _userHelper.LoginAsync(loginViewModel);
-
-                if (result2.Succeeded)
+                    await _dataContext.SaveChangesAsync();
+                }
+                else if ((int)user.UserType == 1) 
                 {
-                    return RedirectToAction("Index", "Home");
+                    _dataContext.Distribuidor.Add(new DistribuidorEntity
+                    {
+                        EmpresaVinculada = "FAMSA",
+                        Usuario = user
+                    });
+
+                    await _dataContext.SaveChangesAsync();
                 }
             }
 
             model.UserTypes = _combosHelper.GetComboRoles();
+            return RedirectToAction("Index", "Home");
+        }
+
+        public async Task<IActionResult> ChangeUser()
+        {
+            UsuarioEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            EditUserViewModel model = new EditUserViewModel
+            {
+                Address = user.Address,
+                Document = user.Document,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                PhoneNumber = user.PhoneNumber,
+                PicturePath = user.PicturePath
+            };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                string path = model.PicturePath;
+
+                UsuarioEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+                user.Document = model.Document;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.PicturePath = path;
+
+                await _userHelper.UpdateUserAsync(user);
+                return RedirectToAction("Index", "Home");
+            }
+
+            return View(model);
+        }
+
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                if (user != null)
+                {
+                    var result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ChangeUser");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "User no found.");
+                }
+            }
+
             return View(model);
         }
 

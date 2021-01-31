@@ -18,6 +18,8 @@ namespace SAC_VALES.Web.Data
         public DbSet<EmpresaEntity> Empresa { get; set; }
         public DbSet<UsuarioEntity> Usuario { get; set; }
 
+        public DbSet<DistribuidorEntity> Distribuidor { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

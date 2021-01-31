@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210130184021_implementedFirstFK")]
+    partial class implementedFirstFK
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,15 +153,11 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(17);
 
-                    b.Property<string>("UsuarioId");
-
                     b.Property<bool>("status");
 
                     b.Property<int>("userType");
 
                     b.HasKey("id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Administrador");
                 });
@@ -172,13 +170,13 @@ namespace SAC_VALES.Web.Migrations
 
                     b.Property<string>("EmpresaVinculada");
 
-                    b.Property<string>("UsuarioId");
+                    b.Property<string>("UsuarioEntityId");
 
                     b.HasKey("id");
 
-                    b.HasIndex("UsuarioId");
+                    b.HasIndex("UsuarioEntityId");
 
-                    b.ToTable("Distribuidor");
+                    b.ToTable("DistribuidorEntity");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.EmpresaEntity", b =>
@@ -311,18 +309,11 @@ namespace SAC_VALES.Web.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.AdministradorEntity", b =>
-                {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
-                });
-
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity")
+                        .WithMany("Distribuidor")
+                        .HasForeignKey("UsuarioEntityId");
                 });
 #pragma warning restore 612, 618
         }

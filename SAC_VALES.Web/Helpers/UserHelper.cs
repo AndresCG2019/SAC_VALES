@@ -66,6 +66,12 @@ namespace SAC_VALES.Web.Helpers
             await _userManager.AddToRoleAsync(user, roleName); 
         }
 
+        public async Task<IdentityResult> ChangePasswordAsync(UsuarioEntity user, string oldPassword, string newPassword)
+        {
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+
+        }
+
         public async Task CheckRoleAsync(string roleName)
         {
             bool roleExists = await _roleManager.RoleExistsAsync(roleName);
@@ -103,6 +109,11 @@ namespace SAC_VALES.Web.Helpers
         public async Task LogoutAsync()
         {
             await _signInManager.SignOutAsync();
+        }
+
+        public async Task<IdentityResult> UpdateUserAsync(UsuarioEntity user)
+        {
+            return await _userManager.UpdateAsync(user);
         }
     }
 }

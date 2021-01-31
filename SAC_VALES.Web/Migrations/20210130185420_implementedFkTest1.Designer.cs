@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210130185420_implementedFkTest1")]
+    partial class implementedFkTest1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -151,15 +153,11 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(17);
 
-                    b.Property<string>("UsuarioId");
-
                     b.Property<bool>("status");
 
                     b.Property<int>("userType");
 
                     b.HasKey("id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Administrador");
                 });
@@ -309,13 +307,6 @@ namespace SAC_VALES.Web.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.AdministradorEntity", b =>
-                {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Usuario")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>

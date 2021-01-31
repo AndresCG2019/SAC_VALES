@@ -31,7 +31,7 @@ namespace SAC_VALES.Web.Data.Entities
         public UserType userType { get; set; } // SEGUIR IMPLEMENTANDO AUTH PROBAR ROLE Y DESPUES REGISTER USER
 
         public bool status { get; set; }
-
+        public UsuarioEntity Usuario { get; set; }
 
     }
 }

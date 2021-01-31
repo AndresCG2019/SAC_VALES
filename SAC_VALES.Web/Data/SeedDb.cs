@@ -55,6 +55,15 @@ namespace SAC_VALES.Web.Data
 
                 await _userHelper.AddUserAsync(user, "123456");
                 await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+
+                _dataContext.Distribuidor.Add(new DistribuidorEntity
+                {
+                    EmpresaVinculada = "famsa",
+                    Usuario = user
+
+                });
+
+                await _dataContext.SaveChangesAsync();
             }
 
             return user;

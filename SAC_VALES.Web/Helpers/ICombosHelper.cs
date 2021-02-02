@@ -8,7 +8,9 @@ namespace SAC_VALES.Web.Helpers
 {
     public interface ICombosHelper
     {
-        IEnumerable<SelectListItem> GetComboRoles();
+        IEnumerable<SelectListItem> GetComboRolesAdmin();
+        IEnumerable<SelectListItem> GetComboRolesEmpresa();
+        IEnumerable<SelectListItem> GetComboRolesDistribuidor();
 
     }
 }

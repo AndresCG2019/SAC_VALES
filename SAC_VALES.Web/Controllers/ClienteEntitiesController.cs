@@ -9,29 +9,31 @@ using Microsoft.EntityFrameworkCore;
 using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class AdministradoresController : Controller
+    [Authorize(Roles = "Distribuidor")]
+    public class ClienteEntitiesController : Controller
     {
-        
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public AdministradoresController(DataContext context)
+        public ClienteEntitiesController(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
-        // GET: Administradores
+        // GET: ClienteEntities
         public async Task<IActionResult> Index()
         {
             return View(await _context.Usuario
-               .Where(d => d.UserType == UserType.Admin)
+               .Where(d => d.UserType == UserType.Cliente)
                .ToListAsync());
         }
 
-        // GET: Administradores/Details/5
+        // GET: ClienteEntities/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,39 +41,39 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var administradorEntity = await _context.Administrador
+            var clienteEntity = await _context.Cliente
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (administradorEntity == null)
+            if (clienteEntity == null)
             {
                 return NotFound();
             }
 
-            return View(administradorEntity);
+            return View(clienteEntity);
         }
 
-        // GET: Administradores/Create
+        // GET: ClienteEntities/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Administradores/Create
+        // POST: ClienteEntities/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Nombre, ApellidoP, ApellidoM,Telefono")] AdministradorEntity administradorEntity)
+        public async Task<IActionResult> Create([Bind("id,status_cliente")] ClienteEntity clienteEntity)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(administradorEntity);
+                _context.Add(clienteEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(administradorEntity);
+            return View(clienteEntity);
         }
 
-        // GET: Administradores/Edit/5
+        // GET: ClienteEntities/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,22 +81,22 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var administradorEntity = await _context.Administrador.FindAsync(id);
-            if (administradorEntity == null)
+            var clienteEntity = await _context.Cliente.FindAsync(id);
+            if (clienteEntity == null)
             {
                 return NotFound();
             }
-            return View(administradorEntity);
+            return View(clienteEntity);
         }
 
-        // POST: Administradores/Edit/5
+        // POST: ClienteEntities/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Nombre")] AdministradorEntity administradorEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,status_cliente")] ClienteEntity clienteEntity)
         {
-            if (id != administradorEntity.id)
+            if (id != clienteEntity.id)
             {
                 return NotFound();
             }
@@ -103,12 +105,12 @@ namespace SAC_VALES.Web.Controllers
             {
                 try
                 {
-                    _context.Update(administradorEntity);
+                    _context.Update(clienteEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdministradorEntityExists(administradorEntity.id))
+                    if (!ClienteEntityExists(clienteEntity.id))
                     {
                         return NotFound();
                     }
@@ -119,10 +121,10 @@ namespace SAC_VALES.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(administradorEntity);
+            return View(clienteEntity);
         }
 
-        // GET: Administradores/Delete/5
+        // GET: ClienteEntities/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,30 +132,30 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var administradorEntity = await _context.Administrador
+            var clienteEntity = await _context.Cliente
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (administradorEntity == null)
+            if (clienteEntity == null)
             {
                 return NotFound();
             }
 
-            return View(administradorEntity);
+            return View(clienteEntity);
         }
 
-        // POST: Administradores/Delete/5
+        // POST: ClienteEntities/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var administradorEntity = await _context.Administrador.FindAsync(id);
-            _context.Administrador.Remove(administradorEntity);
+            var clienteEntity = await _context.Cliente.FindAsync(id);
+            _context.Cliente.Remove(clienteEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AdministradorEntityExists(int id)
+        private bool ClienteEntityExists(int id)
         {
-            return _context.Administrador.Any(e => e.id == id);
+            return _context.Cliente.Any(e => e.id == id);
         }
     }
 }

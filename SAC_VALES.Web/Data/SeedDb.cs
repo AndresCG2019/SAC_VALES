@@ -55,15 +55,6 @@ namespace SAC_VALES.Web.Data
 
                 await _userHelper.AddUserAsync(user, "123456");
                 await _userHelper.AddUserToRoleAsync(user, userType.ToString());
-
-                _dataContext.Distribuidor.Add(new DistribuidorEntity
-                {
-                    EmpresaVinculada = "famsa",
-                    Usuario = user
-
-                });
-
-                await _dataContext.SaveChangesAsync();
             }
 
             return user;
@@ -74,6 +65,8 @@ namespace SAC_VALES.Web.Data
         {
             await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
             await _userHelper.CheckRoleAsync(UserType.Distribuidor.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Empresa.ToString());
+            await _userHelper.CheckRoleAsync(UserType.Cliente.ToString());
         }
 
         private async Task CheckAdminsAsync()

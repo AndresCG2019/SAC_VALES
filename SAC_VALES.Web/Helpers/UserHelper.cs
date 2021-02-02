@@ -35,6 +35,24 @@ namespace SAC_VALES.Web.Helpers
 
         public async Task<UsuarioEntity> AddUserAsync(AddUserViewModel model, string path)
         {
+            UserType userType = new UserType();
+
+            switch (model.UserTypeId)
+            {
+                case 1:
+                    userType = UserType.Admin;
+                    break;
+                case 2:
+                    userType = UserType.Empresa;
+                    break;
+                case 3:
+                    userType = UserType.Distribuidor;
+                    break;
+                case 4:
+                    userType = UserType.Cliente;
+                    break;
+            }
+
             UsuarioEntity userEntity = new UsuarioEntity
             {
                 Address = model.Address,
@@ -46,7 +64,7 @@ namespace SAC_VALES.Web.Helpers
                 PhoneNumber = model.PhoneNumber,
                 UserName = model.Username,
                 // si se elige 1 es Admin, si se elige 2 es distribuidor
-                UserType = model.UserTypeId == 1 ? UserType.Admin : UserType.Distribuidor
+                UserType = userType
             };
 
             IdentityResult result = await _userManager.CreateAsync(userEntity, model.Password);

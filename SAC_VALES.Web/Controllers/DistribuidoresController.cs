@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -9,29 +10,36 @@ using Microsoft.EntityFrameworkCore;
 using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Admin")]
-    public class AdministradoresController : Controller
+    [Authorize(Roles = "Empresa")]
+    public class DistribuidoresController : Controller
     {
-        
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public AdministradoresController(DataContext context)
+        public DistribuidoresController(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
-        // GET: Administradores
+        // GET: Distribuidores
         public async Task<IActionResult> Index()
         {
+            var empresa = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+            Debug.WriteLine("hola");
+            Debug.WriteLine(User.Identity.Name.ToString());
+            Debug.WriteLine(empresa.Id);
+
             return View(await _context.Usuario
-               .Where(d => d.UserType == UserType.Admin)
-               .ToListAsync());
+                .Where(d => d.UserType == UserType.Distribuidor)
+                .ToListAsync());
         }
 
-        // GET: Administradores/Details/5
+        // GET: Distribuidores/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -39,39 +47,39 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var administradorEntity = await _context.Administrador
+            var distribuidorEntity = await _context.Distribuidor
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (administradorEntity == null)
+            if (distribuidorEntity == null)
             {
                 return NotFound();
             }
 
-            return View(administradorEntity);
+            return View(distribuidorEntity);
         }
 
-        // GET: Administradores/Create
+        // GET: Distribuidores/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Administradores/Create
+        // POST: Distribuidores/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Nombre, ApellidoP, ApellidoM,Telefono")] AdministradorEntity administradorEntity)
+        public async Task<IActionResult> Create([Bind("id,EmpresaVinculada,StatusDistribuidor")] DistribuidorEntity distribuidorEntity)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(administradorEntity);
+                _context.Add(distribuidorEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(administradorEntity);
+            return View(distribuidorEntity);
         }
 
-        // GET: Administradores/Edit/5
+        // GET: Distribuidores/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -79,22 +87,22 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var administradorEntity = await _context.Administrador.FindAsync(id);
-            if (administradorEntity == null)
+            var distribuidorEntity = await _context.Distribuidor.FindAsync(id);
+            if (distribuidorEntity == null)
             {
                 return NotFound();
             }
-            return View(administradorEntity);
+            return View(distribuidorEntity);
         }
 
-        // POST: Administradores/Edit/5
+        // POST: Distribuidores/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Nombre")] AdministradorEntity administradorEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,EmpresaVinculada,StatusDistribuidor")] DistribuidorEntity distribuidorEntity)
         {
-            if (id != administradorEntity.id)
+            if (id != distribuidorEntity.id)
             {
                 return NotFound();
             }
@@ -103,12 +111,12 @@ namespace SAC_VALES.Web.Controllers
             {
                 try
                 {
-                    _context.Update(administradorEntity);
+                    _context.Update(distribuidorEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!AdministradorEntityExists(administradorEntity.id))
+                    if (!DistribuidorEntityExists(distribuidorEntity.id))
                     {
                         return NotFound();
                     }
@@ -119,10 +127,10 @@ namespace SAC_VALES.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(administradorEntity);
+            return View(distribuidorEntity);
         }
 
-        // GET: Administradores/Delete/5
+        // GET: Distribuidores/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,30 +138,30 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var administradorEntity = await _context.Administrador
+            var distribuidorEntity = await _context.Distribuidor
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (administradorEntity == null)
+            if (distribuidorEntity == null)
             {
                 return NotFound();
             }
 
-            return View(administradorEntity);
+            return View(distribuidorEntity);
         }
 
-        // POST: Administradores/Delete/5
+        // POST: Distribuidores/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var administradorEntity = await _context.Administrador.FindAsync(id);
-            _context.Administrador.Remove(administradorEntity);
+            var distribuidorEntity = await _context.Distribuidor.FindAsync(id);
+            _context.Distribuidor.Remove(distribuidorEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool AdministradorEntityExists(int id)
+        private bool DistribuidorEntityExists(int id)
         {
-            return _context.Administrador.Any(e => e.id == id);
+            return _context.Distribuidor.Any(e => e.id == id);
         }
     }
 }

@@ -35,8 +35,18 @@
                     <li><a asp-area="" asp-controller="Home" asp-action="Contact">Contact</a></li>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
-                        <li><a asp-area="" asp-controller="Administradores" asp-action="Index">Gestionar</a></li>
                         <li><a asp-controller="Account" asp-action="Register">Registrar nuevo Usuario</a></li>
+                        <li><a asp-controller="Administradores" asp-action="Index">Ver Administradores</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Empresa"))
+                    {
+                        <li><a asp-controller="Account" asp-action="Register">Registrar Distribuidor</a></li>
+                        <li><a asp-controller="Distribuidores" asp-action="Index">Ver Distribuidor</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
+                    {
+                        <li><a asp-controller="Account" asp-action="Register">Registrar Cliente</a></li>
+                        <li><a asp-controller="ClienteEntities" asp-action="Index">Ver Clientes</a></li>
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

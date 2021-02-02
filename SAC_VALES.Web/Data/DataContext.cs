@@ -17,6 +17,7 @@ namespace SAC_VALES.Web.Data
         public DbSet<AdministradorEntity> Administrador { get; set; }
         public DbSet<EmpresaEntity> Empresa { get; set; }
         public DbSet<UsuarioEntity> Usuario { get; set; }
+        public DbSet<ClienteEntity> Cliente { get; set; }
 
         public DbSet<DistribuidorEntity> Distribuidor { get; set; }
 

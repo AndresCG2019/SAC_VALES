@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
 using SAC_VALES.Web.Helpers;
@@ -58,7 +59,7 @@ namespace SAC_VALES.Web.Controllers
         public async Task<IActionResult> Logout()
         {
             await _userHelper.LogoutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
         public IActionResult NotAuthorized()
@@ -66,12 +67,36 @@ namespace SAC_VALES.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Empresa,Distribuidor")]
         public IActionResult Register()
         {
+
+            if (User.Identity.IsAuthenticated && User.IsInRole("Empresa")) 
+            {
+                AddUserViewModel modelDist = new AddUserViewModel
+                {
+                    UserTypes = _combosHelper.GetComboRolesEmpresa(),
+                    UserTypeId = 1
+                };
+
+                return View(modelDist);
+
+            }
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
+            {
+                AddUserViewModel modelCliente = new AddUserViewModel
+                {
+                    UserTypes = _combosHelper.GetComboRolesDistribuidor(),
+                    UserTypeId = 2
+                };
+
+                return View(modelCliente);
+
+            }
+
             AddUserViewModel model = new AddUserViewModel
             {
-                UserTypes = _combosHelper.GetComboRoles()
+                UserTypes = _combosHelper.GetComboRolesAdmin()
             };
 
             return View(model);
@@ -87,9 +112,11 @@ namespace SAC_VALES.Web.Controllers
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "This email is already used.");
-                    model.UserTypes = _combosHelper.GetComboRoles();
+                    model.UserTypes = _combosHelper.GetComboRolesAdmin();
                     return View(model);
                 }
+
+                // registro de la tabla extendida
 
                 if ((int)user.UserType == 0)
                 {
@@ -105,19 +132,41 @@ namespace SAC_VALES.Web.Controllers
 
                     await _dataContext.SaveChangesAsync();
                 }
-                else if ((int)user.UserType == 1) 
+                else if ((int)user.UserType == 3)
                 {
+                    _dataContext.Empresa.Add(new EmpresaEntity
+                    {
+                        NombreEmpresa = "EL PORTON",
+                        representante = user
+                    });
+                    await _dataContext.SaveChangesAsync();
+                }
+                else if ((int)user.UserType == 1)
+                {
+                    var empresa = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
                     _dataContext.Distribuidor.Add(new DistribuidorEntity
                     {
-                        EmpresaVinculada = "FAMSA",
-                        Usuario = user
+                        EmpresaVinculada = empresa,
+                        UsuarioVinculado = user
                     });
+                    await _dataContext.SaveChangesAsync();
+                }
+                else if ((int)user.UserType == 2)
+                {
+                    var distribuidor = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
+                    _dataContext.Cliente.Add(new ClienteEntity
+                    {
+                        Distribuidor = distribuidor,
+                        Cliente
+
+                    });
                     await _dataContext.SaveChangesAsync();
                 }
             }
 
-            model.UserTypes = _combosHelper.GetComboRoles();
+            model.UserTypes = _combosHelper.GetComboRolesAdmin();
             return RedirectToAction("Index", "Home");
         }
 

@@ -8,6 +8,7 @@ namespace SAC_VALES.Common.Enums
     {
         Admin,
         Distribuidor,
-        Cliente
+        Cliente,
+        Empresa
     }
 }

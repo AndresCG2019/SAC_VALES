@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210202002247_changes2")]
+    partial class changes2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,27 +164,6 @@ namespace SAC_VALES.Web.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Administrador");
-                });
-
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ClienteEntity", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("ClienteId");
-
-                    b.Property<string>("DistribuidorId");
-
-                    b.Property<bool>("status_cliente");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("ClienteId");
-
-                    b.HasIndex("DistribuidorId");
-
-                    b.ToTable("Cliente");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>
@@ -343,17 +324,6 @@ namespace SAC_VALES.Web.Migrations
                     b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId");
-                });
-
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ClienteEntity", b =>
-                {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("ClienteId");
-
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Distribuidor")
-                        .WithMany()
-                        .HasForeignKey("DistribuidorId");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>

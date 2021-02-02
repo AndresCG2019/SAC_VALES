@@ -25,12 +25,11 @@ namespace SAC_VALES.Web.Data
             await CheckAdminsAsync();
             await CheckRolesAsync();
 
-            await CheckUserAsync("1010", "Juan", "Zuluaga", "jzuluaga55@gmail.com", "350 634 2747", "Calle Luna Calle Pereyra", UserType.Admin);
+            await CheckUserAsync("Juan", "Zuluaga", "jzuluaga55@gmail.com", "350 634 2747", "Calle Luna Calle Pereyra", UserType.Admin);
 
         }
 
         private async Task<UsuarioEntity> CheckUserAsync(
-           string document,
            string firstName,
            string lastName,
            string email,
@@ -43,13 +42,12 @@ namespace SAC_VALES.Web.Data
             {
                 user = new UsuarioEntity
                 {
-                    FirstName = firstName,
-                    LastName = lastName,
+                    Nombre = firstName,
+                    Apellidos = lastName,
                     Email = email,
                     UserName = email,
                     PhoneNumber = phone,
-                    Address = address,
-                    Document = document,
+                    Direccion = address,
                     UserType = userType
                 };
 

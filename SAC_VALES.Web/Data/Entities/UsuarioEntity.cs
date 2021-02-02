@@ -6,33 +6,24 @@ namespace SAC_VALES.Web.Data.Entities
 {
     public class UsuarioEntity : IdentityUser
     {
-        [Display(Name = "Document")]
-        [MaxLength(20, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string Document { get; set; }
+        [Display(Name = "Nombre")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string Nombre { get; set; }
 
-        [Display(Name = "First Name")]
-        [MaxLength(50, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string FirstName { get; set; }
+        [Display(Name = "Apellidos")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
+        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
+        public string Apellidos { get; set; }
 
-        [Display(Name = "Last Name")]
-        [MaxLength(50, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        [Required(ErrorMessage = "The field {0} is mandatory.")]
-        public string LastName { get; set; }
-
-        [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
-        public string Address { get; set; }
-
-        [Display(Name = "Picture")]
-        public string PicturePath { get; set; }
+        [Display(Name = "Direccion")]
+        [MaxLength(100, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
+        public string Direccion { get; set; }
 
         [Display(Name = "User Type")]
         public UserType UserType { get; set; }
 
-        public string FullName => $"{FirstName} {LastName}";
-
-        public string FullNameWithDocument => $"{FirstName} {LastName} - {Document}";
+        public string NombreCompleto => $"{Nombre} {Apellidos}";
 
     }
 }

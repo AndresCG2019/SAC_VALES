@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210202024617_changedFields1")]
+    partial class changedFields1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -230,6 +232,9 @@ namespace SAC_VALES.Web.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
+                    b.Property<string>("Address")
+                        .HasMaxLength(100);
+
                     b.Property<string>("Apellidos")
                         .IsRequired()
                         .HasMaxLength(50);
@@ -237,8 +242,9 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Direccion")
-                        .HasMaxLength(100);
+                    b.Property<string>("Document")
+                        .IsRequired()
+                        .HasMaxLength(20);
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
@@ -264,6 +270,8 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
+
+                    b.Property<string>("PicturePath");
 
                     b.Property<string>("SecurityStamp");
 

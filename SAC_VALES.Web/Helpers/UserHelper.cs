@@ -55,12 +55,10 @@ namespace SAC_VALES.Web.Helpers
 
             UsuarioEntity userEntity = new UsuarioEntity
             {
-                Address = model.Address,
-                Document = model.Document,
+                Direccion = model.Address,
                 Email = model.Username,
-                FirstName = model.FirstName,
-                LastName = model.LastName,
-                PicturePath = path,
+                Nombre = model.FirstName,
+                Apellidos = model.LastName,
                 PhoneNumber = model.PhoneNumber,
                 UserName = model.Username,
                 // si se elige 1 es Admin, si se elige 2 es distribuidor
@@ -118,8 +116,8 @@ namespace SAC_VALES.Web.Helpers
         {
             return await _signInManager.PasswordSignInAsync(
                 model.Username,
-                model.Password,
-                model.RememberMe,
+                model.Contraseña,
+                model.Recuerdame,
                 false);
 
         }

@@ -14,9 +14,9 @@ namespace SAC_VALES.Web.Models
 
         [Required]
         [MinLength(6)]
-        public string Password { get; set; }
+        public string Contraseña { get; set; }
 
-        public bool RememberMe { get; set; }
+        public bool Recuerdame { get; set; }
 
     }
 }

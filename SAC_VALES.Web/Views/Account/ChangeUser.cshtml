@@ -12,13 +12,12 @@
         <form asp-action="ChangeUser" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
-            <input type="hidden" asp-for="PicturePath" />
 
             <partial name="_User" />
 
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
-                <a asp-action="ChangePassword" class="btn btn-warning">Change Password</a>
+                <a asp-action="ChangePassword" class="btn btn-warning">Cambiar Contraseña</a>
             </div>
         </form>
     </div>

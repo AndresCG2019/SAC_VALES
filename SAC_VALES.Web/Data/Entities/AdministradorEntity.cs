@@ -28,7 +28,7 @@ namespace SAC_VALES.Web.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Telefono { get; set; }
 
-        public UserType userType { get; set; } // SEGUIR IMPLEMENTANDO AUTH PROBAR ROLE Y DESPUES REGISTER USER
+        public UserType userType { get; set; }
 
         public bool status { get; set; }
         public UsuarioEntity Usuario { get; set; }

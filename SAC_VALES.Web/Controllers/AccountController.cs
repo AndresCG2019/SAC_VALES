@@ -159,7 +159,7 @@ namespace SAC_VALES.Web.Controllers
                     _dataContext.Cliente.Add(new ClienteEntity
                     {
                         Distribuidor = distribuidor,
-                        Cliente
+                        Cliente = user
 
                     });
                     await _dataContext.SaveChangesAsync();
@@ -180,12 +180,10 @@ namespace SAC_VALES.Web.Controllers
 
             EditUserViewModel model = new EditUserViewModel
             {
-                Address = user.Address,
-                Document = user.Document,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
+                Address = user.Direccion,
+                FirstName = user.Nombre,
+                LastName = user.Apellidos,
                 PhoneNumber = user.PhoneNumber,
-                PicturePath = user.PicturePath
             };
 
             return View(model);
@@ -197,16 +195,14 @@ namespace SAC_VALES.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                string path = model.PicturePath;
+                string path = "";
 
                 UsuarioEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
-                user.Document = model.Document;
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.Address = model.Address;
+                user.Nombre = model.FirstName;
+                user.Apellidos = model.LastName;
+                user.Direccion = model.Address;
                 user.PhoneNumber = model.PhoneNumber;
-                user.PicturePath = path;
 
                 await _userHelper.UpdateUserAsync(user);
                 return RedirectToAction("Index", "Home");

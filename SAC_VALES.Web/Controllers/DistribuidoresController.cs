@@ -34,8 +34,8 @@ namespace SAC_VALES.Web.Controllers
             Debug.WriteLine(User.Identity.Name.ToString());
             Debug.WriteLine(empresa.Id);
 
-            return View(await _context.Usuario
-                .Where(d => d.UserType == UserType.Distribuidor)
+            return View(await _context.Distribuidor
+                .Where(d => d.EmpresaVinculada.Id == empresa.Id)
                 .ToListAsync());
         }
 

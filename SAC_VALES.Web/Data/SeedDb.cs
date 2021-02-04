@@ -73,8 +73,7 @@ namespace SAC_VALES.Web.Data
             _dataContext.Administrador.Add(new AdministradorEntity 
             { 
                 Nombre = "Juan",
-                ApellidoP = "Perez",
-                ApellidoM = "Sanchez",
+                Apellidos = "Suarez",
                 Telefono = "6181658123",
                 status = true
 
@@ -83,8 +82,7 @@ namespace SAC_VALES.Web.Data
             _dataContext.Administrador.Add(new AdministradorEntity
             {
                 Nombre = "Pedro",
-                ApellidoP = "Casas",
-                ApellidoM = "Rosas",
+                Apellidos = "Gonzales",
                 Telefono = "6181928743",
                 status = true
 

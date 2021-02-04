@@ -123,10 +123,10 @@ namespace SAC_VALES.Web.Controllers
                     _dataContext.Administrador.Add(new AdministradorEntity
                     {
                         status = true,
-                        Nombre = "omar",
-                        ApellidoP = "gomez",
-                        ApellidoM = "arreola",
-                        Telefono = "6184192931",
+                        Nombre = model.FirstName,
+                        Apellidos = model.LastName,
+                        Telefono = model.PhoneNumber,
+                        Email =model.Username,
                         Usuario = user
                     });
 
@@ -136,7 +136,11 @@ namespace SAC_VALES.Web.Controllers
                 {
                     _dataContext.Empresa.Add(new EmpresaEntity
                     {
-                        NombreEmpresa = "EL PORTON",
+                        NombreEmpresa = "PLACEHOLDER NAME",
+                        NombreRepresentante = model.FirstName,
+                        ApellidosRepresentante = model.LastName,
+                        TelefonoRepresentante = model.PhoneNumber,
+                        Email = model.Username,
                         representante = user
                     });
                     await _dataContext.SaveChangesAsync();
@@ -147,6 +151,11 @@ namespace SAC_VALES.Web.Controllers
 
                     _dataContext.Distribuidor.Add(new DistribuidorEntity
                     {
+                        Nombre = model.FirstName,
+                        Apellidos = model.LastName,
+                        Direccion = model.Address,
+                        Telefono = model.PhoneNumber,
+                        Email = model.Username,
                         EmpresaVinculada = empresa,
                         UsuarioVinculado = user
                     });
@@ -158,6 +167,11 @@ namespace SAC_VALES.Web.Controllers
 
                     _dataContext.Cliente.Add(new ClienteEntity
                     {
+                        Nombre = model.FirstName,
+                        Apellidos = model.LastName,
+                        Direccion = model.Address,
+                        Telefono = model.PhoneNumber,
+                        Email = model.Username,
                         Distribuidor = distribuidor,
                         Cliente = user
 

@@ -10,8 +10,8 @@ using SAC_VALES.Web.Data;
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210202033107_changedFields2")]
-    partial class changedFields2
+    [Migration("20210204010643_modifiedDistTable")]
+    partial class modifiedDistTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,13 +137,9 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApellidoM")
+                    b.Property<string>("Apellidos")
                         .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("ApellidoP")
-                        .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(90);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -193,9 +189,24 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(100);
+
                     b.Property<string>("EmpresaVinculadaId");
 
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<bool>("StatusDistribuidor");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("UsuarioVinculadoId");
 
@@ -214,7 +225,19 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApellidosRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<string>("NombreEmpresa");
+
+                    b.Property<string>("NombreRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("TelefonoRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("representanteId");
 

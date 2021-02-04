@@ -135,13 +135,12 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApellidoM")
+                    b.Property<string>("Apellidos")
                         .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(90);
 
-                    b.Property<string>("ApellidoP")
-                        .IsRequired()
-                        .HasMaxLength(30);
+                    b.Property<string>("Email")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -170,9 +169,27 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<string>("ClienteId");
 
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(100);
+
                     b.Property<string>("DistribuidorId");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<bool>("status_cliente");
 
@@ -191,9 +208,27 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(100);
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100);
+
                     b.Property<string>("EmpresaVinculadaId");
 
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<bool>("StatusDistribuidor");
+
+                    b.Property<string>("Telefono")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("UsuarioVinculadoId");
 
@@ -212,7 +247,22 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApellidosRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(100);
+
                     b.Property<string>("NombreEmpresa");
+
+                    b.Property<string>("NombreRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("TelefonoRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("representanteId");
 

@@ -1,4 +1,4 @@
-﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.UsuarioEntity>
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.DistribuidorEntity>
 
 @{
     ViewData["Title"] = "Index";
@@ -9,7 +9,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.UserName)
+                @Html.DisplayNameFor(model => model.Email)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
@@ -21,7 +21,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.UserName)
+                @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nombre)

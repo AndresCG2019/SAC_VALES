@@ -16,21 +16,22 @@ namespace SAC_VALES.Web.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Nombre { get; set; }
 
-        [StringLength(30, MinimumLength = 2, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
+        [StringLength(90, MinimumLength = 2, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        public string ApellidoP { get; set; }
-
-        [StringLength(30, MinimumLength = 2, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
-        [Required(ErrorMessage = "El campo {0} es obligatorio")]
-        public string ApellidoM { get; set; }
+        public string Apellidos { get; set; }
 
         [StringLength(17, MinimumLength = 5, ErrorMessage = "El campo {0} debe tener al menos {1} caracteres")]
         [Required(ErrorMessage = "El campo {0} es obligatorio")]
         public string Telefono { get; set; }
 
+        [Display(Name = "Email")]
+        [MaxLength(100, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
+        public string Email { get; set; }
+
         public UserType userType { get; set; }
 
         public bool status { get; set; }
+
         public UsuarioEntity Usuario { get; set; }
 
     }

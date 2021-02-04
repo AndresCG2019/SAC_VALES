@@ -4,27 +4,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SAC_VALES.Web.Migrations
 {
-    public partial class secondSetup : Migration
+    public partial class thirdSetup : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Administrador",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Nombre = table.Column<string>(maxLength: 30, nullable: false),
-                    ApellidoP = table.Column<string>(maxLength: 30, nullable: false),
-                    ApellidoM = table.Column<string>(maxLength: 30, nullable: false),
-                    Telefono = table.Column<string>(maxLength: 17, nullable: false),
-                    status = table.Column<bool>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Administrador", x => x.id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "AspNetRoles",
                 columns: table => new
@@ -58,24 +41,14 @@ namespace SAC_VALES.Web.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    name = table.Column<string>(nullable: true)
+                    Nombre = table.Column<string>(maxLength: 50, nullable: false),
+                    Apellidos = table.Column<string>(maxLength: 50, nullable: false),
+                    Direccion = table.Column<string>(maxLength: 100, nullable: true),
+                    UserType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Empresa",
-                columns: table => new
-                {
-                    id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    NombreEmpresa = table.Column<string>(maxLength: 6, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Empresa", x => x.id);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,6 +70,31 @@ namespace SAC_VALES.Web.Migrations
                         principalTable: "AspNetRoles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Administrador",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(maxLength: 30, nullable: false),
+                    ApellidoP = table.Column<string>(maxLength: 30, nullable: false),
+                    ApellidoM = table.Column<string>(maxLength: 30, nullable: false),
+                    Telefono = table.Column<string>(maxLength: 17, nullable: false),
+                    userType = table.Column<int>(nullable: false),
+                    status = table.Column<bool>(nullable: false),
+                    UsuarioId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Administrador", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Administrador_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,6 +182,85 @@ namespace SAC_VALES.Web.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Cliente",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    status_cliente = table.Column<bool>(nullable: false),
+                    DistribuidorId = table.Column<string>(nullable: true),
+                    ClienteId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Cliente", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Cliente_AspNetUsers_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Cliente_AspNetUsers_DistribuidorId",
+                        column: x => x.DistribuidorId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Distribuidor",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    EmpresaVinculadaId = table.Column<string>(nullable: true),
+                    StatusDistribuidor = table.Column<bool>(nullable: false),
+                    UsuarioVinculadoId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Distribuidor", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Distribuidor_AspNetUsers_EmpresaVinculadaId",
+                        column: x => x.EmpresaVinculadaId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Distribuidor_AspNetUsers_UsuarioVinculadoId",
+                        column: x => x.UsuarioVinculadoId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Empresa",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    NombreEmpresa = table.Column<string>(nullable: true),
+                    representanteId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Empresa", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Empresa_AspNetUsers_representanteId",
+                        column: x => x.representanteId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Administrador_UsuarioId",
+                table: "Administrador",
+                column: "UsuarioId");
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -222,6 +299,31 @@ namespace SAC_VALES.Web.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cliente_ClienteId",
+                table: "Cliente",
+                column: "ClienteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cliente_DistribuidorId",
+                table: "Cliente",
+                column: "DistribuidorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Distribuidor_EmpresaVinculadaId",
+                table: "Distribuidor",
+                column: "EmpresaVinculadaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Distribuidor_UsuarioVinculadoId",
+                table: "Distribuidor",
+                column: "UsuarioVinculadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Empresa_representanteId",
+                table: "Empresa",
+                column: "representanteId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -243,6 +345,12 @@ namespace SAC_VALES.Web.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Distribuidor");
 
             migrationBuilder.DropTable(
                 name: "Empresa");

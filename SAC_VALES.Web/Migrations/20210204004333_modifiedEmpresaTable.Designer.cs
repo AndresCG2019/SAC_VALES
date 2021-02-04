@@ -10,8 +10,8 @@ using SAC_VALES.Web.Data;
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210202021416_changes3")]
-    partial class changes3
+    [Migration("20210204004333_modifiedEmpresaTable")]
+    partial class modifiedEmpresaTable
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -137,13 +137,9 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("ApellidoM")
+                    b.Property<string>("Apellidos")
                         .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("ApellidoP")
-                        .IsRequired()
-                        .HasMaxLength(30);
+                        .HasMaxLength(90);
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -214,7 +210,19 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<string>("ApellidosRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
                     b.Property<string>("NombreEmpresa");
+
+                    b.Property<string>("NombreRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
+
+                    b.Property<string>("TelefonoRepresentante")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("representanteId");
 
@@ -232,32 +240,28 @@ namespace SAC_VALES.Web.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(100);
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Document")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -270,8 +274,6 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("PicturePath");
 
                     b.Property<string>("SecurityStamp");
 

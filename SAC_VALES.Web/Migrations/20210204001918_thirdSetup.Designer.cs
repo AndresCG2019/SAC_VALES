@@ -10,8 +10,8 @@ using SAC_VALES.Web.Data;
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210129224241_deletedDistribuidor")]
-    partial class deletedDistribuidor
+    [Migration("20210204001918_thirdSetup")]
+    partial class thirdSetup
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -153,13 +153,59 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(17);
 
+                    b.Property<string>("UsuarioId");
+
                     b.Property<bool>("status");
 
                     b.Property<int>("userType");
 
                     b.HasKey("id");
 
+                    b.HasIndex("UsuarioId");
+
                     b.ToTable("Administrador");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ClienteEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClienteId");
+
+                    b.Property<string>("DistribuidorId");
+
+                    b.Property<bool>("status_cliente");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("ClienteId");
+
+                    b.HasIndex("DistribuidorId");
+
+                    b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("EmpresaVinculadaId");
+
+                    b.Property<bool>("StatusDistribuidor");
+
+                    b.Property<string>("UsuarioVinculadoId");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("EmpresaVinculadaId");
+
+                    b.HasIndex("UsuarioVinculadoId");
+
+                    b.ToTable("Distribuidor");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.EmpresaEntity", b =>
@@ -168,11 +214,13 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("NombreEmpresa")
-                        .IsRequired()
-                        .HasMaxLength(6);
+                    b.Property<string>("NombreEmpresa");
+
+                    b.Property<string>("representanteId");
 
                     b.HasKey("id");
+
+                    b.HasIndex("representanteId");
 
                     b.ToTable("Empresa");
                 });
@@ -184,32 +232,28 @@ namespace SAC_VALES.Web.Migrations
 
                     b.Property<int>("AccessFailedCount");
 
-                    b.Property<string>("Address")
-                        .HasMaxLength(100);
+                    b.Property<string>("Apellidos")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken();
 
-                    b.Property<string>("Document")
-                        .IsRequired()
-                        .HasMaxLength(20);
+                    b.Property<string>("Direccion")
+                        .HasMaxLength(100);
 
                     b.Property<string>("Email")
                         .HasMaxLength(256);
 
                     b.Property<bool>("EmailConfirmed");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50);
-
                     b.Property<bool>("LockoutEnabled");
 
                     b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasMaxLength(50);
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256);
@@ -222,8 +266,6 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("PhoneNumber");
 
                     b.Property<bool>("PhoneNumberConfirmed");
-
-                    b.Property<string>("PicturePath");
 
                     b.Property<string>("SecurityStamp");
 
@@ -290,6 +332,42 @@ namespace SAC_VALES.Web.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.AdministradorEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ClienteEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("ClienteId");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Distribuidor")
+                        .WithMany()
+                        .HasForeignKey("DistribuidorId");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "EmpresaVinculada")
+                        .WithMany()
+                        .HasForeignKey("EmpresaVinculadaId");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "UsuarioVinculado")
+                        .WithMany()
+                        .HasForeignKey("UsuarioVinculadoId");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.EmpresaEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "representante")
+                        .WithMany()
+                        .HasForeignKey("representanteId");
                 });
 #pragma warning restore 612, 618
         }

@@ -26,11 +26,8 @@ namespace SAC_VALES.Web.Controllers
         // GET: Administradores
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Usuario
-               .Where(d => d.UserType == UserType.Admin)
-               .ToListAsync());
+            return View(await _context.Administrador.ToListAsync());
         }
-
         // GET: Administradores/Details/5
         public async Task<IActionResult> Details(int? id)
         {

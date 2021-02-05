@@ -1,0 +1,37 @@
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.EmpresaEntity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Empresas Registrados</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nombre del Encargado
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NombreRepresentante)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                <a asp-action="EditEmpresa" asp-route-id="@item.id">Editar</a>
+            </td>
+
+        </tr>
+        }
+    </tbody>
+</table>

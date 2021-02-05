@@ -75,6 +75,7 @@ namespace SAC_VALES.Web.Data
                 Nombre = "Juan",
                 Apellidos = "Suarez",
                 Telefono = "6181658123",
+                Email = "juan@yopmail.com",
                 status = true
 
             });
@@ -84,6 +85,7 @@ namespace SAC_VALES.Web.Data
                 Nombre = "Pedro",
                 Apellidos = "Gonzales",
                 Telefono = "6181928743",
+                Email = "pedormail.com",
                 status = true
 
             });

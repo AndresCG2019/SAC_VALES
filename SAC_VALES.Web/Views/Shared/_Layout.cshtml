@@ -35,11 +35,12 @@
                     {
                         <li><a asp-controller="Account" asp-action="Register">Registrar nuevo Usuario</a></li>
                         <li><a asp-controller="Administradores" asp-action="Index">Ver Administradores</a></li>
+                        <li><a asp-controller="Empresas" asp-action="Index">Ver Empresas</a></li>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Empresa"))
                     {
                         <li><a asp-controller="Account" asp-action="Register">Registrar Distribuidor</a></li>
-                        <li><a asp-controller="Distribuidores" asp-action="Index">Ver Distribuidor</a></li>
+                        <li><a asp-controller="Distribuidores" asp-action="Index">Mis Distribuidores</a></li>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
                     {

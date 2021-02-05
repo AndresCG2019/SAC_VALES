@@ -9,6 +9,8 @@ namespace SAC_VALES.Web.Data.Entities
     public class EmpresaEntity
     {
         public int id { get; set; }
+        [Display(Name = "Nombre de la empresa")]
+        [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
         public string NombreEmpresa { get; set; }
 
         [Display(Name = "Nombre")]

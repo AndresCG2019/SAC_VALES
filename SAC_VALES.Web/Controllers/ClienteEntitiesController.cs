@@ -28,8 +28,10 @@ namespace SAC_VALES.Web.Controllers
         // GET: ClienteEntities
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Usuario
-               .Where(d => d.UserType == UserType.Cliente)
+            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            return View(await _context.Cliente
+               .Where(c =>c.Distribuidor.Id == user.Id )
                .ToListAsync());
         }
 
@@ -94,7 +96,8 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,status_cliente")] ClienteEntity clienteEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,status_cliente,Nombre,Direccion,Email,Apellidos,Telefono")]
+        ClienteEntity clienteEntity)
         {
             if (id != clienteEntity.id)
             {

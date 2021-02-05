@@ -136,7 +136,7 @@ namespace SAC_VALES.Web.Controllers
                 {
                     _dataContext.Empresa.Add(new EmpresaEntity
                     {
-                        NombreEmpresa = "PLACEHOLDER NAME",
+                        NombreEmpresa = "",
                         NombreRepresentante = model.FirstName,
                         ApellidosRepresentante = model.LastName,
                         TelefonoRepresentante = model.PhoneNumber,

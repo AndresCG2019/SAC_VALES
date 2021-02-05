@@ -1,42 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
-using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Empresa")]
-    public class DistribuidoresController : Controller
+    [Authorize(Roles = "Admin")]
+    public class EmpresasController : Controller
     {
         private readonly DataContext _context;
-        private readonly IUserHelper _userHelper;
 
-        public DistribuidoresController(DataContext context, IUserHelper userHelper)
+        public EmpresasController(DataContext context)
         {
             _context = context;
-            _userHelper = userHelper;
         }
 
-        // GET: Distribuidores
+        // GET: Empresas
         public async Task<IActionResult> Index()
         {
-            var empresa = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
-
-            return View(await _context.Distribuidor
-                .Where(d => d.EmpresaVinculada.Id == empresa.Id)
-                .ToListAsync());
+            return View(await _context.Empresa.ToListAsync());
         }
 
-        // GET: Distribuidores/Details/5
+        // GET: Empresas/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -44,39 +35,39 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var distribuidorEntity = await _context.Distribuidor
+            var empresaEntity = await _context.Empresa
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (distribuidorEntity == null)
+            if (empresaEntity == null)
             {
                 return NotFound();
             }
 
-            return View(distribuidorEntity);
+            return View(empresaEntity);
         }
 
-        // GET: Distribuidores/Create
+        // GET: Empresas/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Distribuidores/Create
+        // POST: Empresas/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,EmpresaVinculada,StatusDistribuidor")] DistribuidorEntity distribuidorEntity)
+        public async Task<IActionResult> Create([Bind("id,NombreEmpresa,NombreRepresentante,ApellidosRepresentante,TelefonoRepresentante,Email")] EmpresaEntity empresaEntity)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(distribuidorEntity);
+                _context.Add(empresaEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(distribuidorEntity);
+            return View(empresaEntity);
         }
 
-        // GET: Distribuidores/Edit/5
+        // GET: Empresas/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -84,23 +75,22 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var distribuidorEntity = await _context.Distribuidor.FindAsync(id);
-            if (distribuidorEntity == null)
+            var empresaEntity = await _context.Empresa.FindAsync(id);
+            if (empresaEntity == null)
             {
                 return NotFound();
             }
-            return View(distribuidorEntity);
+            return View(empresaEntity);
         }
 
-        // POST: Distribuidores/Edit/5
+        // POST: Empresas/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,EmpresaVinculada,StatusDistribuidor,Nombre,Apellidos,Direccion,Telefono,Email")]
-        DistribuidorEntity distribuidorEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,NombreEmpresa,NombreRepresentante,ApellidosRepresentante,TelefonoRepresentante,Email")] EmpresaEntity empresaEntity)
         {
-            if (id != distribuidorEntity.id)
+            if (id != empresaEntity.id)
             {
                 return NotFound();
             }
@@ -109,12 +99,12 @@ namespace SAC_VALES.Web.Controllers
             {
                 try
                 {
-                    _context.Update(distribuidorEntity);
+                    _context.Update(empresaEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DistribuidorEntityExists(distribuidorEntity.id))
+                    if (!EmpresaEntityExists(empresaEntity.id))
                     {
                         return NotFound();
                     }
@@ -125,10 +115,10 @@ namespace SAC_VALES.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(distribuidorEntity);
+            return View(empresaEntity);
         }
 
-        // GET: Distribuidores/Delete/5
+        // GET: Empresas/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -136,30 +126,30 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var distribuidorEntity = await _context.Distribuidor
+            var empresaEntity = await _context.Empresa
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (distribuidorEntity == null)
+            if (empresaEntity == null)
             {
                 return NotFound();
             }
 
-            return View(distribuidorEntity);
+            return View(empresaEntity);
         }
 
-        // POST: Distribuidores/Delete/5
+        // POST: Empresas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var distribuidorEntity = await _context.Distribuidor.FindAsync(id);
-            _context.Distribuidor.Remove(distribuidorEntity);
+            var empresaEntity = await _context.Empresa.FindAsync(id);
+            _context.Empresa.Remove(empresaEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DistribuidorEntityExists(int id)
+        private bool EmpresaEntityExists(int id)
         {
-            return _context.Distribuidor.Any(e => e.id == id);
+            return _context.Empresa.Any(e => e.id == id);
         }
     }
 }

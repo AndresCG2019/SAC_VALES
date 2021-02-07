@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210207041241_addedPersona")]
+    partial class addedPersona
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -274,6 +276,27 @@ namespace SAC_VALES.Web.Migrations
                     b.ToTable("Empresa");
                 });
 
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.PersonaEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("Distribuidorid");
+
+                    b.Property<int?>("Empresaid");
+
+                    b.Property<string>("test_description");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Distribuidorid");
+
+                    b.HasIndex("Empresaid");
+
+                    b.ToTable("Persona");
+                });
+
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.UsuarioEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -436,6 +459,17 @@ namespace SAC_VALES.Web.Migrations
                     b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "representante")
                         .WithMany()
                         .HasForeignKey("representanteId");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.PersonaEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
+                        .WithMany()
+                        .HasForeignKey("Distribuidorid");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("Empresaid");
                 });
 #pragma warning restore 612, 618
         }

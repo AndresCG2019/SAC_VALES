@@ -8,16 +8,19 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
     public class ValesController : Controller
     {
         private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
 
-        public ValesController(DataContext context)
+        public ValesController(DataContext context, IUserHelper userHelper)
         {
             _context = context;
+            _userHelper = userHelper;
         }
 
         // GET: Vales
@@ -47,7 +50,10 @@ namespace SAC_VALES.Web.Controllers
         // GET: Vales/Create
         public IActionResult Create()
         {
-            ViewBag.Cliente_id = new SelectList(_context.Cliente,"id", "Email" );
+            DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+            ViewBag.Cliente_id = new SelectList(_context.Cliente.Where(c => c.Distribuidor.Email == User.Identity.Name).ToList(),"id", "Email" );
+            ViewBag.Empresa_id = new SelectList(_context.Empresa, "id", "Email");
 
             return View();
         }
@@ -57,17 +63,25 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Monto,Clienteid")] ValeEntity valeEntity)
+        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId")] ValeEntity valeEntity)
         {
+            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            DistribuidorEntity distribuidor = _context.Distribuidor
+              .Where(d => d.Email == user.Email).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
+                valeEntity.DistribuidorId = distribuidor.id;
+
                 _context.Add(valeEntity);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Cliente_id = new SelectList(_context.Cliente, "id", "Email", valeEntity.Cliente);
+            ViewBag.Cliente_id = new SelectList(_context.Cliente.Where(c => c.Distribuidor.Email == User.Identity.Name).ToList(), "id", "Email");
+            ViewBag.Empresa_id = new SelectList(_context.Empresa, "id", "Email");
+
             return View(valeEntity);
         }
 

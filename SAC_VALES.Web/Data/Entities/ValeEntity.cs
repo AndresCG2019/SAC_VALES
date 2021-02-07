@@ -14,13 +14,13 @@ namespace SAC_VALES.Web.Data.Entities
         public float Monto { get; set; }
         
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public DistribuidorEntity Distribuidor { get; set; }
+        public int DistribuidorId { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public EmpresaEntity Empresa { get; set; }
+        public int EmpresaId { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public ClienteEntity Cliente { get; set; }
+        public int ClienteId { get; set; }
 
     }
 }

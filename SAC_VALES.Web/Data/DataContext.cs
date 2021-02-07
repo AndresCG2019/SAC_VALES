@@ -20,6 +20,8 @@ namespace SAC_VALES.Web.Data
         public DbSet<ClienteEntity> Cliente { get; set; }
 
         public DbSet<DistribuidorEntity> Distribuidor { get; set; }
+        public DbSet<ValeEntity> Vale { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,6 +29,8 @@ namespace SAC_VALES.Web.Data
 
             
         }
+
+        public DbSet<SAC_VALES.Web.Data.Entities.ValeEntity> ValeEntity { get; set; }
 
     }
 }

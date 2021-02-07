@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210205193933_addedVales")]
+    partial class addedVales
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -338,31 +340,6 @@ namespace SAC_VALES.Web.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ValeEntity", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Clienteid");
-
-                    b.Property<int>("Distribuidorid");
-
-                    b.Property<int>("Empresaid");
-
-                    b.Property<float>("Monto");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("Clienteid");
-
-                    b.HasIndex("Distribuidorid");
-
-                    b.HasIndex("Empresaid");
-
-                    b.ToTable("ValeEntity");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -442,24 +419,6 @@ namespace SAC_VALES.Web.Migrations
                     b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "representante")
                         .WithMany()
                         .HasForeignKey("representanteId");
-                });
-
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ValeEntity", b =>
-                {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.ClienteEntity", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("Clienteid")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
-                        .WithMany()
-                        .HasForeignKey("Distribuidorid")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("Empresaid")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

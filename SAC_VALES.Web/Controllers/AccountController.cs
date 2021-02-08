@@ -147,7 +147,7 @@ namespace SAC_VALES.Web.Controllers
                 }
                 else if ((int)user.UserType == 1)
                 {
-                    var empresa = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    var empresa = _dataContext.Empresa.Where(e => e.Email == User.Identity.Name).FirstOrDefault();
 
                     _dataContext.Distribuidor.Add(new DistribuidorEntity
                     {

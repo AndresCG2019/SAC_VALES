@@ -26,7 +26,11 @@ namespace SAC_VALES.Web.Controllers
         // GET: Vales
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Vale.ToListAsync());
+            DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+            return View(await _context.Vale
+                .Where(v => v.DistribuidorId == distribuidor.id)
+                .ToListAsync());
         }
 
         // GET: Vales/Details/5

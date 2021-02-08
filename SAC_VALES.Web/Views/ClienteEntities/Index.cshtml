@@ -15,6 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Nombre)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -23,6 +26,9 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nombre)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Apellidos)

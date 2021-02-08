@@ -7,7 +7,7 @@
 <h2>Vales</h2>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Registrar Vale</a>
 </p>
 <table class="table">
     <thead>
@@ -15,7 +15,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.Monto)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaLocal)
+            </th>
         </tr>
     </thead>
     <tbody>
@@ -25,9 +27,10 @@
                 @Html.DisplayFor(modelItem => item.Monto)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.id">Delete</a>
+                @Html.DisplayFor(modelItem => item.FechaLocal)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id">Modificar</a>
             </td>
         </tr>
 }

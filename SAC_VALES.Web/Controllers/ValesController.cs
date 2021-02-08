@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,7 @@ using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
+    [Authorize(Roles = "Distribuidor")]
     public class ValesController : Controller
     {
         private readonly DataContext _context;
@@ -67,7 +69,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId")] ValeEntity valeEntity)
+        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha")] ValeEntity valeEntity)
         {
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
@@ -77,6 +79,7 @@ namespace SAC_VALES.Web.Controllers
             if (ModelState.IsValid)
             {
                 valeEntity.DistribuidorId = distribuidor.id;
+                valeEntity.Fecha = DateTime.UtcNow;
 
                 _context.Add(valeEntity);
                 await _context.SaveChangesAsync();
@@ -98,6 +101,13 @@ namespace SAC_VALES.Web.Controllers
             }
 
             var valeEntity = await _context.Vale.FindAsync(id);
+
+            ClienteEntity cliente = await _context.Cliente.Where(c => c.id == valeEntity.ClienteId).FirstOrDefaultAsync();
+
+            ViewBag.ClienteEmail = cliente.Email;
+            ViewBag.ClienteNombre = cliente.Nombre;
+            ViewBag.ClienteApellidos = cliente.Apellidos;
+
             if (valeEntity == null)
             {
                 return NotFound();
@@ -110,7 +120,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Monto")] ValeEntity valeEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId")] ValeEntity valeEntity)
         {
             if (id != valeEntity.id)
             {

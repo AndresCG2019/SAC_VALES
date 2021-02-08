@@ -4,9 +4,8 @@
     ViewData["Title"] = "Create";
 }
 
-<h2>Create</h2>
+<h2>Registrar Vale</h2>
 
-<h4>ValeEntity</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -20,7 +19,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.ClienteId, "id", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.ClienteId, "Cliente", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
 
                     @Html.DropDownListFor(model => model.ClienteId, (SelectList)ViewBag.Cliente_id, new { @class = "form-control" })
@@ -30,7 +29,7 @@
             </div>
 
             <div class="form-group">
-                @Html.LabelFor(model => model.EmpresaId, "id", htmlAttributes: new { @class = "control-label col-md-2" })
+                @Html.LabelFor(model => model.EmpresaId, "Empresa", htmlAttributes: new { @class = "control-label col-md-2" })
                 <div class="col-md-10">
 
                     @Html.DropDownListFor(model => model.EmpresaId, (SelectList)ViewBag.Empresa_id, new { @class = "form-control" })
@@ -41,14 +40,14 @@
 
            
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-default" />
+                <input type="submit" value="Guardar" class="btn btn-default" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Volver</a>
 </div>
 
 @section Scripts {

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
@@ -7,6 +8,7 @@ using SAC_VALES.Web.Helpers;
 using SAC_VALES.Web.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,12 +19,15 @@ namespace SAC_VALES.Web.Controllers
         private readonly IUserHelper _userHelper;
         private readonly ICombosHelper _combosHelper;
         private readonly DataContext _dataContext;
+        private readonly UserManager<UsuarioEntity> _userManager;
 
-        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper, DataContext dataContext)
+        public AccountController(IUserHelper userHelper, ICombosHelper combosHelper
+            , DataContext dataContext, UserManager<UsuarioEntity> userManager)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _dataContext = dataContext;
+            _userManager = userManager;
         }
 
         public IActionResult Login()
@@ -257,6 +262,61 @@ namespace SAC_VALES.Web.Controllers
             return View(model);
         }
 
+        public IActionResult SendPasswordResetLink(string username)
+        {
+            UsuarioEntity user =  _userManager.
+                 FindByEmailAsync(username).Result;
+
+            Debug.WriteLine("VALOR DE USUARIO");
+            Debug.WriteLine(user);
+
+            if (user == null)
+            {
+                ViewBag.Message = "Error while resetting your password!";
+                return View("Error");
+            }
+
+            /*var token = _userManager.
+                  GeneratePasswordResetTokenAsync(user).Result;*/
+
+            var token = "aijdjfodjfsodifj433r";
+
+            var resetLink = Url.Action("ResetPassword",
+                            "Account", new { token = token },
+                             protocol: HttpContext.Request.Scheme);
+
+            // code to email the above link
+            // see the earlier article
+
+            ViewBag.Message = "Password reset link has been sent to your email address!";
+            return View("Login");
+
+        }
+
+        public IActionResult ResetPassword(string token)
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult ResetPassword(ResetPasswordViewModel obj)
+        {
+            var user = _userManager.
+                         FindByNameAsync(obj.UserName).Result;
+
+            IdentityResult result = _userManager.ResetPasswordAsync
+                      (user, obj.Token, obj.Password).Result;
+            if (result.Succeeded)
+            {
+                ViewBag.Message = "Password reset successful!";
+                return View("Success");
+            }
+            else
+            {
+                ViewBag.Message = "Error while resetting the password!";
+                return View("Error");
+            }
+        }
 
     }
 }

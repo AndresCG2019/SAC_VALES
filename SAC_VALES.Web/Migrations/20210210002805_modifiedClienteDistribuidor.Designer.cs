@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210210002805_modifiedClienteDistribuidor")]
+    partial class modifiedClienteDistribuidor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,8 +137,6 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("AdminAuthId");
-
                     b.Property<string>("Apellidos")
                         .IsRequired()
                         .HasMaxLength(90);
@@ -152,13 +152,15 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(17);
 
+                    b.Property<string>("UsuarioId");
+
                     b.Property<bool>("status");
 
                     b.Property<int>("userType");
 
                     b.HasKey("id");
 
-                    b.HasIndex("AdminAuthId");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Administrador");
                 });
@@ -173,7 +175,7 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
-                    b.Property<string>("ClienteAuthId");
+                    b.Property<string>("ClienteId");
 
                     b.Property<string>("Direccion")
                         .HasMaxLength(100);
@@ -195,7 +197,7 @@ namespace SAC_VALES.Web.Migrations
 
                     b.HasKey("id");
 
-                    b.HasIndex("ClienteAuthId");
+                    b.HasIndex("ClienteId");
 
                     b.HasIndex("Distribuidorid");
 
@@ -215,8 +217,6 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("Direccion")
                         .HasMaxLength(100);
 
-                    b.Property<string>("DistribuidorAuthId");
-
                     b.Property<string>("Email")
                         .HasMaxLength(100);
 
@@ -232,11 +232,13 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<string>("UsuarioVinculadoId");
+
                     b.HasKey("id");
 
-                    b.HasIndex("DistribuidorAuthId");
-
                     b.HasIndex("EmpresaVinculadaid");
+
+                    b.HasIndex("UsuarioVinculadoId");
 
                     b.ToTable("Distribuidor");
                 });
@@ -254,8 +256,6 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("Email")
                         .HasMaxLength(100);
 
-                    b.Property<string>("EmpresaAuthId");
-
                     b.Property<string>("NombreEmpresa")
                         .HasMaxLength(50);
 
@@ -267,9 +267,11 @@ namespace SAC_VALES.Web.Migrations
                         .IsRequired()
                         .HasMaxLength(50);
 
+                    b.Property<string>("representanteId");
+
                     b.HasKey("id");
 
-                    b.HasIndex("EmpresaAuthId");
+                    b.HasIndex("representanteId");
 
                     b.ToTable("Empresa");
                 });
@@ -406,16 +408,16 @@ namespace SAC_VALES.Web.Migrations
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.AdministradorEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "AdminAuth")
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Usuario")
                         .WithMany()
-                        .HasForeignKey("AdminAuthId");
+                        .HasForeignKey("UsuarioId");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ClienteEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "ClienteAuth")
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "Cliente")
                         .WithMany()
-                        .HasForeignKey("ClienteAuthId");
+                        .HasForeignKey("ClienteId");
 
                     b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
                         .WithMany()
@@ -424,20 +426,20 @@ namespace SAC_VALES.Web.Migrations
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.DistribuidorEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "DistribuidorAuth")
-                        .WithMany()
-                        .HasForeignKey("DistribuidorAuthId");
-
                     b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "EmpresaVinculada")
                         .WithMany()
                         .HasForeignKey("EmpresaVinculadaid");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "UsuarioVinculado")
+                        .WithMany()
+                        .HasForeignKey("UsuarioVinculadoId");
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.EmpresaEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "EmpresaAuth")
+                    b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "representante")
                         .WithMany()
-                        .HasForeignKey("EmpresaAuthId");
+                        .HasForeignKey("representanteId");
                 });
 #pragma warning restore 612, 618
         }

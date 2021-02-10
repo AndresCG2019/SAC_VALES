@@ -28,10 +28,10 @@ namespace SAC_VALES.Web.Controllers
         // GET: ClienteEntities
         public async Task<IActionResult> Index()
         {
-            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+            DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
             return View(await _context.Cliente
-               .Where(c =>c.Distribuidor.Id == user.Id )
+               .Where(c =>c.Distribuidor.id == distribuidor.id )
                .ToListAsync());
         }
 

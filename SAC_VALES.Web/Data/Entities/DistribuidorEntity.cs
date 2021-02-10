@@ -36,6 +36,6 @@ namespace SAC_VALES.Web.Data.Entities
         public bool StatusDistribuidor { get; set; }
 
         public EmpresaEntity EmpresaVinculada { get; set; }
-        public UsuarioEntity UsuarioVinculado { get; set; }
+        public UsuarioEntity DistribuidorAuth { get; set; }
     }
 }

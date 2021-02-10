@@ -32,7 +32,7 @@ namespace SAC_VALES.Web.Data.Entities
 
         public bool status { get; set; }
 
-        public UsuarioEntity Usuario { get; set; }
+        public UsuarioEntity AdminAuth { get; set; }
 
     }
 }

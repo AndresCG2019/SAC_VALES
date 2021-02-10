@@ -34,7 +34,7 @@ namespace SAC_VALES.Web.Data.Entities
         public string Email { get; set; }
 
         public bool status_cliente { get; set; }
-        public UsuarioEntity Distribuidor { get; set; }
-        public UsuarioEntity Cliente { get; set; }
+        public DistribuidorEntity Distribuidor { get; set; }
+        public UsuarioEntity ClienteAuth { get; set; }
     }
 }

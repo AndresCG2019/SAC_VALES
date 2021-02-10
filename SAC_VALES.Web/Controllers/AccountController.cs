@@ -132,7 +132,7 @@ namespace SAC_VALES.Web.Controllers
                         Apellidos = model.LastName,
                         Telefono = model.PhoneNumber,
                         Email =model.Username,
-                        Usuario = user
+                        AdminAuth = user
                     });
 
                     await _dataContext.SaveChangesAsync();
@@ -146,7 +146,7 @@ namespace SAC_VALES.Web.Controllers
                         ApellidosRepresentante = model.LastName,
                         TelefonoRepresentante = model.PhoneNumber,
                         Email = model.Username,
-                        representante = user
+                        EmpresaAuth = user
                     });
                     await _dataContext.SaveChangesAsync();
                 }
@@ -162,13 +162,13 @@ namespace SAC_VALES.Web.Controllers
                         Telefono = model.PhoneNumber,
                         Email = model.Username,
                         EmpresaVinculada = empresa,
-                        UsuarioVinculado = user
+                        DistribuidorAuth = user
                     });
                     await _dataContext.SaveChangesAsync();
                 }
                 else if ((int)user.UserType == 2)
                 {
-                    var distribuidor = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+                    var distribuidor = _dataContext.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
                     _dataContext.Cliente.Add(new ClienteEntity
                     {
@@ -178,7 +178,7 @@ namespace SAC_VALES.Web.Controllers
                         Telefono = model.PhoneNumber,
                         Email = model.Username,
                         Distribuidor = distribuidor,
-                        Cliente = user
+                        ClienteAuth = user
 
                     });
                     await _dataContext.SaveChangesAsync();

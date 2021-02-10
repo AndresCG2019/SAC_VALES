@@ -99,12 +99,19 @@ namespace SAC_VALES.Web.Controllers
 
             }
 
-            AddUserViewModel model = new AddUserViewModel
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
             {
-                UserTypes = _combosHelper.GetComboRolesAdmin()
-            };
+                AddUserViewModel modelAdmin = new AddUserViewModel
+                {
+                    UserTypes = _combosHelper.GetComboRolesAdmin(),
+                    UserTypeId = 0
+                };
 
-            return View(model);
+                return View(modelAdmin);
+
+            }
+
+            return View();
         }
 
         [HttpPost]
@@ -131,7 +138,7 @@ namespace SAC_VALES.Web.Controllers
                         Nombre = model.FirstName,
                         Apellidos = model.LastName,
                         Telefono = model.PhoneNumber,
-                        Email =model.Username,
+                        Email = model.Username,
                         AdminAuth = user
                     });
 
@@ -146,6 +153,7 @@ namespace SAC_VALES.Web.Controllers
                         ApellidosRepresentante = model.LastName,
                         TelefonoRepresentante = model.PhoneNumber,
                         Email = model.Username,
+                        Direccion = model.Address,
                         EmpresaAuth = user
                     });
                     await _dataContext.SaveChangesAsync();
@@ -185,25 +193,91 @@ namespace SAC_VALES.Web.Controllers
                 }
             }
 
-            model.UserTypes = _combosHelper.GetComboRolesAdmin();
+            //model.UserTypes = _combosHelper.GetComboRolesAdmin()
             return RedirectToAction("Index", "Home");
         }
 
         public async Task<IActionResult> ChangeUser()
         {
-            UsuarioEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
-            if (user == null)
+            UsuarioEntity authUser = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            if (authUser == null)
             {
                 return NotFound();
             }
 
-            EditUserViewModel model = new EditUserViewModel
+            EditUserViewModel model = new EditUserViewModel();
+
+            switch (authUser.UserType)
             {
-                Address = user.Direccion,
-                FirstName = user.Nombre,
-                LastName = user.Apellidos,
-                PhoneNumber = user.PhoneNumber,
-            };
+                case UserType.Admin:
+                    AdministradorEntity admin = _dataContext.Administrador
+                        .Where(a => a.Email == User.Identity.Name).FirstOrDefault();
+
+                    //esto se hace solo en el caso de admin ya que es el unico con registros en seed
+                    if (admin == null)
+                    {
+                        return NotFound();
+                    }
+
+                    Debug.WriteLine("user type en casa admin es :");
+                    Debug.WriteLine(authUser.UserType);
+
+                    model.FirstName = admin.Nombre;
+                    model.LastName = admin.Apellidos;
+                    model.PhoneNumber = admin.Telefono;
+                    model.userType = UserType.Admin;
+
+                    break;
+
+                case UserType.Distribuidor:
+
+                    DistribuidorEntity dist = _dataContext.Distribuidor
+                        .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+                    Debug.WriteLine("user type en casa dist es :");
+                    Debug.WriteLine(authUser.UserType);
+
+                    model.FirstName = dist.Nombre;
+                    model.LastName = dist.Apellidos;
+                    model.PhoneNumber = dist.Telefono;
+                    model.Address = dist.Direccion;
+                    model.userType = UserType.Distribuidor;
+
+                    break;
+
+                case UserType.Cliente:
+
+                    ClienteEntity cliente = _dataContext.Cliente
+                        .Where(c => c.Email == User.Identity.Name).FirstOrDefault();
+
+                    Debug.WriteLine("user type en casa cliente es :");
+                    Debug.WriteLine(authUser.UserType);
+
+                    model.FirstName = cliente.Nombre;
+                    model.LastName = cliente.Apellidos;
+                    model.PhoneNumber = cliente.Telefono;
+                    model.Address = cliente.Direccion;
+                    model.userType = UserType.Cliente;
+
+                    break;
+
+                case UserType.Empresa:
+
+                    EmpresaEntity empresa = _dataContext.Empresa
+                        .Where(e => e.Email == User.Identity.Name).FirstOrDefault();
+
+                    Debug.WriteLine("user type en casa empresa es :");
+                    Debug.WriteLine(authUser.UserType);
+
+                    model.FirstName = empresa.NombreRepresentante;
+                    model.LastName = empresa.ApellidosRepresentante;
+                    model.PhoneNumber = empresa.TelefonoRepresentante;
+                    model.Address = empresa.Direccion;
+                    model.userType = UserType.Empresa;
+
+                    break;
+            }
 
             return View(model);
         }
@@ -218,12 +292,66 @@ namespace SAC_VALES.Web.Controllers
 
                 UsuarioEntity user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
-                user.Nombre = model.FirstName;
-                user.Apellidos = model.LastName;
-                user.Direccion = model.Address;
-                user.PhoneNumber = model.PhoneNumber;
-
                 await _userHelper.UpdateUserAsync(user);
+
+                switch (model.userType)
+                {
+                    case UserType.Admin:
+
+                        AdministradorEntity admin =  _dataContext.Administrador
+                            .Where(a => a.Email == User.Identity.Name).FirstOrDefault();
+
+                        admin.Nombre = model.FirstName;
+                        admin.Apellidos = model.LastName;
+                        admin.Telefono = model.PhoneNumber;
+
+                        _dataContext.Update(admin);
+                        await _dataContext.SaveChangesAsync();
+                        return RedirectToAction("Index", "Home");
+
+                    case UserType.Distribuidor:
+                        DistribuidorEntity dist = _dataContext.Distribuidor
+                            .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+                        dist.Nombre = model.FirstName;
+                        dist.Apellidos = model.LastName;
+                        dist.Telefono = model.PhoneNumber;
+
+                        _dataContext.Update(dist);
+                        await _dataContext.SaveChangesAsync();
+                        return RedirectToAction("Index", "Home");
+
+                    case UserType.Cliente:
+
+                        ClienteEntity cliente = _dataContext.Cliente
+                            .Where(c => c.Email == User.Identity.Name).FirstOrDefault();
+
+                        cliente.Nombre = model.FirstName;
+                        cliente.Apellidos = model.LastName;
+                        cliente.Telefono = model.PhoneNumber;
+
+                        _dataContext.Update(cliente);
+                        await _dataContext.SaveChangesAsync();
+                        return RedirectToAction("Index", "Home");
+
+                    case UserType.Empresa:
+
+                        EmpresaEntity empresa = _dataContext.Empresa
+                            .Where(e => e.Email == User.Identity.Name).FirstOrDefault();
+
+                        empresa.NombreRepresentante = model.FirstName;
+                        empresa.ApellidosRepresentante = model.LastName;
+                        empresa.TelefonoRepresentante = model.PhoneNumber;
+
+                        _dataContext.Update(empresa);
+                        await _dataContext.SaveChangesAsync();
+                        return RedirectToAction("Index", "Home");
+
+
+                    default:
+                        break;
+                }
+
                 return RedirectToAction("Index", "Home");
             }
 

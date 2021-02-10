@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SAC_VALES.Common.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -31,6 +32,8 @@ namespace SAC_VALES.Web.Models
 
         [Display(Name = "Picture")]
         public string PicturePath { get; set; }
+
+        public UserType userType { get; set; }
 
     }
 }

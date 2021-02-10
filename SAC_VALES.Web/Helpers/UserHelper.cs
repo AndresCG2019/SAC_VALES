@@ -55,11 +55,7 @@ namespace SAC_VALES.Web.Helpers
 
             UsuarioEntity userEntity = new UsuarioEntity
             {
-                Direccion = model.Address,
                 Email = model.Username,
-                Nombre = model.FirstName,
-                Apellidos = model.LastName,
-                PhoneNumber = model.PhoneNumber,
                 UserName = model.Username,
                 // si se elige 1 es Admin, si se elige 2 es distribuidor
                 UserType = userType

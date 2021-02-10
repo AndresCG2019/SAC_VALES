@@ -28,8 +28,6 @@ namespace SAC_VALES.Web.Data.Entities
         [MaxLength(100, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
         public string Email { get; set; }
 
-        public UserType userType { get; set; }
-
         public bool status { get; set; }
 
         public UsuarioEntity AdminAuth { get; set; }

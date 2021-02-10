@@ -25,29 +25,34 @@ namespace SAC_VALES.Web.Data
             await CheckAdminsAsync();
             await CheckRolesAsync();
 
-            await CheckUserAsync("Juan", "Zuluaga", "jzuluaga55@gmail.com", "350 634 2747", "Calle Luna Calle Pereyra", UserType.Admin);
+            _dataContext.Administrador.Add(new AdministradorEntity
+            {
+                Nombre = "Zuluaga",
+                Apellidos = "Admin",
+                Telefono = "350 634 2747",
+                Email = "jzuluaga55@gmail.com",
+                AdminAuth = await CheckUserAsync("jzuluaga55@gmail.com", "350 634 2747", UserType.Admin),
+                status = true
+
+            });
+
+            await _dataContext.SaveChangesAsync();
 
         }
 
         private async Task<UsuarioEntity> CheckUserAsync(
-           string firstName,
-           string lastName,
            string email,
            string phone,
-           string address,
            UserType userType)
         {
             var user = await _userHelper.GetUserByEmailAsync(email);
             if (user == null)
             {
                 user = new UsuarioEntity
-                {
-                    Nombre = firstName,
-                    Apellidos = lastName,
+                {   
                     Email = email,
                     UserName = email,
                     PhoneNumber = phone,
-                    Direccion = address,
                     UserType = userType
                 };
 
@@ -79,17 +84,6 @@ namespace SAC_VALES.Web.Data
                 status = true
 
             });
-
-            _dataContext.Administrador.Add(new AdministradorEntity
-            {
-                Nombre = "Pedro",
-                Apellidos = "Gonzales",
-                Telefono = "6181928743",
-                Email = "pedormail.com",
-                status = true
-
-            });
-
             await _dataContext.SaveChangesAsync();
 
         }

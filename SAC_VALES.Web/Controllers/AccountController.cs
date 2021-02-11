@@ -98,9 +98,7 @@ namespace SAC_VALES.Web.Controllers
                 return View(modelCliente);
 
             }
-
-            else if (User.Identity.IsAuthenticated && User.IsInRole("Administrador"))
-            {
+          
                 AddUserViewModel modelAdmin = new AddUserViewModel
                 {
                     UserTypes = _combosHelper.GetComboRolesAdmin(),
@@ -108,10 +106,6 @@ namespace SAC_VALES.Web.Controllers
                 };
 
                 return View(modelAdmin);
-
-            }
-
-            return View();
         }
 
         [HttpPost]

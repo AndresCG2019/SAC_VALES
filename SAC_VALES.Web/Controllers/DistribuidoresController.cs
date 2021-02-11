@@ -31,9 +31,7 @@ namespace SAC_VALES.Web.Controllers
         {
             EmpresaEntity empresa = _context.Empresa.Where(e => e.Email == User.Identity.Name).FirstOrDefault();
 
-            return View(await _context.Distribuidor
-                .Where(d => d.EmpresaVinculada.id == empresa.id)
-                .ToListAsync());
+            return View(await _context.Distribuidor.ToListAsync());
         }
 
         // GET: Distribuidores/Details/5

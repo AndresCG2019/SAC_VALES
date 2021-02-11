@@ -58,7 +58,7 @@ namespace SAC_VALES.Web.Controllers
         {
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
-            ViewBag.Cliente_id = new SelectList(_context.Cliente.Where(c => c.Distribuidor.Email == User.Identity.Name).ToList(),"id", "Email" );
+            ViewBag.Cliente_id = new SelectList(_context.Cliente.ToList(),"id", "Email" );
             ViewBag.Empresa_id = new SelectList(_context.Empresa, "id", "Email");
 
             return View();
@@ -86,7 +86,7 @@ namespace SAC_VALES.Web.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Cliente_id = new SelectList(_context.Cliente.Where(c => c.Distribuidor.Email == User.Identity.Name).ToList(), "id", "Email");
+            ViewBag.Cliente_id = new SelectList(_context.Cliente.ToList(), "id", "Email");
             ViewBag.Empresa_id = new SelectList(_context.Empresa, "id", "Email");
 
             return View(valeEntity);

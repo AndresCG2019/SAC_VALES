@@ -169,7 +169,6 @@ namespace SAC_VALES.Web.Controllers
                         Direccion = model.Address,
                         Telefono = model.PhoneNumber,
                         Email = model.Username,
-                        EmpresaVinculada = empresa,
                         DistribuidorAuth = user
                     });
                     await _dataContext.SaveChangesAsync();
@@ -185,7 +184,6 @@ namespace SAC_VALES.Web.Controllers
                         Direccion = model.Address,
                         Telefono = model.PhoneNumber,
                         Email = model.Username,
-                        Distribuidor = distribuidor,
                         ClienteAuth = user
 
                     });

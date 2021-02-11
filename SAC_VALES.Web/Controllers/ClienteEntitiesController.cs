@@ -30,9 +30,7 @@ namespace SAC_VALES.Web.Controllers
         {
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
-            return View(await _context.Cliente
-               .Where(c =>c.Distribuidor.id == distribuidor.id )
-               .ToListAsync());
+            return View(await _context.Cliente.ToListAsync());
         }
 
         // GET: ClienteEntities/Details/5

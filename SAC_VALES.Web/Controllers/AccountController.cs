@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
@@ -11,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace SAC_VALES.Web.Controllers
 {
@@ -28,6 +30,90 @@ namespace SAC_VALES.Web.Controllers
             _combosHelper = combosHelper;
             _dataContext = dataContext;
             _userManager = userManager;
+        }
+
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            Debug.WriteLine("TOKEN en reset 1");
+            Debug.WriteLine(token);
+
+            if (token == null || email == null)
+            {
+                ModelState.AddModelError("", "Recuperación de contraseña invalido");
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            Debug.WriteLine("TOKEN EN RESET 2");
+            Debug.WriteLine(model.Token);
+            
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    var decoded_token = HttpUtility.UrlDecode(model.Token);
+
+                    Debug.WriteLine("DECODED TOKEN");
+                    Debug.WriteLine(decoded_token);
+
+                    var result = await _userManager.ResetPasswordAsync(user, decoded_token, model.Password);
+                    if (result.Succeeded)
+                    {
+                        return View("ResetPasswordCofirmation");
+                    }
+                    foreach ( var error in result.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(model);
+                }
+                return View("ResetPasswordCofirmation");
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult ForgotPassword()
+        {
+            Debug.WriteLine("entre a forgot password 1");
+
+            return View();
+
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            Debug.WriteLine("entre a forgot password 2");
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByEmailAsync(model.Email);
+                if (user != null)
+                {
+                    //var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+                    var token = HttpUtility.UrlEncode(await _userManager.GeneratePasswordResetTokenAsync(user));
+                    var passwordResetLink = Url.Action("ResetPassword", "Account",
+                        new { email = model.Email, token = token }, Request.Scheme);
+                    //logger.Log(LogLevel.Warning, passwordResetLink);
+                    Debug.WriteLine("RESET PASSWORD LINK");
+                    Debug.WriteLine(LogLevel.Warning, passwordResetLink);
+                    return View("ForgotPasswordConfirmation");
+                }
+                
+                return View("ForgotPasswordConfirmation");
+            }
+           
+            return View(model);
         }
 
         public IActionResult Login()
@@ -76,7 +162,7 @@ namespace SAC_VALES.Web.Controllers
         public IActionResult Register()
         {
 
-            if (User.Identity.IsAuthenticated && User.IsInRole("Empresa")) 
+            if (User.Identity.IsAuthenticated && User.IsInRole("Empresa"))
             {
                 AddUserViewModel modelDist = new AddUserViewModel
                 {
@@ -113,7 +199,7 @@ namespace SAC_VALES.Web.Controllers
         {
             if (ModelState.IsValid)
             {
-                Data.Entities.UsuarioEntity user = await _userHelper.AddUserAsync(model, ""); 
+                Data.Entities.UsuarioEntity user = await _userHelper.AddUserAsync(model, "");
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "This email is already used.");
@@ -131,7 +217,7 @@ namespace SAC_VALES.Web.Controllers
                         Nombre = model.FirstName,
                         Apellidos = model.LastName,
                         Telefono = model.PhoneNumber,
-                        Email =model.Username,
+                        Email = model.Username,
                         Usuario = user
                     });
 
@@ -262,61 +348,7 @@ namespace SAC_VALES.Web.Controllers
             return View(model);
         }
 
-        public IActionResult SendPasswordResetLink(string username)
-        {
-            UsuarioEntity user =  _userManager.
-                 FindByEmailAsync(username).Result;
-
-            Debug.WriteLine("VALOR DE USUARIO");
-            Debug.WriteLine(user);
-
-            if (user == null)
-            {
-                ViewBag.Message = "Error while resetting your password!";
-                return View("Error");
-            }
-
-            /*var token = _userManager.
-                  GeneratePasswordResetTokenAsync(user).Result;*/
-
-            var token = "aijdjfodjfsodifj433r";
-
-            var resetLink = Url.Action("ResetPassword",
-                            "Account", new { token = token },
-                             protocol: HttpContext.Request.Scheme);
-
-            // code to email the above link
-            // see the earlier article
-
-            ViewBag.Message = "Password reset link has been sent to your email address!";
-            return View("Login");
-
-        }
-
-        public IActionResult ResetPassword(string token)
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult ResetPassword(ResetPasswordViewModel obj)
-        {
-            var user = _userManager.
-                         FindByNameAsync(obj.UserName).Result;
-
-            IdentityResult result = _userManager.ResetPasswordAsync
-                      (user, obj.Token, obj.Password).Result;
-            if (result.Succeeded)
-            {
-                ViewBag.Message = "Password reset successful!";
-                return View("Success");
-            }
-            else
-            {
-                ViewBag.Message = "Error while resetting the password!";
-                return View("Error");
-            }
-        }
+        
 
     }
 }

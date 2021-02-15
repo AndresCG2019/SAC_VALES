@@ -9,14 +9,15 @@ namespace SAC_VALES.Web.Models
     public class ResetPasswordViewModel
     {
         [Required]
-        public string UserName { get; set; }
+        [EmailAddress]
+        public string Email { get; set; }
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
         [Required]
         [DataType(DataType.Password)]
+        [Compare("Password", ErrorMessage ="Las contraseñas no coinciden")]
         public string ConfirmPassword { get; set; }
-        [Required]
         public string Token { get; set; }
     }
 }

@@ -43,7 +43,7 @@ namespace SAC_VALES.Web
             });
 
 
-            services.AddIdentity<UsuarioEntity, IdentityRole>(cfg =>
+            services.AddIdentity<UsuarioEntity, IdentityRole >  (cfg =>
             {
                 cfg.User.RequireUniqueEmail = true;
                 cfg.Password.RequireDigit = false;
@@ -51,7 +51,7 @@ namespace SAC_VALES.Web
                 cfg.Password.RequireLowercase = false;
                 cfg.Password.RequireNonAlphanumeric = false;
                 cfg.Password.RequireUppercase = false;
-            }).AddEntityFrameworkStores<DataContext>();
+            }).AddEntityFrameworkStores<DataContext>().AddDefaultTokenProviders();
 
 
 

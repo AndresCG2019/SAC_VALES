@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
@@ -30,8 +31,23 @@ namespace SAC_VALES.Web.Controllers
         {
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
-            return View(await _context.Cliente.ToListAsync());
+            return View(await _context.ClienteDistribuidor
+                .Include(item => item.Cliente)
+                .Where(cd => cd.DistribuidorId == distribuidor.id)
+                .ToListAsync());
         }
+
+        public async Task<IActionResult> SearchCliente()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ShowSearchResults(string SearchPhrase)
+        {
+            return View( await _context.Cliente.Where(c => c.Email.Contains(SearchPhrase)).ToListAsync());
+        }
+
+
 
         // GET: ClienteEntities/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -86,6 +102,63 @@ namespace SAC_VALES.Web.Controllers
             {
                 return NotFound();
             }
+            return View(clienteEntity);
+        }
+
+        public async Task<IActionResult> Vincular(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var clienteEntity = await _context.Cliente.FindAsync(id);
+            if (clienteEntity == null)
+            {
+                return NotFound();
+            }
+            return View(clienteEntity);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Vincular(int id, [Bind("id,Email,Nombre,Apellidos,Direccion,Telefono")]
+        ClienteEntity clienteEntity)
+        {
+            Debug.WriteLine("HOLA");
+            Debug.WriteLine("ENTRE VINCULAR");
+
+            if (id != clienteEntity.id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+
+                Debug.WriteLine("ENTRE AL IF");
+                try
+                {
+                    DistribuidorEntity distribuidor = _context.Distribuidor
+                                .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+                    _context.ClienteDistribuidor.Add(new ClienteDistribuidor
+                    {
+                        ClienteId = clienteEntity.id,
+                        DistribuidorId = distribuidor.id,
+                    });
+
+                    await _context.SaveChangesAsync();
+
+
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception e)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+            }
+            Debug.WriteLine("NO PASO NADA");
             return View(clienteEntity);
         }
 

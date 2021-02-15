@@ -1,0 +1,36 @@
+﻿
+@model SAC_VALES.Web.Data.Entities.ClienteEntity
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>¿Estás seguro de que quieres vincularte con este cliente?</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Vincular">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>@Html.ValidationSummary()</div>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="Email" />
+            <input type="hidden" asp-for="Nombre" />
+            <input type="hidden" asp-for="Apellidos" />
+            <input type="hidden" asp-for="Direccion" />
+            <input type="hidden" asp-for="Telefono" />
+
+            <div class="form-group">
+                <input type="submit" value="Vincular" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

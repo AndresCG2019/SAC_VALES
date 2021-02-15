@@ -25,19 +25,7 @@ namespace SAC_VALES.Web.Data
             await CheckAdminsAsync();
             await CheckRolesAsync();
 
-            _dataContext.Administrador.Add(new AdministradorEntity
-            {
-                Nombre = "Zuluaga",
-                Apellidos = "Admin",
-                Telefono = "350 634 2747",
-                Email = "jzuluaga55@gmail.com",
-                AdminAuth = await CheckUserAsync("jzuluaga55@gmail.com", "350 634 2747", UserType.Admin),
-                status = true
-
-            });
-
-            await _dataContext.SaveChangesAsync();
-
+            await CheckUserAsync("jzuluaga55@gmail.com", "350 634 2747", UserType.Admin);
         }
 
         private async Task<UsuarioEntity> CheckUserAsync(

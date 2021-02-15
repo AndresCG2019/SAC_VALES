@@ -72,11 +72,29 @@ namespace SAC_VALES.Web.Controllers
             return View();
         }
 
-        [Authorize(Roles = "Admin,Empresa,Distribuidor")]
-        public IActionResult Register()
+        public IActionResult Register(int? id)
         {
+            Debug.WriteLine("ENTRE A REGISTER");
 
-            if (User.Identity.IsAuthenticated && User.IsInRole("Empresa")) 
+            if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor") || id == 1)
+            {
+                int NavID = 0;
+
+                if (id == 1) NavID = 1; else NavID = 2;
+
+                AddUserViewModel modelCliente = new AddUserViewModel
+                {
+                    UserTypes = _combosHelper.GetComboRolesDistribuidor(),
+                    UserTypeId = 2,
+                    navId = NavID
+
+                };
+
+                return View(modelCliente);
+
+            }
+
+            else if ( !User.Identity.IsAuthenticated ||(User.Identity.IsAuthenticated && User.IsInRole("Empresa")) ) 
             {
                 AddUserViewModel modelDist = new AddUserViewModel
                 {
@@ -85,17 +103,6 @@ namespace SAC_VALES.Web.Controllers
                 };
 
                 return View(modelDist);
-
-            }
-            else if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
-            {
-                AddUserViewModel modelCliente = new AddUserViewModel
-                {
-                    UserTypes = _combosHelper.GetComboRolesDistribuidor(),
-                    UserTypeId = 2
-                };
-
-                return View(modelCliente);
 
             }
           
@@ -142,7 +149,7 @@ namespace SAC_VALES.Web.Controllers
                 {
                     _dataContext.Empresa.Add(new EmpresaEntity
                     {
-                        NombreEmpresa = "",
+                        NombreEmpresa = "Nombre Pendiente...",
                         NombreRepresentante = model.FirstName,
                         ApellidosRepresentante = model.LastName,
                         TelefonoRepresentante = model.PhoneNumber,
@@ -163,24 +170,53 @@ namespace SAC_VALES.Web.Controllers
                         Direccion = model.Address,
                         Telefono = model.PhoneNumber,
                         Email = model.Username,
-                        DistribuidorAuth = user
+                        DistribuidorAuth = user,
+
                     });
                     await _dataContext.SaveChangesAsync();
                 }
-                else if ((int)user.UserType == 2)
+                else if ((int)user.UserType == 2 && model.navId != 1)
                 {
                     var distribuidor = _dataContext.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+                    //var testDist = _dataContext.Distribuidor.Where(d => d.Email == "ortega@yopmail.com").FirstOrDefault();
 
-                    _dataContext.Cliente.Add(new ClienteEntity
+                    ClienteEntity cliente = new ClienteEntity()
                     {
                         Nombre = model.FirstName,
                         Apellidos = model.LastName,
                         Direccion = model.Address,
                         Telefono = model.PhoneNumber,
                         Email = model.Username,
-                        ClienteAuth = user
+                        ClienteAuth = user,
+                    };
 
+                    _dataContext.Cliente.Add(cliente);
+                    await _dataContext.SaveChangesAsync();
+
+                    _dataContext.ClienteDistribuidor.Add(new ClienteDistribuidor
+                    {
+                        Cliente = cliente,
+                        ClienteId = cliente.id,
+                        Distribuidor = distribuidor,
+                        DistribuidorId = distribuidor.id
                     });
+
+                    await _dataContext.SaveChangesAsync();
+                }
+
+                else if (model.navId == 1) 
+                {
+                    ClienteEntity cliente = new ClienteEntity()
+                    {
+                        Nombre = model.FirstName,
+                        Apellidos = model.LastName,
+                        Direccion = model.Address,
+                        Telefono = model.PhoneNumber,
+                        Email = model.Username,
+                        ClienteAuth = user,
+                    };
+
+                    _dataContext.Cliente.Add(cliente);
                     await _dataContext.SaveChangesAsync();
                 }
             }

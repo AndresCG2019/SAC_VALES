@@ -56,7 +56,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,NombreEmpresa,NombreRepresentante,ApellidosRepresentante,TelefonoRepresentante,Email")] EmpresaEntity empresaEntity)
+        public async Task<IActionResult> Create([Bind("id,NombreEmpresa,NombreRepresentante,ApellidosRepresentante,TelefonoRepresentante,Email,Direccion")] EmpresaEntity empresaEntity)
         {
             if (ModelState.IsValid)
             {
@@ -88,7 +88,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,NombreEmpresa,NombreRepresentante,ApellidosRepresentante,TelefonoRepresentante,Email")] EmpresaEntity empresaEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,NombreEmpresa,NombreRepresentante,ApellidosRepresentante,TelefonoRepresentante,Email,Direccion")] EmpresaEntity empresaEntity)
         {
             if (id != empresaEntity.id)
             {

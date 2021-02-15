@@ -1,0 +1,43 @@
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ClienteEntity>
+
+@{
+    ViewData["Title"] = "Resultado de Busqueda de Cliente";
+}
+
+<h2>Resultado de Busqueda de Cliente</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nombre)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Apellidos)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nombre)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Apellidos)
+                </td>
+                <td>
+                    <a asp-action="Vincular" asp-route-id="@item.id">Vincular</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

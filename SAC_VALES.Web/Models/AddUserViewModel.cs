@@ -33,6 +33,8 @@ namespace SAC_VALES.Web.Models
         [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar un rol.")]
         public int UserTypeId { get; set; }
 
+        public int navId { get; set; }
+
         public IEnumerable<SelectListItem> UserTypes { get; set; }
 
     }

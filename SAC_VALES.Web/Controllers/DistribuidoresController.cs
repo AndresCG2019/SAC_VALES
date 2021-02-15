@@ -14,7 +14,6 @@ using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Empresa")]
     public class DistribuidoresController : Controller
     {
         private readonly DataContext _context;
@@ -27,11 +26,24 @@ namespace SAC_VALES.Web.Controllers
         }
 
         // GET: Distribuidores
+        [Authorize(Roles = "Empresa")]
         public async Task<IActionResult> Index()
         {
             EmpresaEntity empresa = _context.Empresa.Where(e => e.Email == User.Identity.Name).FirstOrDefault();
 
             return View(await _context.Distribuidor.ToListAsync());
+        }
+
+        // GET: Distribuidores
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> ClientSideIndex()
+        {
+            ClienteEntity cliente = _context.Cliente.Where(c => c.Email == User.Identity.Name).FirstOrDefault();
+            
+            return View(await _context.ClienteDistribuidor
+               .Include(item => item.Distribuidor)
+               .Where(cd => cd.ClienteId == cliente.id)
+               .ToListAsync());
         }
 
         // GET: Distribuidores/Details/5

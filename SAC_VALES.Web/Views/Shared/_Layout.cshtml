@@ -40,13 +40,18 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Empresa"))
                     {
                         <li><a asp-controller="Account" asp-action="Register">Registrar Distribuidor</a></li>
-                        <li><a asp-controller="Distribuidores" asp-action="Index">Mis Distribuidores</a></li>
+                        <li><a asp-controller="Distribuidores" asp-action="Index">Distribuidores</a></li>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
                     {
                         <li><a asp-controller="Account" asp-action="Register">Registrar Cliente</a></li>
-                        <li><a asp-controller="ClienteEntities" asp-action="Index">Ver Clientes</a></li>
+                        <li><a asp-controller="ClienteEntities" asp-action="Index">Mis Clientes</a></li>
+                        <li><a asp-controller="ClienteEntities" asp-action="SearchCliente">Buscar Clientes</a></li>
                         <li><a asp-controller="Vales" asp-action="Index">Vales</a></li>
+                    }
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Cliente"))
+                    {
+                        <li><a asp-controller="Distribuidores" asp-action="ClientSideIndex">Mis Distribuidores</a></li>
                     }
                 </ul>
                 <ul class="nav navbar-nav navbar-right">

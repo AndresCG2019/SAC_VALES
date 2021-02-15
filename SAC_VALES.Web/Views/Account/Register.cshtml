@@ -4,14 +4,15 @@
     ViewData["Title"] = "Register";
 }
 
-<h2>Register</h2>
+<h2>Registrar Nuevo Usuario</h2>
 
-<h4>User</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
         <form asp-action="Register" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <input type="hidden" asp-for="navId" />
 
             <div class="form-group">
                 <label asp-for="Username" class="control-label"></label>
@@ -19,13 +20,14 @@
                 <span asp-validation-for="Username" class="text-danger"></span>
             </div>
 
-            <partial name="_User" />
 
             <div class="form-group">
                 <label asp-for="UserTypeId" class="control-label"></label>
                 <select asp-for="UserTypeId" asp-items="Model.UserTypes" class="form-control"></select>
                 <span asp-validation-for="UserTypeId" class="text-danger"></span>
             </div>
+
+            <partial name="_User" />
 
             <div class="form-group">
                 <label asp-for="Password" class="control-label"></label>

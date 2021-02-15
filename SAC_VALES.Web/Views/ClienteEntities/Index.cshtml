@@ -1,22 +1,22 @@
-﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ClienteEntity>
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ClienteDistribuidor>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h2>Index</h2>
+<h2>Mis Clientes</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Email)
+                @Html.DisplayNameFor(model => model.Cliente.Email)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Nombre)
+                @Html.DisplayNameFor(model => model.Cliente.Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Apellidos)
+                @Html.DisplayNameFor(model => model.Cliente.Apellidos)
             </th>
             <th></th>
         </tr>
@@ -25,16 +25,16 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Email)
+                @Html.DisplayFor(modelItem => item.Cliente.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Nombre)
+                @Html.DisplayFor(modelItem => item.Cliente.Nombre)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Apellidos)
+                @Html.DisplayFor(modelItem => item.Cliente.Apellidos)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Editar</a>
+                <a asp-action="Edit" asp-route-id="@item.Cliente.id">Editar</a>
             </td>
         </tr>
 }

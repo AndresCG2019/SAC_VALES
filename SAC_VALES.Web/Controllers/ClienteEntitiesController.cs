@@ -125,8 +125,6 @@ namespace SAC_VALES.Web.Controllers
         public async Task<IActionResult> Vincular(int id, [Bind("id,Email,Nombre,Apellidos,Direccion,Telefono")]
         ClienteEntity clienteEntity)
         {
-            Debug.WriteLine("HOLA");
-            Debug.WriteLine("ENTRE VINCULAR");
 
             if (id != clienteEntity.id)
             {
@@ -136,7 +134,6 @@ namespace SAC_VALES.Web.Controllers
             if (ModelState.IsValid)
             {
 
-                Debug.WriteLine("ENTRE AL IF");
                 try
                 {
                     DistribuidorEntity distribuidor = _context.Distribuidor
@@ -158,7 +155,6 @@ namespace SAC_VALES.Web.Controllers
                     return RedirectToAction(nameof(Index));
                 }
             }
-            Debug.WriteLine("NO PASO NADA");
             return View(clienteEntity);
         }
 

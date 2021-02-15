@@ -31,26 +31,8 @@ namespace SAC_VALES.Web.Controllers
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
             return View(await _context.Vale
-                .Where(v => v.DistribuidorId == distribuidor.id)
+                .Where(v => v.DistribuidorId == distribuidor.id && v.status_vale == true)
                 .ToListAsync());
-        }
-
-        // GET: Vales/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var valeEntity = await _context.Vale
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (valeEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(valeEntity);
         }
 
         // GET: Vales/Create
@@ -69,7 +51,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha")] ValeEntity valeEntity)
+        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,status_vale")] ValeEntity valeEntity)
         {
             var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
 
@@ -80,6 +62,7 @@ namespace SAC_VALES.Web.Controllers
             {
                 valeEntity.DistribuidorId = distribuidor.id;
                 valeEntity.Fecha = DateTime.UtcNow;
+                valeEntity.status_vale = true;
 
                 _context.Add(valeEntity);
                 await _context.SaveChangesAsync();
@@ -120,7 +103,7 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId")] ValeEntity valeEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale")] ValeEntity valeEntity)
         {
             if (id != valeEntity.id)
             {
@@ -150,33 +133,55 @@ namespace SAC_VALES.Web.Controllers
             return View(valeEntity);
         }
 
-        // GET: Vales/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Eliminar(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var valeEntity = await _context.Vale
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (valeEntity == null)
+            var vale = await _context.Vale.FindAsync(id);
+            if (vale == null)
+            {
+                return NotFound();
+            }
+            return View(vale);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale")]
+        ValeEntity valeEntity)
+        {
+
+            if (id != valeEntity.id)
             {
                 return NotFound();
             }
 
-            return View(valeEntity);
-        }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    valeEntity.status_vale = false;
 
-        // POST: Vales/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var valeEntity = await _context.Vale.FindAsync(id);
-            _context.Vale.Remove(valeEntity);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+                    _context.Update(valeEntity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ValeEntityExists(valeEntity.id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(valeEntity);
         }
 
         private bool ValeEntityExists(int id)

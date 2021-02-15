@@ -1,0 +1,36 @@
+﻿
+@model SAC_VALES.Web.Data.Entities.ValeEntity
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>¿Estás seguro de que quieres eliminar este vale?</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Eliminar">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>@Html.ValidationSummary()</div>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="Monto" />
+            <input type="hidden" asp-for="DistribuidorId" />
+            <input type="hidden" asp-for="EmpresaId" />
+            <input type="hidden" asp-for="ClienteId" />
+            <input type="hidden" asp-for="status_vale" />
+
+            <div class="form-group">
+                <input type="submit" value="Eliminar" class="btn btn-success" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Regresar</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

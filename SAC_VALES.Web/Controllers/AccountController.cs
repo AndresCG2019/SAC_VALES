@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -106,7 +107,30 @@ namespace SAC_VALES.Web.Controllers
                         new { email = model.Email, token = token }, Request.Scheme);
                     //logger.Log(LogLevel.Warning, passwordResetLink);
                     Debug.WriteLine("RESET PASSWORD LINK");
-                    Debug.WriteLine(LogLevel.Warning, passwordResetLink);
+                    Debug.WriteLine(/*LogLevel.Warning,*/ passwordResetLink);
+
+                    // ----- Start   CODIGO DE EMAIL
+                    string EmailDestino = model.Email;
+                    string EmailOrigen = "EvolSoftSoporte@gmail.com";
+                    string Contraseña = "EvolSoft12345";
+                    MailMessage oMailMessage = new MailMessage(EmailOrigen, EmailDestino, "Recuperación de contraseña",
+                        "<p>Correo para recuperación de contraseña</p><br>" +
+                        "<a href='" + passwordResetLink + "'>Click para recuperar</a>");
+
+                    oMailMessage.IsBodyHtml = true;
+
+                    SmtpClient oSmtpClient = new SmtpClient("smtp.gmail.com");
+                    oSmtpClient.EnableSsl = true;
+                    oSmtpClient.UseDefaultCredentials = false;
+                    oSmtpClient.Port = 587;
+                    oSmtpClient.Credentials = new System.Net.NetworkCredential(EmailOrigen, Contraseña);
+
+                    oSmtpClient.Send(oMailMessage);
+
+                    oSmtpClient.Dispose();
+                    // -- End CODIGO DE EMAIL
+
+
                     return View("ForgotPasswordConfirmation");
                 }
                 

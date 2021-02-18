@@ -1,0 +1,30 @@
+﻿@model SAC_VALES.Web.Data.Entities.TaloneraEntity
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TaloneraEntity</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.RangoInicio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RangoInicio)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RangoFin)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RangoFin)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

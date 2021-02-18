@@ -102,7 +102,8 @@ namespace SAC_VALES.Web.Controllers
             {
                 return NotFound();
             }
-            return View(clienteEntity);
+            //return View(clienteEntity); TEMPORALMENTE INHABILITADO
+            return NotFound();
         }
 
         public async Task<IActionResult> Vincular(int? id)

@@ -23,7 +23,7 @@ namespace SAC_VALES.Web.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]
         public DateTime FechaLocal => Fecha.ToLocalTime();
 
-        public bool status_vale { get; set; }
+        public string status_vale { get; set; }
 
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public int DistribuidorId { get; set; }

@@ -7,46 +7,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
-using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
-    public class DistribuidoresController : Controller
+    [Authorize(Roles = "Distribuidor")]
+    public class TalonerasController : Controller
     {
         private readonly DataContext _context;
-        private readonly IUserHelper _userHelper;
 
-        public DistribuidoresController(DataContext context, IUserHelper userHelper)
+        public TalonerasController(DataContext context)
         {
             _context = context;
-            _userHelper = userHelper;
         }
 
-        // GET: Distribuidores
-        [Authorize(Roles = "Empresa")]
+        // GET: Taloneras
         public async Task<IActionResult> Index()
         {
-            EmpresaEntity empresa = _context.Empresa.Where(e => e.Email == User.Identity.Name).FirstOrDefault();
-
-            return View(await _context.Distribuidor.ToListAsync());
+            return View(await _context.Talonera.ToListAsync());
         }
 
-        // GET: Distribuidores
-        [Authorize(Roles = "Cliente")]
-        public async Task<IActionResult> ClientSideIndex()
-        {
-            ClienteEntity cliente = _context.Cliente.Where(c => c.Email == User.Identity.Name).FirstOrDefault();
-            
-            return View(await _context.ClienteDistribuidor
-               .Include(item => item.Distribuidor)
-               .Where(cd => cd.ClienteId == cliente.id)
-               .ToListAsync());
-        }
-
-        // GET: Distribuidores/Details/5
+        // GET: Taloneras/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -54,39 +36,59 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var distribuidorEntity = await _context.Distribuidor
+            var taloneraEntity = await _context.Talonera
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (distribuidorEntity == null)
+            if (taloneraEntity == null)
             {
                 return NotFound();
             }
 
-            return View(distribuidorEntity);
+            return View(taloneraEntity);
         }
 
-        // GET: Distribuidores/Create
-        public IActionResult Create()
+        public async Task<IActionResult> SelectEmpresa()
         {
+            
+            return View(await _context.Empresa.ToListAsync());
+        }
+
+        // GET: Taloneras/Create
+        public IActionResult Create(int? id)
+        {
+            EmpresaEntity empresa = _context.Empresa.Where(e => e.id == id).FirstOrDefault();
+
+            ViewBag.emailEmpresa = empresa.Email;
+
             return View();
         }
 
-        // POST: Distribuidores/Create
+        // POST: Taloneras/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,EmpresaVinculada,StatusDistribuidor")] DistribuidorEntity distribuidorEntity)
+        public async Task<IActionResult> Create([Bind("id,RangoInicio,RangoFin,Empresa")] 
+        TaloneraEntity taloneraEntity, int? id)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(distribuidorEntity);
+                EmpresaEntity empresa = _context.Empresa.Where(e => e.id == id).FirstOrDefault();
+
+                _context.Talonera.Add(new TaloneraEntity
+                {
+                    RangoInicio = taloneraEntity.RangoInicio,
+                    RangoFin = taloneraEntity.RangoFin,
+                    Empresa = empresa
+                });
+
                 await _context.SaveChangesAsync();
+
                 return RedirectToAction(nameof(Index));
             }
-            return View(distribuidorEntity);
+            return View(taloneraEntity);
         }
 
-        // GET: Distribuidores/Edit/5
+        // GET: Taloneras/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -94,24 +96,22 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var distribuidorEntity = await _context.Distribuidor.FindAsync(id);
-            if (distribuidorEntity == null)
+            var taloneraEntity = await _context.Talonera.FindAsync(id);
+            if (taloneraEntity == null)
             {
                 return NotFound();
             }
-            //return View(distribuidorEntity); DESHABILITADO TEMPORALMENTE
-            return NotFound();
+            return View(taloneraEntity);
         }
 
-        // POST: Distribuidores/Edit/5
+        // POST: Taloneras/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,EmpresaVinculada,StatusDistribuidor,Nombre,Apellidos,Direccion,Telefono,Email")]
-        DistribuidorEntity distribuidorEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,RangoInicio,RangoFin")] TaloneraEntity taloneraEntity)
         {
-            if (id != distribuidorEntity.id)
+            if (id != taloneraEntity.id)
             {
                 return NotFound();
             }
@@ -120,12 +120,12 @@ namespace SAC_VALES.Web.Controllers
             {
                 try
                 {
-                    _context.Update(distribuidorEntity);
+                    _context.Update(taloneraEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DistribuidorEntityExists(distribuidorEntity.id))
+                    if (!TaloneraEntityExists(taloneraEntity.id))
                     {
                         return NotFound();
                     }
@@ -136,10 +136,10 @@ namespace SAC_VALES.Web.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(distribuidorEntity);
+            return View(taloneraEntity);
         }
 
-        // GET: Distribuidores/Delete/5
+        // GET: Taloneras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -147,30 +147,30 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var distribuidorEntity = await _context.Distribuidor
+            var taloneraEntity = await _context.Talonera
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (distribuidorEntity == null)
+            if (taloneraEntity == null)
             {
                 return NotFound();
             }
 
-            return View(distribuidorEntity);
+            return View(taloneraEntity);
         }
 
-        // POST: Distribuidores/Delete/5
+        // POST: Taloneras/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var distribuidorEntity = await _context.Distribuidor.FindAsync(id);
-            _context.Distribuidor.Remove(distribuidorEntity);
+            var taloneraEntity = await _context.Talonera.FindAsync(id);
+            _context.Talonera.Remove(taloneraEntity);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DistribuidorEntityExists(int id)
+        private bool TaloneraEntityExists(int id)
         {
-            return _context.Distribuidor.Any(e => e.id == id);
+            return _context.Talonera.Any(e => e.id == id);
         }
     }
 }

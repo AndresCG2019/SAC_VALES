@@ -31,7 +31,7 @@ namespace SAC_VALES.Web.Controllers
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
             return View(await _context.Vale
-                .Where(v => v.DistribuidorId == distribuidor.id && v.status_vale == true)
+                .Where(v => v.DistribuidorId == distribuidor.id && v.status_vale == "Activo")
                 .ToListAsync());
         }
 
@@ -62,7 +62,7 @@ namespace SAC_VALES.Web.Controllers
             {
                 valeEntity.DistribuidorId = distribuidor.id;
                 valeEntity.Fecha = DateTime.UtcNow;
-                valeEntity.status_vale = true;
+                valeEntity.status_vale = "Activo";
 
                 _context.Add(valeEntity);
                 await _context.SaveChangesAsync();
@@ -163,7 +163,7 @@ namespace SAC_VALES.Web.Controllers
             {
                 try
                 {
-                    valeEntity.status_vale = false;
+                    valeEntity.status_vale = "Inactivo";
 
                     _context.Update(valeEntity);
                     await _context.SaveChangesAsync();

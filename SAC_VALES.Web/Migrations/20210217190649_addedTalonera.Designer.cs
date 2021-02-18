@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210217190649_addedTalonera")]
+    partial class addedTalonera
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -280,25 +282,6 @@ namespace SAC_VALES.Web.Migrations
                     b.ToTable("Empresa");
                 });
 
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>
-                {
-                    b.Property<int>("id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int?>("Empresaid");
-
-                    b.Property<int>("RangoFin");
-
-                    b.Property<int>("RangoInicio");
-
-                    b.HasKey("id");
-
-                    b.HasIndex("Empresaid");
-
-                    b.ToTable("Talonera");
-                });
-
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.UsuarioEntity", b =>
                 {
                     b.Property<string>("Id")
@@ -459,13 +442,6 @@ namespace SAC_VALES.Web.Migrations
                     b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "EmpresaAuth")
                         .WithMany()
                         .HasForeignKey("EmpresaAuthId");
-                });
-
-            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>
-                {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("Empresaid");
                 });
 #pragma warning restore 612, 618
         }

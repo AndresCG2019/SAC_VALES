@@ -35,12 +35,13 @@
                 <input type="submit" value="Login" class="btn btn-success" />
             </div>
         </form>
-       
-        <div>
-            <a asp-controller="Account" asp-action="ForgotPassword">¿Olvidaste tu contraseña?</a>
-        </div>
     </div>
 </div>
+
+
+<li><a asp-controller="Account" asp-action="Register">Registrarse como Distribuidor</a></li>
+<li><a asp-controller="Account" asp-action="Register" asp-route-id="1">Registrarse como Cliente</a></li>
+<li><a asp-controller="Account" asp-action="ForgotPassword">¿Olvidaste tu contraseña?</a></li>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

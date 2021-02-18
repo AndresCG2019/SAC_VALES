@@ -46,7 +46,7 @@
                     {
                         <li><a asp-controller="Account" asp-action="Register">Registrar Cliente</a></li>
                         <li><a asp-controller="ClienteEntities" asp-action="Index">Mis Clientes</a></li>
-                        <li><a asp-controller="ClienteEntities" asp-action="SearchCliente">Buscar Clientes</a></li>
+                        <li><a asp-controller="ClienteEntities" asp-action="SearchCliente">Vincular Clientes</a></li>
                         <li><a asp-controller="Vales" asp-action="Index">Vales</a></li>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Cliente"))

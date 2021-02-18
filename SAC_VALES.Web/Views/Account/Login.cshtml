@@ -35,34 +35,10 @@
                 <input type="submit" value="Login" class="btn btn-success" />
             </div>
         </form>
-        <li><a asp-controller="Account" asp-action="Register">Registrarse como Distribuidor</a></li>
-        <li><a asp-controller="Account" asp-action="Register" asp-route-id="1">Registrarse como Cliente</a></li>
-        <h1>Reset Your Password</h1>
-
-        <form asp-controller="Account"
-              asp-action="SendPasswordResetLink"
-              method="post">
-
-            <table>
-                <tr>
-                    <td>
-                        <label asp-for="Username">
-                            User Name :
-                        </label>
-                    </td>
-                    <td><input name="UserName" type="text" /></td>
-                </tr>
-                <tr>
-                    <td colspan="2">
-                        <input type="submit"
-                               value="Reset Password" />
-                    </td>
-                </tr>
-            </table>
-            <strong>@ViewBag.Message</strong>
-            <div asp-validation-summary="All"></div>
-
-        </form>
+       
+        <div>
+            <a asp-controller="Account" asp-action="ForgotPassword">¿Olvidaste tu contraseña?</a>
+        </div>
     </div>
 </div>
 

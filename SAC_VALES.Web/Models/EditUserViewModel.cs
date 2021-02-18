@@ -24,10 +24,12 @@ namespace SAC_VALES.Web.Models
 
         [Display(Name = "Direccion")]
         [MaxLength(100, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        
         public string Address { get; set; }
 
         [Display(Name = "Número de Teléfono")]
         [MaxLength(50, ErrorMessage = "The {0} field can not have more than {1} characters.")]
+        [Required(ErrorMessage = "The field {0} is mandatory.")]
         public string PhoneNumber { get; set; }
 
         [Display(Name = "Picture")]

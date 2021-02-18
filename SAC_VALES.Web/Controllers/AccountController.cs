@@ -250,7 +250,7 @@ namespace SAC_VALES.Web.Controllers
                         Apellidos = model.LastName,
                         Telefono = model.PhoneNumber,
                         Email =model.Username,
-                        Usuario = user
+                        AdminAuth = user
                     });
 
                     await _dataContext.SaveChangesAsync();

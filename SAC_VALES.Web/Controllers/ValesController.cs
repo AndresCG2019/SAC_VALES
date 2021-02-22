@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
 using SAC_VALES.Web.Helpers;
+using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAC_VALES.Web.Controllers
 {
@@ -31,17 +30,63 @@ namespace SAC_VALES.Web.Controllers
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
             return View(await _context.Vale
-                .Where(v => v.DistribuidorId == distribuidor.id && v.status_vale == "Activo")
+                .Include(i => i.Empresa)
+                .Include(i => i.Cliente)
+                .Include(i => i.Talonera)
+                .Where(v => v.Distribuidor.id == distribuidor.id && v.status_vale == "Activo")
                 .ToListAsync());
         }
 
-        // GET: Vales/Create
-        public IActionResult Create()
+        public async Task<IActionResult> SelectTalonera()
         {
-            DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+            return View(await _context.Talonera
+                .Where(t => t.Distribuidor.Email == User.Identity.Name)
+                .Include(i => i.Empresa)
+                .ToListAsync());
+        }
 
-            ViewBag.Cliente_id = new SelectList(_context.Cliente.ToList(),"id", "Email" );
-            ViewBag.Empresa_id = new SelectList(_context.Empresa, "id", "Email");
+        public async Task<IActionResult> SelectCliente(int? id)
+        {
+            DistribuidorEntity distribuidor = _context.Distribuidor
+                .Where(d => d.Email == User.Identity.Name)
+                .FirstOrDefault();
+
+            ViewBag.idTalonera = id;
+
+            Debug.WriteLine("id en select cliente");
+            Debug.WriteLine(id);
+
+            return View(await _context.ClienteDistribuidor
+                .Include(item => item.Cliente)
+                .Where(cd => cd.DistribuidorId == distribuidor.id)
+                .ToListAsync());
+        }
+
+        public IActionResult ErrorVale()
+        {
+            Debug.WriteLine("ENTRE A ERROR VALE");
+            return View();
+        }
+
+        // GET: Vales/Create
+        public IActionResult Create(int? idTalonera, int? idCliente)
+        {
+            ViewBag.idTalonera = idTalonera;
+            ViewBag.idCliente = idCliente;
+
+            if (idTalonera == null) return NotFound();
+
+            TaloneraEntity talonera = _context.Talonera
+                .Include(item => item.Empresa)
+                .Where(t => t.id == idTalonera)
+                .FirstOrDefault();
+
+            ViewBag.Talonera = talonera;
+
+            if (talonera.Empresa.NombreEmpresa != "Nombre Pendiente...")
+                ViewBag.EmpresaDisplay = talonera.Empresa.NombreEmpresa;
+            else
+                ViewBag.EmpresaDisplay = talonera.Empresa.Email;
 
             return View();
         }
@@ -51,26 +96,59 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,status_vale")] ValeEntity valeEntity)
+        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,status_vale,NumeroFolio")]
+        ValeEntity valeEntity, int? idTalonera, int? idCliente)
         {
-            var user = await _userHelper.GetUserByEmailAsync(User.Identity.Name);
+
+            Debug.WriteLine("ID DE LA TALONERA EN TASK");
+            Debug.WriteLine(idTalonera);
+
+            Debug.WriteLine("ID DEL CLIENTE EN TASK");
+            Debug.WriteLine(idCliente);
+
 
             DistribuidorEntity distribuidor = _context.Distribuidor
-              .Where(d => d.Email == user.Email).FirstOrDefault();
+             .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+            TaloneraEntity talonera = _context.Talonera
+                .Include(item => item.Empresa)
+                .Where(t => t.id == idTalonera)
+                .FirstOrDefault();
+
+            ClienteEntity cliente = _context.Cliente.Where(c => c.id == idCliente).FirstOrDefault();
 
             if (ModelState.IsValid)
             {
-                valeEntity.DistribuidorId = distribuidor.id;
-                valeEntity.Fecha = DateTime.UtcNow;
-                valeEntity.status_vale = "Activo";
+                // evalua que el folio del vale ingresado este dentro del rango de la talonera a la que pertenece
 
-                _context.Add(valeEntity);
+                if (talonera == null ||
+                    valeEntity.NumeroFolio < talonera.RangoInicio || valeEntity.NumeroFolio > talonera.RangoFin)
+                    return RedirectToAction(nameof(ErrorVale));
+
+                ValeEntity valeValidacion = _context.Vale
+                    .Where(v => v.Talonera.id == talonera.id && v.NumeroFolio == valeEntity.NumeroFolio)
+                    .FirstOrDefault();
+
+                // evalua que el folio del vale ingresado no se repita dentro de la talonera a la que pertenece
+
+                if (valeValidacion != null)
+                    return RedirectToAction(nameof(ErrorVale));
+
+                _context.Vale.Add(new ValeEntity
+                {
+                    Monto = valeEntity.Monto,
+                    Fecha = DateTime.UtcNow,
+                    status_vale = "Activo",
+                    Talonera = talonera,
+                    Distribuidor = distribuidor,
+                    Empresa = talonera.Empresa,
+                    Cliente = cliente,  
+                    NumeroFolio = valeEntity.NumeroFolio
+                });
+
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-
-            ViewBag.Cliente_id = new SelectList(_context.Cliente.ToList(), "id", "Email");
-            ViewBag.Empresa_id = new SelectList(_context.Empresa, "id", "Email");
 
             return View(valeEntity);
         }
@@ -85,7 +163,8 @@ namespace SAC_VALES.Web.Controllers
 
             var valeEntity = await _context.Vale.FindAsync(id);
 
-            ClienteEntity cliente = await _context.Cliente.Where(c => c.id == valeEntity.ClienteId).FirstOrDefaultAsync();
+            ClienteEntity cliente = await _context.Cliente
+                .Where(c => c.id == valeEntity.Cliente.id).FirstOrDefaultAsync();
 
             ViewBag.ClienteEmail = cliente.Email;
             ViewBag.ClienteNombre = cliente.Nombre;
@@ -103,7 +182,8 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale")] ValeEntity valeEntity)
+        public async Task<IActionResult> Edit(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale,Fecha")]
+        ValeEntity valeEntity)
         {
             if (id != valeEntity.id)
             {

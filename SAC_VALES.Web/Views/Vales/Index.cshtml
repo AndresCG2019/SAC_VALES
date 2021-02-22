@@ -1,21 +1,18 @@
 ﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ValeEntity>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vales";
 }
+
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
 <h2>Vales</h2>
 
-<div class="row">
-    <p class="col-lg-1 col-md-1 ">
-        <a asp-action="Create">Registrar Vale</a>
-    </p>
-    <p class="col-lg-1 col-md-1">
-        <a asp-controller="Taloneras" asp-action="Index">Taloneras</a>
-    </p>
-</div>
+<a asp-action="SelectTalonera">Registrar Vale</a>
 
-<table class="table">
+<hr />
+
+<table class="table table-hover table-responsive table-striped" id="MyTable">
     <thead>
         <tr>
             <th>
@@ -24,24 +21,78 @@
             <th>
                 @Html.DisplayNameFor(model => model.FechaLocal)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroFolio)
+            </th>
+            <th>
+                Email de la Empresa
+            </th>
+            <th>
+                Email del Cliente
+            </th>
+            <th>
+                Talonera
+            </th>
+            <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Monto)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FechaLocal)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.id">Modificar</a>
-            </td>
-            <td>
-                <a asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Monto)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaLocal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NumeroFolio)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Empresa.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cliente.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Talonera.RangoInicio) - @Html.DisplayFor(modelItem => item.Talonera.RangoFin)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.id">Modificar</a>
+                </td>
+                <td>
+                    <a asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No hay resultados",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+
+}

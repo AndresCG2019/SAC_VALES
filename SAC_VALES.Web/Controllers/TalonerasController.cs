@@ -25,8 +25,24 @@ namespace SAC_VALES.Web.Controllers
         // GET: Taloneras
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Talonera.ToListAsync());
+            return View(await _context.Talonera
+                .Include(item => item.Empresa)
+                .Where(t => t.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync());
         }
+
+        public IActionResult ErrorTalonera()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> ValesTalonera(int? id)
+        {
+            if (id == null) return NotFound();
+
+            return View(await _context.Vale.Where(v => v.Talonera.id == id).ToListAsync());
+        }
+
 
         // GET: Taloneras/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -37,6 +53,7 @@ namespace SAC_VALES.Web.Controllers
             }
 
             var taloneraEntity = await _context.Talonera
+                .Include(item => item.Empresa)
                 .FirstOrDefaultAsync(m => m.id == id);
             if (taloneraEntity == null)
             {
@@ -55,6 +72,8 @@ namespace SAC_VALES.Web.Controllers
         // GET: Taloneras/Create
         public IActionResult Create(int? id)
         {
+            if (id == null) return NotFound();
+
             EmpresaEntity empresa = _context.Empresa.Where(e => e.id == id).FirstOrDefault();
 
             ViewBag.emailEmpresa = empresa.Email;
@@ -72,13 +91,23 @@ namespace SAC_VALES.Web.Controllers
         {
             if (ModelState.IsValid)
             {
+                // valida que el inicio de rango sea menor que el final de rango
+                if (taloneraEntity.RangoInicio >= taloneraEntity.RangoFin
+                        || taloneraEntity.RangoFin <= taloneraEntity.RangoInicio
+                    )
+                    return RedirectToAction(nameof(ErrorTalonera));
+
                 EmpresaEntity empresa = _context.Empresa.Where(e => e.id == id).FirstOrDefault();
+
+                DistribuidorEntity distribuidor = _context.Distribuidor
+                    .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
                 _context.Talonera.Add(new TaloneraEntity
                 {
                     RangoInicio = taloneraEntity.RangoInicio,
                     RangoFin = taloneraEntity.RangoFin,
-                    Empresa = empresa
+                    Empresa = empresa,
+                    Distribuidor = distribuidor
                 });
 
                 await _context.SaveChangesAsync();

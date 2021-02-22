@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SAC_VALES.Web.Data;
 
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20210218183912_taloneraRange")]
+    partial class taloneraRange
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -286,8 +288,6 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("Distribuidorid");
-
                     b.Property<int?>("Empresaid");
 
                     b.Property<int>("RangoFin");
@@ -295,8 +295,6 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<int>("RangoInicio");
 
                     b.HasKey("id");
-
-                    b.HasIndex("Distribuidorid");
 
                     b.HasIndex("Empresaid");
 
@@ -362,11 +360,11 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("Clienteid");
+                    b.Property<int>("ClienteId");
 
-                    b.Property<int?>("Distribuidorid");
+                    b.Property<int>("DistribuidorId");
 
-                    b.Property<int?>("Empresaid");
+                    b.Property<int>("EmpresaId");
 
                     b.Property<DateTime>("Fecha");
 
@@ -379,12 +377,6 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<string>("status_vale");
 
                     b.HasKey("id");
-
-                    b.HasIndex("Clienteid");
-
-                    b.HasIndex("Distribuidorid");
-
-                    b.HasIndex("Empresaid");
 
                     b.HasIndex("Taloneraid");
 
@@ -479,10 +471,6 @@ namespace SAC_VALES.Web.Migrations
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
-                        .WithMany()
-                        .HasForeignKey("Distribuidorid");
-
                     b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
                         .WithMany()
                         .HasForeignKey("Empresaid");
@@ -490,18 +478,6 @@ namespace SAC_VALES.Web.Migrations
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ValeEntity", b =>
                 {
-                    b.HasOne("SAC_VALES.Web.Data.Entities.ClienteEntity", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("Clienteid");
-
-                    b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
-                        .WithMany()
-                        .HasForeignKey("Distribuidorid");
-
-                    b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
-                        .WithMany()
-                        .HasForeignKey("Empresaid");
-
                     b.HasOne("SAC_VALES.Web.Data.Entities.TaloneraEntity", "Talonera")
                         .WithMany()
                         .HasForeignKey("Taloneraid");

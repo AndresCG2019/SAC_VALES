@@ -1,0 +1,55 @@
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ValeEntity>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2>Vales de la Talonera</h2>
+
+@if (!Model.Any())
+{
+    <hr />
+    <h4>Aun no hay vales en esta talonera...</h4>
+}
+else 
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Monto)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FechaLocal)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.NumeroFolio)
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Monto)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FechaLocal)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NumeroFolio)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.id">Modificar</a>
+                    </td>
+                    <td>
+                        <a asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

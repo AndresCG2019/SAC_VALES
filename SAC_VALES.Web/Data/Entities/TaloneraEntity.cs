@@ -18,5 +18,7 @@ namespace SAC_VALES.Web.Data.Entities
         [Required(ErrorMessage = "Es necesario ingresar un final del rango")]
         public int RangoFin { get; set; }
         public EmpresaEntity Empresa { get; set; }
+
+        public DistribuidorEntity Distribuidor { get; set; }
     }
 }

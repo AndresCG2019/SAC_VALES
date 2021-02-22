@@ -4,27 +4,40 @@
     ViewData["Title"] = "Details";
 }
 
-<h2>Details</h2>
+<h2>Detalles de la Talonera</h2>
 
 <div>
-    <h4>TaloneraEntity</h4>
     <hr />
     <dl class="dl-horizontal">
-        <dt>
+        <dt style="text-align: left">
             @Html.DisplayNameFor(model => model.RangoInicio)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.RangoInicio)
         </dd>
-        <dt>
+        <dt style="text-align: left">
             @Html.DisplayNameFor(model => model.RangoFin)
         </dt>
         <dd>
             @Html.DisplayFor(model => model.RangoFin)
         </dd>
+        <dt style="text-align: left">
+            Email de la empresa
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Empresa.Email)
+        </dd>
+        <dt style="text-align: left">
+            @Html.DisplayNameFor(model => model.Empresa.NombreEmpresa)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Empresa.NombreEmpresa)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="ValesTalonera" asp-route-id="@Model.id" class="btn btn-primary">
+        Ver vales de esta talonera
+    </a>
+    <a asp-action="Index" style="margin-left:10px" class="btn btn-default">Regresar</a>
 </div>

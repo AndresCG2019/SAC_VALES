@@ -4,34 +4,63 @@
     ViewData["Title"] = "Index";
 }
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
 <h2>Empresas Registrados</h2>
-<table class="table">
+<table class="table  table-hover table-responsive table-striped" id="MyTable">
     <thead>
         <tr>
             <th>
-                Nombre del Encargado
+                @Html.DisplayNameFor(model => model.NombreRepresentante)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Email)
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.NombreRepresentante)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                <a asp-action="EditEmpresa" asp-route-id="@item.id">Editar</a>
-            </td>
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.NombreRepresentante)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    <a asp-action="EditEmpresa" asp-route-id="@item.id">Editar</a>
+                </td>
 
-        </tr>
+            </tr>
         }
     </tbody>
 </table>
+
+@section Scripts {
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            console.log("hola");
+            $('#MyTable').DataTable({
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No hay resultados",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+
+}
+

@@ -1,23 +1,26 @@
 ﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ClienteDistribuidor>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Escoger Cliente";
 }
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
-<h2>Mis Distribuidores</h2>
+<h2>Seleccione un Cliente</h2>
+<h5>Escoja el cliente al que usted desea otorgarle este vale ...</h5>
+<hr />
+
 <table class="table table-hover table-responsive table-striped" id="MyTable">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Distribuidor.Email)
+                @Html.DisplayNameFor(model => model.Cliente.Nombre)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Distribuidor.Nombre)
+                @Html.DisplayNameFor(model => model.Cliente.Apellidos)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Distribuidor.Apellidos)
+                @Html.DisplayNameFor(model => model.Cliente.Email)
             </th>
             <th></th>
         </tr>
@@ -25,20 +28,21 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Distribuidor.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Distribuidor.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Distribuidor.Apellidos)
-                </td>
-                <td>
-                    <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Distribuidor.id">Mas Datos</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Nombre)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Apellidos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Email)
+            </td>
+            <td>
+                <a asp-action="Create" asp-route-idTalonera="@ViewBag.idTalonera" 
+                   asp-route-idCliente ="@item.Cliente.id"class="btn btn-default">Elegir</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -49,6 +53,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            console.log("hola");
             $('#MyTable').DataTable({
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ registros por página",

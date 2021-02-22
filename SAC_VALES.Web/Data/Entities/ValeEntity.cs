@@ -10,6 +10,11 @@ namespace SAC_VALES.Web.Data.Entities
     {
         public int id { get; set; }
 
+        [Range(1, 2000, ErrorMessage = "Por favor, ingrese un número válido")]
+        [Display(Name = "Número de folio")]
+        [Required(ErrorMessage = "Es necesario ingresar un número de folio")]
+        public int NumeroFolio { get; set; }
+
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public float Monto { get; set; }
 
@@ -25,14 +30,13 @@ namespace SAC_VALES.Web.Data.Entities
 
         public string status_vale { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public int DistribuidorId { get; set; }
+        public DistribuidorEntity Distribuidor { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public int EmpresaId { get; set; }
+        public EmpresaEntity Empresa { get; set; }
 
-        [Required(ErrorMessage = "El campo {0} es obligatorio.")]
-        public int ClienteId { get; set; }
+        public ClienteEntity Cliente { get; set; }
+
+        public TaloneraEntity Talonera { get; set; }
 
     }
 }

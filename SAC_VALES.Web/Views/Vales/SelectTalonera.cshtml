@@ -1,23 +1,29 @@
-﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ClienteDistribuidor>
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.TaloneraEntity>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Escoger Talonera";
 }
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
-<h2>Mis Distribuidores</h2>
+<h2>Seleccione una Talonera</h2>
+<h5>Escoja una talonera para poder crear un vale que corresponda a dicha elección...</h5>
+<hr />
+
 <table class="table table-hover table-responsive table-striped" id="MyTable">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Distribuidor.Email)
+                @Html.DisplayNameFor(model => model.RangoInicio)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Distribuidor.Nombre)
+                @Html.DisplayNameFor(model => model.RangoFin)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Distribuidor.Apellidos)
+                @Html.DisplayNameFor(model => model.Empresa.NombreEmpresa)
+            </th>
+            <th>
+                Correo de la empresa
             </th>
             <th></th>
         </tr>
@@ -25,20 +31,23 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Distribuidor.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Distribuidor.Nombre)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Distribuidor.Apellidos)
-                </td>
-                <td>
-                    <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Distribuidor.id">Mas Datos</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RangoInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RangoFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.NombreEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Email)
+            </td>
+            <td>
+                <a asp-action="SelectCliente" asp-route-id="@item.id" class="btn btn-default">Elegir</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>
@@ -49,6 +58,7 @@
 
     <script type="text/javascript">
         $(document).ready(function () {
+            console.log("hola");
             $('#MyTable').DataTable({
                 "language": {
                     "lengthMenu": "Mostrar _MENU_ registros por página",

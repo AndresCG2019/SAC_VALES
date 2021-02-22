@@ -48,6 +48,7 @@
                         <li><a asp-controller="ClienteEntities" asp-action="Index">Mis Clientes</a></li>
                         <li><a asp-controller="ClienteEntities" asp-action="SearchCliente">Vincular Clientes</a></li>
                         <li><a asp-controller="Vales" asp-action="Index">Vales</a></li>
+                        <li><a asp-controller="Taloneras" asp-action="Index">Taloneras</a></li>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Cliente"))
                     {

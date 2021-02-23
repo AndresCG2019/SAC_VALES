@@ -267,7 +267,9 @@ namespace SAC_VALES.Web.Controllers
                         Direccion = model.Address,
                         EmpresaAuth = user
                     });
+
                     await _dataContext.SaveChangesAsync();
+
                 }
                 else if ((int)user.UserType == 1)
                 {
@@ -284,6 +286,13 @@ namespace SAC_VALES.Web.Controllers
 
                     });
                     await _dataContext.SaveChangesAsync();
+
+                    LoginViewModel loginModel = new LoginViewModel();
+                    loginModel.Username = model.Username;
+                    loginModel.Contraseña = model.Password;
+                    loginModel.Recuerdame = true;
+
+                    var result = await _userHelper.LoginAsync(loginModel);
                 }
                 else if ((int)user.UserType == 2 && model.navId != 1)
                 {
@@ -328,6 +337,13 @@ namespace SAC_VALES.Web.Controllers
 
                     _dataContext.Cliente.Add(cliente);
                     await _dataContext.SaveChangesAsync();
+
+                    LoginViewModel loginModel = new LoginViewModel();
+                    loginModel.Username = model.Username;
+                    loginModel.Contraseña = model.Password;
+                    loginModel.Recuerdame = true;
+
+                    var result = await _userHelper.LoginAsync(loginModel);
                 }
             }
 

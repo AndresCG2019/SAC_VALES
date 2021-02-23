@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.ValeEntity>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Vales";
 }
 
 <h2>Vales de la Talonera</h2>
@@ -41,10 +41,10 @@ else
                         @Html.DisplayFor(modelItem => item.NumeroFolio)
                     </td>
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.id">Modificar</a>
+                        <a asp-controller="Vales" asp-action="Edit" asp-route-id="@item.id">Modificar</a>
                     </td>
                     <td>
-                        <a asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
+                        <a asp-controller="Vales" asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
                     </td>
                 </tr>
             }

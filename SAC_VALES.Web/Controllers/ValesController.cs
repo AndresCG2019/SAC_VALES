@@ -83,6 +83,12 @@ namespace SAC_VALES.Web.Controllers
 
             ViewBag.Talonera = talonera;
 
+            ClienteEntity cliente = _context.Cliente
+                .Where(c => c.id == idCliente)
+                .FirstOrDefault();
+
+            ViewBag.Cliente = cliente;
+
             if (talonera.Empresa.NombreEmpresa != "Nombre Pendiente...")
                 ViewBag.EmpresaDisplay = talonera.Empresa.NombreEmpresa;
             else
@@ -161,7 +167,10 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var valeEntity = await _context.Vale.FindAsync(id);
+            ValeEntity valeEntity = _context.Vale
+                .Include(i => i.Cliente)
+                .Where(v => v.id == id)
+                .FirstOrDefault();
 
             ClienteEntity cliente = await _context.Cliente
                 .Where(c => c.id == valeEntity.Cliente.id).FirstOrDefaultAsync();
@@ -182,8 +191,9 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale,Fecha")]
-        ValeEntity valeEntity)
+        public async Task<IActionResult> Edit(int id,
+            [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale,Fecha,NumeroFolio")]
+            ValeEntity valeEntity)
         {
             if (id != valeEntity.id)
             {
@@ -192,6 +202,29 @@ namespace SAC_VALES.Web.Controllers
 
             if (ModelState.IsValid)
             {
+                // evalua que el folio del vale ingresado este dentro del rango de la talonera a la que pertenece
+
+                ValeEntity valeUntracked = _context.Vale.AsNoTracking()
+                    .Include(i => i.Talonera)
+                    .Where(v => v.id == valeEntity.id)
+                    .FirstOrDefault();
+
+                Debug.WriteLine("VALE UNTRACKED ID EN EDIT SUBMIT");
+                Debug.WriteLine(valeUntracked.id);
+
+                TaloneraEntity talonera = _context.Talonera
+                    .Where(t => t.id == valeUntracked.Talonera.id)
+                    .FirstOrDefault();
+
+                Debug.WriteLine("TALONERA ID EN EDIT SUBMIT");
+                Debug.WriteLine(talonera.id);
+
+                if (talonera == null ||
+                    valeEntity.NumeroFolio < talonera.RangoInicio || valeEntity.NumeroFolio > talonera.RangoFin)
+                    return RedirectToAction(nameof(ErrorVale));
+
+                // termina la evaluacion del rango de folio
+
                 try
                 {
                     _context.Update(valeEntity);
@@ -230,7 +263,8 @@ namespace SAC_VALES.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Eliminar(int id, [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale")]
+        public async Task<IActionResult> Eliminar(int id,
+           [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale,NumeroFolio")]
         ValeEntity valeEntity)
         {
 

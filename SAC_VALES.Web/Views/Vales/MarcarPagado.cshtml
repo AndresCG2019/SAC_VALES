@@ -1,0 +1,33 @@
+﻿
+@model SAC_VALES.Web.Data.Entities.PagoEntity
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h2>¿Estás seguro de que quieres cambiar el estado de este pago?</h2>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="MarcarPagado">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div>@Html.ValidationSummary()</div>
+            <input type="hidden" asp-for="id" />
+            <input type="hidden" asp-for="Cantidad" />
+            <input type="hidden" asp-for="FechaLimite" />
+            <input type="hidden" asp-for="Pagado" />
+            <input type="hidden" asp-for="Valeid" />
+
+            <div class="form-group">
+                <input type="submit" value="Cambiar" class="btn btn-success" />
+                <a href="javascript:void(0);" onclick="history.go(-1);" style="margin-left: 10px;"
+                   class="btn btn-primary">Regresar</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

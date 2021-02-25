@@ -28,6 +28,9 @@
                 Email de la Empresa
             </th>
             <th>
+                Nombre de la Empresa
+            </th>
+            <th>
                 Email del Cliente
             </th>
             <th>
@@ -35,37 +38,44 @@
             </th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Monto)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.FechaLocal)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.NumeroFolio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Empresa.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Cliente.Email)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Talonera.RangoInicio) - @Html.DisplayFor(modelItem => item.Talonera.RangoFin)
-                </td>
-                <td>
-                    <a asp-action="Edit" asp-route-id="@item.id">Modificar</a>
-                </td>
-                <td>
-                    <a asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Monto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaLocal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroFolio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.NombreEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cliente.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Talonera.RangoInicio) - @Html.DisplayFor(modelItem => item.Talonera.RangoFin)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">Modificar</a>
+            </td>
+            <td>
+                <a asp-action="Eliminar" asp-route-id="@item.id" class="btn btn-default">Eliminar</a>
+            </td>
+            <td>
+                <a asp-action="VerPagos" asp-route-id="@item.id" class="btn btn-default">Ver Pagos</a>
+            </td>
+        </tr>
         }
     </tbody>
 </table>

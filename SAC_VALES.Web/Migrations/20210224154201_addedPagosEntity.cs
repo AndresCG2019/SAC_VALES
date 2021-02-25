@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace SAC_VALES.Web.Migrations
 {
-    public partial class thirdSetup : Migration
+    public partial class addedPagosEntity : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -41,9 +41,6 @@ namespace SAC_VALES.Web.Migrations
                     LockoutEnd = table.Column<DateTimeOffset>(nullable: true),
                     LockoutEnabled = table.Column<bool>(nullable: false),
                     AccessFailedCount = table.Column<int>(nullable: false),
-                    Nombre = table.Column<string>(maxLength: 50, nullable: false),
-                    Apellidos = table.Column<string>(maxLength: 50, nullable: false),
-                    Direccion = table.Column<string>(maxLength: 100, nullable: true),
                     UserType = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
@@ -79,19 +76,18 @@ namespace SAC_VALES.Web.Migrations
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
                     Nombre = table.Column<string>(maxLength: 30, nullable: false),
-                    ApellidoP = table.Column<string>(maxLength: 30, nullable: false),
-                    ApellidoM = table.Column<string>(maxLength: 30, nullable: false),
+                    Apellidos = table.Column<string>(maxLength: 90, nullable: false),
                     Telefono = table.Column<string>(maxLength: 17, nullable: false),
-                    userType = table.Column<int>(nullable: false),
+                    Email = table.Column<string>(maxLength: 100, nullable: true),
                     status = table.Column<bool>(nullable: false),
-                    UsuarioId = table.Column<string>(nullable: true)
+                    AdminAuthId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Administrador", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Administrador_AspNetUsers_UsuarioId",
-                        column: x => x.UsuarioId,
+                        name: "FK_Administrador_AspNetUsers_AdminAuthId",
+                        column: x => x.AdminAuthId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -188,22 +184,20 @@ namespace SAC_VALES.Web.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Nombre = table.Column<string>(maxLength: 50, nullable: false),
+                    Apellidos = table.Column<string>(maxLength: 50, nullable: false),
+                    Direccion = table.Column<string>(maxLength: 100, nullable: true),
+                    Telefono = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 100, nullable: true),
                     status_cliente = table.Column<bool>(nullable: false),
-                    DistribuidorId = table.Column<string>(nullable: true),
-                    ClienteId = table.Column<string>(nullable: true)
+                    ClienteAuthId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cliente", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Cliente_AspNetUsers_ClienteId",
-                        column: x => x.ClienteId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Cliente_AspNetUsers_DistribuidorId",
-                        column: x => x.DistribuidorId,
+                        name: "FK_Cliente_AspNetUsers_ClienteAuthId",
+                        column: x => x.ClienteAuthId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -215,22 +209,20 @@ namespace SAC_VALES.Web.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    EmpresaVinculadaId = table.Column<string>(nullable: true),
+                    Nombre = table.Column<string>(maxLength: 50, nullable: false),
+                    Apellidos = table.Column<string>(maxLength: 50, nullable: false),
+                    Direccion = table.Column<string>(maxLength: 100, nullable: true),
+                    Telefono = table.Column<string>(maxLength: 50, nullable: false),
+                    Email = table.Column<string>(maxLength: 100, nullable: true),
                     StatusDistribuidor = table.Column<bool>(nullable: false),
-                    UsuarioVinculadoId = table.Column<string>(nullable: true)
+                    DistribuidorAuthId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Distribuidor", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Distribuidor_AspNetUsers_EmpresaVinculadaId",
-                        column: x => x.EmpresaVinculadaId,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Distribuidor_AspNetUsers_UsuarioVinculadoId",
-                        column: x => x.UsuarioVinculadoId,
+                        name: "FK_Distribuidor_AspNetUsers_DistribuidorAuthId",
+                        column: x => x.DistribuidorAuthId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
@@ -242,24 +234,148 @@ namespace SAC_VALES.Web.Migrations
                 {
                     id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    NombreEmpresa = table.Column<string>(nullable: true),
-                    representanteId = table.Column<string>(nullable: true)
+                    NombreEmpresa = table.Column<string>(maxLength: 50, nullable: true),
+                    NombreRepresentante = table.Column<string>(maxLength: 50, nullable: false),
+                    ApellidosRepresentante = table.Column<string>(maxLength: 50, nullable: false),
+                    TelefonoRepresentante = table.Column<string>(maxLength: 50, nullable: false),
+                    Direccion = table.Column<string>(maxLength: 100, nullable: true),
+                    Email = table.Column<string>(maxLength: 100, nullable: true),
+                    EmpresaAuthId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Empresa", x => x.id);
                     table.ForeignKey(
-                        name: "FK_Empresa_AspNetUsers_representanteId",
-                        column: x => x.representanteId,
+                        name: "FK_Empresa_AspNetUsers_EmpresaAuthId",
+                        column: x => x.EmpresaAuthId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ClienteDistribuidor",
+                columns: table => new
+                {
+                    ClienteId = table.Column<int>(nullable: false),
+                    DistribuidorId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ClienteDistribuidor", x => new { x.ClienteId, x.DistribuidorId });
+                    table.ForeignKey(
+                        name: "FK_ClienteDistribuidor_Cliente_ClienteId",
+                        column: x => x.ClienteId,
+                        principalTable: "Cliente",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ClienteDistribuidor_Distribuidor_DistribuidorId",
+                        column: x => x.DistribuidorId,
+                        principalTable: "Distribuidor",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Talonera",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    RangoInicio = table.Column<int>(nullable: false),
+                    RangoFin = table.Column<int>(nullable: false),
+                    Empresaid = table.Column<int>(nullable: true),
+                    Distribuidorid = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Talonera", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Talonera_Distribuidor_Distribuidorid",
+                        column: x => x.Distribuidorid,
+                        principalTable: "Distribuidor",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Talonera_Empresa_Empresaid",
+                        column: x => x.Empresaid,
+                        principalTable: "Empresa",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ValeEntity",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    NumeroFolio = table.Column<int>(nullable: false),
+                    Monto = table.Column<float>(nullable: false),
+                    Fecha = table.Column<DateTime>(nullable: false),
+                    CantidadPagos = table.Column<int>(nullable: false),
+                    status_vale = table.Column<string>(nullable: true),
+                    Distribuidorid = table.Column<int>(nullable: true),
+                    Empresaid = table.Column<int>(nullable: true),
+                    Clienteid = table.Column<int>(nullable: true),
+                    Taloneraid = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ValeEntity", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_ValeEntity_Cliente_Clienteid",
+                        column: x => x.Clienteid,
+                        principalTable: "Cliente",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ValeEntity_Distribuidor_Distribuidorid",
+                        column: x => x.Distribuidorid,
+                        principalTable: "Distribuidor",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ValeEntity_Empresa_Empresaid",
+                        column: x => x.Empresaid,
+                        principalTable: "Empresa",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_ValeEntity_Talonera_Taloneraid",
+                        column: x => x.Taloneraid,
+                        principalTable: "Talonera",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pago",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    Cantidad = table.Column<int>(nullable: false),
+                    FechaLimite = table.Column<DateTime>(nullable: false),
+                    Pagado = table.Column<bool>(nullable: false),
+                    Valeid = table.Column<int>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pago", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_Pago_ValeEntity_Valeid",
+                        column: x => x.Valeid,
+                        principalTable: "ValeEntity",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
-                name: "IX_Administrador_UsuarioId",
+                name: "IX_Administrador_AdminAuthId",
                 table: "Administrador",
-                column: "UsuarioId");
+                column: "AdminAuthId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -301,29 +417,59 @@ namespace SAC_VALES.Web.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cliente_ClienteId",
+                name: "IX_Cliente_ClienteAuthId",
                 table: "Cliente",
-                column: "ClienteId");
+                column: "ClienteAuthId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cliente_DistribuidorId",
-                table: "Cliente",
+                name: "IX_ClienteDistribuidor_DistribuidorId",
+                table: "ClienteDistribuidor",
                 column: "DistribuidorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Distribuidor_EmpresaVinculadaId",
+                name: "IX_Distribuidor_DistribuidorAuthId",
                 table: "Distribuidor",
-                column: "EmpresaVinculadaId");
+                column: "DistribuidorAuthId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Distribuidor_UsuarioVinculadoId",
-                table: "Distribuidor",
-                column: "UsuarioVinculadoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Empresa_representanteId",
+                name: "IX_Empresa_EmpresaAuthId",
                 table: "Empresa",
-                column: "representanteId");
+                column: "EmpresaAuthId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pago_Valeid",
+                table: "Pago",
+                column: "Valeid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Talonera_Distribuidorid",
+                table: "Talonera",
+                column: "Distribuidorid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Talonera_Empresaid",
+                table: "Talonera",
+                column: "Empresaid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValeEntity_Clienteid",
+                table: "ValeEntity",
+                column: "Clienteid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValeEntity_Distribuidorid",
+                table: "ValeEntity",
+                column: "Distribuidorid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValeEntity_Empresaid",
+                table: "ValeEntity",
+                column: "Empresaid");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ValeEntity_Taloneraid",
+                table: "ValeEntity",
+                column: "Taloneraid");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -347,16 +493,28 @@ namespace SAC_VALES.Web.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "ClienteDistribuidor");
+
+            migrationBuilder.DropTable(
+                name: "Pago");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "ValeEntity");
+
+            migrationBuilder.DropTable(
                 name: "Cliente");
+
+            migrationBuilder.DropTable(
+                name: "Talonera");
 
             migrationBuilder.DropTable(
                 name: "Distribuidor");
 
             migrationBuilder.DropTable(
                 name: "Empresa");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

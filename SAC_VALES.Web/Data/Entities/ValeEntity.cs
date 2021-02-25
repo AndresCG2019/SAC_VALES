@@ -10,7 +10,7 @@ namespace SAC_VALES.Web.Data.Entities
     {
         public int id { get; set; }
 
-        [Range(1, 2000, ErrorMessage = "Por favor, ingrese un número válido")]
+        [Range(1, 2000, ErrorMessage = "Por favor, ingrese un número de folio válido")]
         [Display(Name = "Número de folio")]
         [Required(ErrorMessage = "Es necesario ingresar un número de folio")]
         public int NumeroFolio { get; set; }
@@ -27,6 +27,11 @@ namespace SAC_VALES.Web.Data.Entities
         [Display(Name = "Fecha Formato Local")]
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]
         public DateTime FechaLocal => Fecha.ToLocalTime();
+
+        [Range(1, 48, ErrorMessage = "Por favor, ingrese un número de pagos válido")]
+        [Display(Name = "Cantidad de pagos quincenales")]
+        [Required(ErrorMessage = "Es necesario ingresar una cantidad de pagos")]
+        public int CantidadPagos { get; set; }
 
         public string status_vale { get; set; }
 

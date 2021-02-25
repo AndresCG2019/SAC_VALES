@@ -4,6 +4,8 @@
     ViewData["Title"] = "Vales";
 }
 
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
+
 <h2>Vales de la Talonera</h2>
 
 @if (!Model.Any())
@@ -11,9 +13,9 @@
     <hr />
     <h4>Aun no hay vales en esta talonera...</h4>
 }
-else 
+else
 {
-    <table class="table">
+    <table class="table table-hover table-responsive table-striped" id="MyTable">
         <thead>
             <tr>
                 <th>
@@ -25,6 +27,8 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.NumeroFolio)
                 </th>
+                <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -51,5 +55,33 @@ else
         </tbody>
     </table>
 }
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script src="//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#MyTable').DataTable({
+                "language": {
+                    "lengthMenu": "Mostrar _MENU_ registros por página",
+                    "zeroRecords": "No hay resultados",
+                    "info": "Mostrando página _PAGE_ de _PAGES_",
+                    "infoEmpty": "No hay registros disponibles",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "search": "Buscar:",
+                    "paginate": {
+                        "first": "Primera",
+                        "last": "Ultima",
+                        "next": "Siguiente",
+                        "previous": "Anterior"
+                    }
+                }
+            });
+        });
+    </script>
+
+}
+
 
 

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.PagoEntity>
+
+@{
+    ViewData["Title"] = "Pagos";
+}
+
+<h2>Pagos del Vale</h2>
+
+<hr />
+
+<table class="table" id="MyTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Cantidad)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FechaLimite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pagado)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cantidad)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FechaLimite)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pagado)
+                </td>
+                <td>
+                    @if (item.Pagado == false)
+                    {
+                        <a asp-action="MarcarPagado" asp-route-id="@item.id"
+                           class="btn btn-default">Marcar Como Pagado</a>
+                    }
+
+                    else
+                    {
+                        <a asp-action="MarcarPagado" asp-route-id="@item.id"
+                           class="btn btn-default">Marcar Como No Pagado</a>
+                    }
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

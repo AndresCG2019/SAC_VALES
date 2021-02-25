@@ -10,8 +10,8 @@ using SAC_VALES.Web.Data;
 namespace SAC_VALES.Web.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20210217190841_addedTalonera2")]
-    partial class addedTalonera2
+    [Migration("20210224195332_changedPagoCantidad")]
+    partial class changedPagoCantidad
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -282,11 +282,34 @@ namespace SAC_VALES.Web.Migrations
                     b.ToTable("Empresa");
                 });
 
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.PagoEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<float>("Cantidad");
+
+                    b.Property<DateTime>("FechaLimite");
+
+                    b.Property<bool>("Pagado");
+
+                    b.Property<int?>("Valeid");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Valeid");
+
+                    b.ToTable("Pago");
+                });
+
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int?>("Distribuidorid");
 
                     b.Property<int?>("Empresaid");
 
@@ -295,6 +318,8 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<int>("RangoInicio");
 
                     b.HasKey("id");
+
+                    b.HasIndex("Distribuidorid");
 
                     b.HasIndex("Empresaid");
 
@@ -360,19 +385,33 @@ namespace SAC_VALES.Web.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("ClienteId");
+                    b.Property<int>("CantidadPagos");
 
-                    b.Property<int>("DistribuidorId");
+                    b.Property<int?>("Clienteid");
 
-                    b.Property<int>("EmpresaId");
+                    b.Property<int?>("Distribuidorid");
+
+                    b.Property<int?>("Empresaid");
 
                     b.Property<DateTime>("Fecha");
 
                     b.Property<float>("Monto");
 
+                    b.Property<int>("NumeroFolio");
+
+                    b.Property<int?>("Taloneraid");
+
                     b.Property<string>("status_vale");
 
                     b.HasKey("id");
+
+                    b.HasIndex("Clienteid");
+
+                    b.HasIndex("Distribuidorid");
+
+                    b.HasIndex("Empresaid");
+
+                    b.HasIndex("Taloneraid");
 
                     b.ToTable("ValeEntity");
                 });
@@ -463,11 +502,41 @@ namespace SAC_VALES.Web.Migrations
                         .HasForeignKey("EmpresaAuthId");
                 });
 
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.PagoEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.ValeEntity", "Vale")
+                        .WithMany()
+                        .HasForeignKey("Valeid");
+                });
+
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>
                 {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
+                        .WithMany()
+                        .HasForeignKey("Distribuidorid");
+
                     b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
                         .WithMany()
                         .HasForeignKey("Empresaid");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.ValeEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.ClienteEntity", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("Clienteid");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.DistribuidorEntity", "Distribuidor")
+                        .WithMany()
+                        .HasForeignKey("Distribuidorid");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.EmpresaEntity", "Empresa")
+                        .WithMany()
+                        .HasForeignKey("Empresaid");
+
+                    b.HasOne("SAC_VALES.Web.Data.Entities.TaloneraEntity", "Talonera")
+                        .WithMany()
+                        .HasForeignKey("Taloneraid");
                 });
 #pragma warning restore 612, 618
         }

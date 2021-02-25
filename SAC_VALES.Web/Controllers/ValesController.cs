@@ -37,6 +37,67 @@ namespace SAC_VALES.Web.Controllers
                 .ToListAsync());
         }
 
+        public async Task<IActionResult> MarcarPagado(int? id) 
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var pago = await _context.Pago.FindAsync(id);
+            if (pago == null)
+            {
+                return NotFound();
+            }
+
+            return View(pago);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarcarPagado(int id,
+          [Bind("id,Cantidad,FechaLimite,Pagado,Valeid")]
+        PagoEntity pagoEntity)
+        {
+
+            if (id != pagoEntity.id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    if (pagoEntity.Pagado == false)
+                        pagoEntity.Pagado = true;
+                    else
+                        pagoEntity.Pagado = false;
+
+                    _context.Update(pagoEntity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ValeEntityExists(pagoEntity.id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("VerPagos/" + pagoEntity.Valeid);
+            }
+            return View(pagoEntity);
+        }
+
+        public async Task<IActionResult> VerPagos(int? id)
+        {
+            return View(await _context.Pago.Where(p => p.Vale.id == id).ToListAsync());
+        }
+
         public async Task<IActionResult> SelectTalonera()
         {
             return View(await _context.Talonera
@@ -53,9 +114,6 @@ namespace SAC_VALES.Web.Controllers
 
             ViewBag.idTalonera = id;
 
-            Debug.WriteLine("id en select cliente");
-            Debug.WriteLine(id);
-
             return View(await _context.ClienteDistribuidor
                 .Include(item => item.Cliente)
                 .Where(cd => cd.DistribuidorId == distribuidor.id)
@@ -64,7 +122,6 @@ namespace SAC_VALES.Web.Controllers
 
         public IActionResult ErrorVale()
         {
-            Debug.WriteLine("ENTRE A ERROR VALE");
             return View();
         }
 
@@ -102,17 +159,10 @@ namespace SAC_VALES.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,status_vale,NumeroFolio")]
-        ValeEntity valeEntity, int? idTalonera, int? idCliente)
+        public async Task<IActionResult> Create(
+            [Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,status_vale,NumeroFolio,CantidadPagos")]
+            ValeEntity valeEntity, int? idTalonera, int? idCliente)
         {
-
-            Debug.WriteLine("ID DE LA TALONERA EN TASK");
-            Debug.WriteLine(idTalonera);
-
-            Debug.WriteLine("ID DEL CLIENTE EN TASK");
-            Debug.WriteLine(idCliente);
-
-
             DistribuidorEntity distribuidor = _context.Distribuidor
              .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
@@ -121,7 +171,11 @@ namespace SAC_VALES.Web.Controllers
                 .Where(t => t.id == idTalonera)
                 .FirstOrDefault();
 
+            ViewBag.Talonera = talonera;
+
             ClienteEntity cliente = _context.Cliente.Where(c => c.id == idCliente).FirstOrDefault();
+
+            ViewBag.Cliente = cliente;
 
             if (ModelState.IsValid)
             {
@@ -140,17 +194,37 @@ namespace SAC_VALES.Web.Controllers
                 if (valeValidacion != null)
                     return RedirectToAction(nameof(ErrorVale));
 
-                _context.Vale.Add(new ValeEntity
+                ValeEntity valeInsert = new ValeEntity
                 {
                     Monto = valeEntity.Monto,
+                    CantidadPagos = valeEntity.CantidadPagos,
                     Fecha = DateTime.UtcNow,
                     status_vale = "Activo",
                     Talonera = talonera,
                     Distribuidor = distribuidor,
                     Empresa = talonera.Empresa,
-                    Cliente = cliente,  
+                    Cliente = cliente,
                     NumeroFolio = valeEntity.NumeroFolio
-                });
+                };
+
+                _context.Vale.Add(valeInsert);
+                await _context.SaveChangesAsync();
+
+                float division = valeEntity.Monto / valeEntity.CantidadPagos;
+
+                for (int i = 0; i < valeEntity.CantidadPagos; i++)
+                {
+                    _context.Pago.Add(new PagoEntity
+                    {
+                        Cantidad = division,
+                        FechaLimite = DateTime.UtcNow,
+                        Vale = valeInsert
+                    });
+                }
+
+                Debug.WriteLine("DIVISION");
+
+                Debug.WriteLine(division);
 
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -209,15 +283,9 @@ namespace SAC_VALES.Web.Controllers
                     .Where(v => v.id == valeEntity.id)
                     .FirstOrDefault();
 
-                Debug.WriteLine("VALE UNTRACKED ID EN EDIT SUBMIT");
-                Debug.WriteLine(valeUntracked.id);
-
                 TaloneraEntity talonera = _context.Talonera
                     .Where(t => t.id == valeUntracked.Talonera.id)
                     .FirstOrDefault();
-
-                Debug.WriteLine("TALONERA ID EN EDIT SUBMIT");
-                Debug.WriteLine(talonera.id);
 
                 if (talonera == null ||
                     valeEntity.NumeroFolio < talonera.RangoInicio || valeEntity.NumeroFolio > talonera.RangoFin)
@@ -301,6 +369,11 @@ namespace SAC_VALES.Web.Controllers
         private bool ValeEntityExists(int id)
         {
             return _context.Vale.Any(e => e.id == id);
+        }
+
+        private bool PagoEntityExists(int id)
+        {
+            return _context.Pago.Any(e => e.id == id);
         }
     }
 }

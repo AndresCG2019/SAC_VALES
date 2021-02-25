@@ -280,6 +280,27 @@ namespace SAC_VALES.Web.Migrations
                     b.ToTable("Empresa");
                 });
 
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.PagoEntity", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<float>("Cantidad");
+
+                    b.Property<DateTime>("FechaLimite");
+
+                    b.Property<bool>("Pagado");
+
+                    b.Property<int>("Valeid");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("Valeid");
+
+                    b.ToTable("Pago");
+                });
+
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>
                 {
                     b.Property<int>("id")
@@ -361,6 +382,8 @@ namespace SAC_VALES.Web.Migrations
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CantidadPagos");
 
                     b.Property<int?>("Clienteid");
 
@@ -475,6 +498,14 @@ namespace SAC_VALES.Web.Migrations
                     b.HasOne("SAC_VALES.Web.Data.Entities.UsuarioEntity", "EmpresaAuth")
                         .WithMany()
                         .HasForeignKey("EmpresaAuthId");
+                });
+
+            modelBuilder.Entity("SAC_VALES.Web.Data.Entities.PagoEntity", b =>
+                {
+                    b.HasOne("SAC_VALES.Web.Data.Entities.ValeEntity", "Vale")
+                        .WithMany()
+                        .HasForeignKey("Valeid")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("SAC_VALES.Web.Data.Entities.TaloneraEntity", b =>

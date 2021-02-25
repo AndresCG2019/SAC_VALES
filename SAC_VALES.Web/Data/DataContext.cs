@@ -21,6 +21,7 @@ namespace SAC_VALES.Web.Data
         public DbSet<DistribuidorEntity> Distribuidor { get; set; }
         public DbSet<ValeEntity> Vale { get; set; }
         public DbSet<TaloneraEntity> Talonera { get; set; }
+        public DbSet<PagoEntity> Pago { get; set; }
         public DbSet<ClienteDistribuidor> ClienteDistribuidor { get; set; }
 
 

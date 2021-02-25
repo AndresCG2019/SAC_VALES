@@ -25,4 +25,8 @@
     <ProjectReference Include="..\SAC_VALES.Common\SAC_VALES.Common.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>

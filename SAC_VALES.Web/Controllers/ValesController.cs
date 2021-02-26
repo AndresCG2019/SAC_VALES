@@ -198,30 +198,34 @@ namespace SAC_VALES.Web.Controllers
                 {
                     Monto = valeEntity.Monto,
                     CantidadPagos = valeEntity.CantidadPagos,
-                    Fecha = DateTime.UtcNow,
+                    Fecha = valeEntity.Fecha,
                     status_vale = "Activo",
                     Talonera = talonera,
                     Distribuidor = distribuidor,
                     Empresa = talonera.Empresa,
                     Cliente = cliente,
-                    NumeroFolio = valeEntity.NumeroFolio
+                    NumeroFolio = valeEntity.NumeroFolio,
+                    
                 };
 
                 _context.Vale.Add(valeInsert);
                 await _context.SaveChangesAsync();
 
                 float division = valeEntity.Monto / valeEntity.CantidadPagos;
+                DateTime FechaLimite = valeEntity.Fecha;
+               
 
                 for (int i = 0; i < valeEntity.CantidadPagos; i++)
                 {
                     _context.Pago.Add(new PagoEntity
                     {
                         Cantidad = division,
-                        FechaLimite = DateTime.UtcNow,
+                        FechaLimite = FechaLimite,
                         Vale = valeInsert
+                        
                     });
+                    FechaLimite = FechaLimite.AddDays(15);
                 }
-
                 Debug.WriteLine("DIVISION");
 
                 Debug.WriteLine(division);

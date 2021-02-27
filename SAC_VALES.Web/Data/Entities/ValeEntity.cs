@@ -20,12 +20,12 @@ namespace SAC_VALES.Web.Data.Entities
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Fecha")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime Fecha { get; set; }
 
         [DataType(DataType.DateTime)]
-        [Display(Name = "Fecha Formato Local")]
-        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd hh:mm}", ApplyFormatInEditMode = false)]
+        [Display(Name = "Fecha de creación de talonera")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime FechaLocal => Fecha.ToLocalTime();
 
         [Range(1, 48, ErrorMessage = "Por favor, ingrese un número de pagos válido")]
@@ -36,6 +36,9 @@ namespace SAC_VALES.Web.Data.Entities
         public bool Pagado { get; set; }
 
         public string status_vale { get; set; }
+        public int dia { get; set; }
+        public string Mes { get; set; }
+        public int Año { get; set; }
 
         public DistribuidorEntity Distribuidor { get; set; }
 

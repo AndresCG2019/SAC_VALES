@@ -27,6 +27,9 @@ else
                 <th>
                     @Html.DisplayNameFor(model => model.NumeroFolio)
                 </th>
+                <th>
+                    Pago
+                </th>
                 <th></th>
                 <th></th>
             </tr>
@@ -45,10 +48,22 @@ else
                         @Html.DisplayFor(modelItem => item.NumeroFolio)
                     </td>
                     <td>
-                        <a asp-controller="Vales" asp-action="Edit" asp-route-id="@item.id">Modificar</a>
+                        @if (item.Pagado == true)
+                        {
+                            <span class="badge badge-primary">Completo</span>
+                        }
+                        else
+                        {
+                            <span class="badge">No Completo</span>
+                        }
                     </td>
                     <td>
-                        <a asp-controller="Vales" asp-action="Eliminar" asp-route-id="@item.id">Eliminar</a>
+                        <a asp-controller="Vales" asp-action="VerPagos" asp-route-id="@item.id"
+                           class="btn btn-default">Ver Pagos</a>
+                    </td>
+                    <td>
+                        <a asp-controller="Vales" asp-action="Eliminar" asp-route-id="@item.id"
+                           class="btn btn-default" >Eliminar</a>
                     </td>
                 </tr>
             }

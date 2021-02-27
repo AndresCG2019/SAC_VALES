@@ -1334,7 +1334,7 @@ mark,
   text-transform: capitalize;
 }
 .text-muted {
-  color: #777777;
+    color: #bdbdbd;
 }
 .text-primary {
   color: #337ab7;
@@ -1358,7 +1358,7 @@ a.text-info:focus {
   color: #245269;
 }
 .text-warning {
-  color: #8a6d3b;
+    color: #f43c28;
 }
 a.text-warning:hover,
 a.text-warning:focus {
@@ -4998,6 +4998,9 @@ a.label:focus {
   vertical-align: middle;
   background-color: #777777;
   border-radius: 10px;
+}
+.badge-primary {
+    background-color: green;
 }
 .badge:empty {
   display: none;

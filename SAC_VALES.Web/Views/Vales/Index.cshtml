@@ -19,10 +19,10 @@
                 @Html.DisplayNameFor(model => model.Monto)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.FechaLocal)
+                Fecha
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.NumeroFolio)
+                Folio
             </th>
             <th>
                 Email de la Empresa
@@ -36,7 +36,9 @@
             <th>
                 Talonera
             </th>
-            <th></th>
+            <th>
+                Pago
+            </th>
             <th></th>
             <th></th>
         </tr>
@@ -67,7 +69,14 @@
                 @Html.DisplayFor(modelItem => item.Talonera.RangoInicio) - @Html.DisplayFor(modelItem => item.Talonera.RangoFin)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.id" class="btn btn-default">Modificar</a>
+                @if (item.Pagado == true)
+                {
+                    <span class="badge badge-primary">Completo</span>
+                }
+                else
+                {
+                    <span class="badge">No Completo</span>
+                }
             </td>
             <td>
                 <a asp-action="Eliminar" asp-route-id="@item.id" class="btn btn-default">Eliminar</a>

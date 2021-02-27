@@ -33,6 +33,8 @@ namespace SAC_VALES.Web.Data.Entities
         [Required(ErrorMessage = "Es necesario ingresar una cantidad de pagos")]
         public int CantidadPagos { get; set; }
 
+        public bool Pagado { get; set; }
+
         public string status_vale { get; set; }
 
         public DistribuidorEntity Distribuidor { get; set; }

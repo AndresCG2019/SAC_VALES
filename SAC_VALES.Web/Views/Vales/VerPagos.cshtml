@@ -54,3 +54,20 @@
         }
     </tbody>
 </table>
+
+<div>
+    <div>
+        @if (ViewBag.Pagado == true)
+        {
+            <label class="text-success">PAGO DEL VALE COMPLETADO</label>
+        }
+        else
+        {
+            <label class="text-muted">PAGO DEL VALE NO COMPLETADO</label>
+        }
+
+    </div>
+    <div>
+        <a asp-action="Index">Regresar a Vales</a>
+    </div>
+</div>

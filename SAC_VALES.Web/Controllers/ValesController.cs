@@ -6,6 +6,7 @@ using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
 using SAC_VALES.Web.Helpers;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
@@ -68,7 +69,7 @@ namespace SAC_VALES.Web.Controllers
             if (ModelState.IsValid)
             {
                 try
-                {
+                {   
                     if (pagoEntity.Pagado == false)
                         pagoEntity.Pagado = true;
                     else
@@ -76,6 +77,21 @@ namespace SAC_VALES.Web.Controllers
 
                     _context.Update(pagoEntity);
                     await _context.SaveChangesAsync();
+
+                    ValeEntity vale = _context.Vale.Where(v => v.id == pagoEntity.Valeid).FirstOrDefault();
+
+                    List<PagoEntity> pagos = await _context.Pago
+                        .Where(p => p.Valeid == pagoEntity.Valeid && p.Pagado == true)
+                        .ToListAsync();
+
+                    if (pagos.Count == vale.CantidadPagos)
+                        vale.Pagado = true;
+                    else
+                        vale.Pagado = false;
+
+                    _context.Update(vale);
+                    await _context.SaveChangesAsync();
+
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -95,6 +111,13 @@ namespace SAC_VALES.Web.Controllers
 
         public async Task<IActionResult> VerPagos(int? id)
         {
+            ValeEntity vale = _context.Vale.Where(v => v.id == id).FirstOrDefault();
+
+            if (vale.Pagado == true)
+                ViewBag.Pagado = true;
+            else
+                ViewBag.Pagado = false;
+
             return View(await _context.Pago.Where(p => p.Vale.id == id).ToListAsync());
         }
 
@@ -145,6 +168,9 @@ namespace SAC_VALES.Web.Controllers
                 .FirstOrDefault();
 
             ViewBag.Cliente = cliente;
+
+            // generacion de numero de folio sugerido
+
 
             if (talonera.Empresa.NombreEmpresa != "Nombre Pendiente...")
                 ViewBag.EmpresaDisplay = talonera.Empresa.NombreEmpresa;

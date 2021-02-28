@@ -170,7 +170,26 @@ namespace SAC_VALES.Web.Controllers
             ViewBag.Cliente = cliente;
 
             // generacion de numero de folio sugerido
+            Random rnd = new Random();
 
+            int folioSugerido = rnd.Next(talonera.RangoInicio, talonera.RangoFin);
+
+            ValeEntity valeValidacion = _context.Vale
+                   .Where(v => v.Talonera.id == talonera.id && v.NumeroFolio == folioSugerido)
+                   .FirstOrDefault();
+
+            while (valeValidacion != null) 
+            {
+                folioSugerido = rnd.Next(talonera.RangoInicio, talonera.RangoFin);
+
+                 valeValidacion = _context.Vale
+                   .Where(v => v.Talonera.id == talonera.id && v.NumeroFolio == folioSugerido)
+                   .FirstOrDefault();
+            }
+
+            ViewBag.FolioSugerido = folioSugerido;
+
+            // termina generacion de numero de folio sugerido
 
             if (talonera.Empresa.NombreEmpresa != "Nombre Pendiente...")
                 ViewBag.EmpresaDisplay = talonera.Empresa.NombreEmpresa;
@@ -186,7 +205,7 @@ namespace SAC_VALES.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
-            [Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,status_vale,NumeroFolio,CantidadPagos")]
+            [Bind("id,Monto,ClienteId,EmpresaId,DistribuidorId,Fecha,FechaPrimerPago,status_vale,NumeroFolio,CantidadPagos")]
             ValeEntity valeEntity, int? idTalonera, int? idCliente)
         {
             DistribuidorEntity distribuidor = _context.Distribuidor
@@ -224,7 +243,8 @@ namespace SAC_VALES.Web.Controllers
                 {
                     Monto = valeEntity.Monto,
                     CantidadPagos = valeEntity.CantidadPagos,
-                    Fecha = valeEntity.Fecha,
+                    FechaPrimerPago = valeEntity.FechaPrimerPago,
+                    FechaCreacion = DateTime.UtcNow,
                     status_vale = "Activo",
                     Talonera = talonera,
                     Distribuidor = distribuidor,
@@ -238,7 +258,7 @@ namespace SAC_VALES.Web.Controllers
                 await _context.SaveChangesAsync();
 
                 float division = valeEntity.Monto / valeEntity.CantidadPagos;
-                DateTime FechaLimite = valeEntity.Fecha;
+                DateTime FechaLimite = valeEntity.FechaPrimerPago;
                
 
                 for (int i = 0; i < valeEntity.CantidadPagos; i++)

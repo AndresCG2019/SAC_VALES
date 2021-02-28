@@ -18,6 +18,11 @@ namespace SAC_VALES.Web.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
         public DateTime FechaLimite { get; set; }
 
+        [DataType(DataType.DateTime)]
+        [Display(Name = "Fecha de pago")]
+        [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = false)]
+        public DateTime FechaLimiteLocal => FechaLimite.ToLocalTime();
+
         public bool Pagado { get; set; }
 
         public int Valeid { get; set; }

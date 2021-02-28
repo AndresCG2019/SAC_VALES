@@ -16,6 +16,9 @@
     <thead>
         <tr>
             <th>
+                Fecha
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Monto)
             </th>
             <th>
@@ -44,6 +47,9 @@
         @foreach (var item in Model)
         {
         <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FechaCreacionLocal)
+            </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Monto)$
             </td>

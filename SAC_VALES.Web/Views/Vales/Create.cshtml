@@ -48,7 +48,7 @@
             <div class="form-group">
                 <label class="control-label">Fecha de inicio de primer pago</label>
                 <br />
-                <input asp-for="FechaPrimerPago" class="form-control" />
+                <input asp-for="FechaPrimerPago" asp-format="{0:yyyy/MM/dd}" class="form-control" />
 
                 <span asp-validation-for="FechaPrimerPago" class="text-danger"></span>
             </div>

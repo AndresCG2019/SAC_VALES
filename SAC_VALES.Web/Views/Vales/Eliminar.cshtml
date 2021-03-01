@@ -5,7 +5,7 @@
     ViewData["Title"] = "Edit";
 }
 
-<h2>¿Estás seguro de que quieres eliminar este vale?</h2>
+<h2>¿Estás seguro de que quieres cancelar este vale?</h2>
 
 <hr />
 <div class="row">
@@ -17,9 +17,12 @@
             <input type="hidden" asp-for="Monto" />
             <input type="hidden" asp-for="status_vale" />
             <input type="hidden" asp-for="NumeroFolio" />
+            <input type="hidden" asp-for="CantidadPagos" />
+            <input type="hidden" asp-for="FechaPrimerPago" />
+            <input type="hidden" asp-for="FechaCreacion" />
 
             <div class="form-group">
-                <input type="submit" value="Eliminar" class="btn btn-success" />
+                <input type="submit" value="Cancelar" class="btn btn-success" />
             </div>
         </form>
     </div>

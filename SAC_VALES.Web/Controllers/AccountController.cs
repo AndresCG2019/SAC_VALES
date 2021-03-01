@@ -38,9 +38,6 @@ namespace SAC_VALES.Web.Controllers
         [AllowAnonymous]
         public IActionResult ResetPassword(string token, string email)
         {
-            Debug.WriteLine("TOKEN en reset 1");
-            Debug.WriteLine(token);
-
             if (token == null || email == null)
             {
                 ModelState.AddModelError("", "Recuperación de contraseña invalido");
@@ -51,19 +48,13 @@ namespace SAC_VALES.Web.Controllers
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
-        {
-            Debug.WriteLine("TOKEN EN RESET 2");
-            Debug.WriteLine(model.Token);
-            
+        {   
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
                 if (user != null)
                 {
                     var decoded_token = HttpUtility.UrlDecode(model.Token);
-
-                    Debug.WriteLine("DECODED TOKEN");
-                    Debug.WriteLine(decoded_token);
 
                     var result = await _userManager.ResetPasswordAsync(user, decoded_token, model.Password);
                     if (result.Succeeded)
@@ -85,17 +76,13 @@ namespace SAC_VALES.Web.Controllers
         [AllowAnonymous]
         public IActionResult ForgotPassword()
         {
-            Debug.WriteLine("entre a forgot password 1");
-
             return View();
-
         }
 
         [HttpPost]
         [AllowAnonymous]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
         {
-            Debug.WriteLine("entre a forgot password 2");
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);
@@ -106,9 +93,7 @@ namespace SAC_VALES.Web.Controllers
                     var passwordResetLink = Url.Action("ResetPassword", "Account",
                         new { email = model.Email, token = token }, Request.Scheme);
                     //logger.Log(LogLevel.Warning, passwordResetLink);
-                    Debug.WriteLine("RESET PASSWORD LINK");
-                    Debug.WriteLine(/*LogLevel.Warning,*/ passwordResetLink);
-
+                  
                     // ----- Start   CODIGO DE EMAIL
                     string EmailDestino = model.Email;
                     string EmailOrigen = "EvolSoftSoporte@gmail.com";
@@ -184,8 +169,6 @@ namespace SAC_VALES.Web.Controllers
 
         public IActionResult Register(int? id)
         {
-            Debug.WriteLine("ENTRE A REGISTER");
-
             if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor") || id == 1)
             {
                 int NavID = 0;
@@ -257,7 +240,7 @@ namespace SAC_VALES.Web.Controllers
                 }
                 else if ((int)user.UserType == 3)
                 {
-                    _dataContext.Empresa.Add(new EmpresaEntity
+                    EmpresaEntity empresaInsert = new EmpresaEntity 
                     {
                         NombreEmpresa = "Nombre Pendiente...",
                         NombreRepresentante = model.FirstName,
@@ -266,9 +249,13 @@ namespace SAC_VALES.Web.Controllers
                         Email = model.Username,
                         Direccion = model.Address,
                         EmpresaAuth = user
-                    });
+                    };
+
+                    _dataContext.Empresa.Add(empresaInsert);
 
                     await _dataContext.SaveChangesAsync();
+
+                    return RedirectToAction("Edit/" + empresaInsert.id, "Empresas");
 
                 }
                 else if ((int)user.UserType == 1)
@@ -374,9 +361,6 @@ namespace SAC_VALES.Web.Controllers
                         return NotFound();
                     }
 
-                    Debug.WriteLine("user type en casa admin es :");
-                    Debug.WriteLine(authUser.UserType);
-
                     model.FirstName = admin.Nombre;
                     model.LastName = admin.Apellidos;
                     model.PhoneNumber = admin.Telefono;
@@ -388,9 +372,6 @@ namespace SAC_VALES.Web.Controllers
 
                     DistribuidorEntity dist = _dataContext.Distribuidor
                         .Where(d => d.Email == User.Identity.Name).FirstOrDefault();
-
-                    Debug.WriteLine("user type en casa dist es :");
-                    Debug.WriteLine(authUser.UserType);
 
                     model.FirstName = dist.Nombre;
                     model.LastName = dist.Apellidos;
@@ -405,9 +386,6 @@ namespace SAC_VALES.Web.Controllers
                     ClienteEntity cliente = _dataContext.Cliente
                         .Where(c => c.Email == User.Identity.Name).FirstOrDefault();
 
-                    Debug.WriteLine("user type en casa cliente es :");
-                    Debug.WriteLine(authUser.UserType);
-
                     model.FirstName = cliente.Nombre;
                     model.LastName = cliente.Apellidos;
                     model.PhoneNumber = cliente.Telefono;
@@ -420,9 +398,6 @@ namespace SAC_VALES.Web.Controllers
 
                     EmpresaEntity empresa = _dataContext.Empresa
                         .Where(e => e.Email == User.Identity.Name).FirstOrDefault();
-
-                    Debug.WriteLine("user type en casa empresa es :");
-                    Debug.WriteLine(authUser.UserType);
 
                     model.FirstName = empresa.NombreRepresentante;
                     model.LastName = empresa.ApellidosRepresentante;

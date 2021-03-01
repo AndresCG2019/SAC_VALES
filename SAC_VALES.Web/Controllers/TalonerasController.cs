@@ -40,7 +40,7 @@ namespace SAC_VALES.Web.Controllers
         {
             if (id == null) return NotFound();
 
-            return View(await _context.Vale.Where(v => v.Talonera.id == id).ToListAsync());
+            return View(await _context.Vale.Where(v => v.Talonera.id == id && v.status_vale == "Activo").ToListAsync());
         }
 
 

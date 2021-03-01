@@ -382,7 +382,7 @@ namespace SAC_VALES.Web.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Eliminar(int id,
-           [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale,NumeroFolio")]
+           [Bind("id,Monto,DistribuidorId,EmpresaId,ClienteId,status_vale,NumeroFolio,CantidadPagos,FechaPrimerPago,FechaCreacion")]
         ValeEntity valeEntity)
         {
 

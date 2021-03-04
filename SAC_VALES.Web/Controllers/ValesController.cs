@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Distribuidor")]
+    [Authorize(Roles = "Distribuidor,Admin")]
     public class ValesController : Controller
     {
         private readonly DataContext _context;
@@ -26,18 +26,37 @@ namespace SAC_VALES.Web.Controllers
         }
 
         // GET: Vales
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? id)
         {
-            DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+            if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
+            {
+                DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
 
-            return View(await _context.Vale
-                .Include(i => i.Empresa)
-                .Include(i => i.Cliente)
-                .Include(i => i.Talonera)
-                .Where(v => v.Distribuidor.id == distribuidor.id && v.status_vale == "Activo")
-                .ToListAsync());
+                return View(await _context.Vale
+                    .Include(i => i.Empresa)
+                    .Include(i => i.Cliente)
+                    .Include(i => i.Talonera)
+                    .Where(v => v.Distribuidor.id == distribuidor.id && v.status_vale == "Activo")
+                    .ToListAsync());
+            }
+            else 
+            {
+                if (id == null)
+                    return NotFound();
+
+                DistribuidorEntity dist = _context.Distribuidor.Where(d => d.id == id).FirstOrDefault();
+                ViewBag.EmailDist = dist.Email;
+
+                return View(await _context.Vale
+                   .Include(i => i.Empresa)
+                   .Include(i => i.Cliente)
+                   .Include(i => i.Talonera)
+                   .Where(v => v.Distribuidor.id == id && v.status_vale == "Activo")
+                   .ToListAsync());
+            }
         }
 
+        [Authorize(Roles = "Distribuidor")]
         public async Task<IActionResult> MarcarPagado(int? id) 
         {
             if (id == null)
@@ -54,6 +73,7 @@ namespace SAC_VALES.Web.Controllers
             return View(pago);
         }
 
+        [Authorize(Roles = "Distribuidor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> MarcarPagado(int id,
@@ -121,6 +141,7 @@ namespace SAC_VALES.Web.Controllers
             return View(await _context.Pago.Where(p => p.Vale.id == id).ToListAsync());
         }
 
+        [Authorize(Roles = "Distribuidor")]
         public async Task<IActionResult> SelectTalonera()
         {
             return View(await _context.Talonera
@@ -129,6 +150,7 @@ namespace SAC_VALES.Web.Controllers
                 .ToListAsync());
         }
 
+        [Authorize(Roles = "Distribuidor")]
         public async Task<IActionResult> SelectCliente(int? id)
         {
             DistribuidorEntity distribuidor = _context.Distribuidor
@@ -149,6 +171,7 @@ namespace SAC_VALES.Web.Controllers
         }
 
         // GET: Vales/Create
+        [Authorize(Roles = "Distribuidor")]
         public IActionResult Create(int? idTalonera, int? idCliente)
         {
             ViewBag.idTalonera = idTalonera;
@@ -202,6 +225,7 @@ namespace SAC_VALES.Web.Controllers
         // POST: Vales/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Distribuidor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(
@@ -284,6 +308,7 @@ namespace SAC_VALES.Web.Controllers
         }
 
         // GET: Vales/Edit/5
+        [Authorize(Roles = "Distribuidor")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -313,6 +338,7 @@ namespace SAC_VALES.Web.Controllers
         // POST: Vales/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [Authorize(Roles = "Distribuidor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id,
@@ -364,6 +390,7 @@ namespace SAC_VALES.Web.Controllers
             return View(valeEntity);
         }
 
+        [Authorize(Roles = "Distribuidor")]
         public async Task<IActionResult> Eliminar(int? id)
         {
             if (id == null)
@@ -379,6 +406,7 @@ namespace SAC_VALES.Web.Controllers
             return View(vale);
         }
 
+        [Authorize(Roles = "Distribuidor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Eliminar(int id,

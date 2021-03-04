@@ -42,5 +42,6 @@
     </dl>
 </div>
 <div>
-    <a href="javascript:void(0);" onclick="history.go(-1);">Regresar</a>
+    <a asp-controller="Vales" asp-action="Index" asp-route-id="@Model.id" class="btn btn-primary">Ver Vales</a>
+    <a href="javascript:void(0);" onclick="history.go(-1);" class="btn btn-default">Regresar</a>
 </div>

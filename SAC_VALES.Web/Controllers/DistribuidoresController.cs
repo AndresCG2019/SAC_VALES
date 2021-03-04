@@ -26,11 +26,9 @@ namespace SAC_VALES.Web.Controllers
         }
 
         // GET: Distribuidores
-        [Authorize(Roles = "Empresa")]
+        [Authorize(Roles = "Admin,Empresa")]
         public async Task<IActionResult> Index()
         {
-            EmpresaEntity empresa = _context.Empresa.Where(e => e.Email == User.Identity.Name).FirstOrDefault();
-
             return View(await _context.Distribuidor.ToListAsync());
         }
 

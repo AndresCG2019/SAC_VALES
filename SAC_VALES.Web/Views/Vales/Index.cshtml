@@ -6,9 +6,16 @@
 
 <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" />
 
-<h2>Vales</h2>
+@if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
+{
+    <h2>Vales</h2>
+    <a asp-action="SelectTalonera">Registrar Vale</a>
+} 
 
-<a asp-action="SelectTalonera">Registrar Vale</a>
+else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+{
+    <h2>Vales de @ViewBag.EmailDist</h2>
+}
 
 <hr />
 
@@ -78,9 +85,20 @@
                     <span class="badge">No Completo</span>
                 }
             </td>
-            <td>
-                <a asp-action="Eliminar" asp-route-id="@item.id" class="btn btn-default">Cancelar Vale</a>
-            </td>
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
+            {
+                <td>
+                    <a asp-action="Eliminar" asp-route-id="@item.id" class="btn btn-default">Cancelar Vale</a>
+                </td>
+            }
+
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
+            {
+                <td>
+                    <a class="btn btn-default" disabled>Cancelar Vale</a>
+                </td>
+            }
+
             <td>
                 <a asp-action="VerPagos" asp-route-id="@item.id" class="btn btn-default">Ver Pagos</a>
             </td>

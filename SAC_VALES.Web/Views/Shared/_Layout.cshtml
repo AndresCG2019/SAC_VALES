@@ -36,6 +36,7 @@
                         <li><a asp-controller="Account" asp-action="Register">Registrar nuevo Usuario</a></li>
                         <li><a asp-controller="Administradores" asp-action="Index">Ver Administradores</a></li>
                         <li><a asp-controller="Empresas" asp-action="Index">Ver Empresas</a></li>
+                        <li><a asp-controller="Distribuidores" asp-action="Index">Ver Distribuidores</a></li>
                     }
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Empresa"))
                     {

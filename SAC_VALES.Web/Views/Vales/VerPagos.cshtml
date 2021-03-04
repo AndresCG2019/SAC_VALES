@@ -37,13 +37,13 @@
                     @Html.DisplayFor(modelItem => item.Pagado)
                 </td>
                 <td>
-                    @if (item.Pagado == false)
+                    @if (item.Pagado == false && User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
                     {
                         <a asp-action="MarcarPagado" asp-route-id="@item.id"
                            class="btn btn-default">Marcar Como Pagado</a>
                     }
 
-                    else
+                    else if(item.Pagado == true && User.Identity.IsAuthenticated && User.IsInRole("Distribuidor"))
                     {
                         <a asp-action="MarcarPagado" asp-route-id="@item.id"
                            class="btn btn-default">Marcar Como No Pagado</a>

@@ -1,4 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SAC_VALES.Web.Data;
+using SAC_VALES.Web.Helpers;
 using SAC_VALES.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -11,15 +14,35 @@ namespace SAC_VALES.Web.Controllers
     public class HomeController : Controller
     {
 
+        private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
+
+        public HomeController(DataContext context, IUserHelper userHelper)
+        {
+            _context = context;
+            _userHelper = userHelper;
+        }
+
         [Route("error/404")]
         public IActionResult Error404()
         {
             return View();
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            DateTime hoyDate = DateTime.UtcNow.ToLocalTime();
+            string hoyString = DateTime.UtcNow.ToLocalTime().ToShortDateString();
+
+            var pagos = await _context.Pago
+                .Where(p => p.FechaLimiteLocal.Date == hoyDate.Date && p.Vale.Distribuidor.Email == User.Identity.Name)
+                .Include(p => p.Vale.Cliente)
+                .Include(p => p.Vale.Talonera.Empresa)
+                .ToListAsync();
+
+            ViewBag.FechaDisplay = hoyString;
+
+            return View(pagos);
         }
 
         public IActionResult About()

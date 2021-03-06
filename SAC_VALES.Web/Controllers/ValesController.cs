@@ -56,8 +56,26 @@ namespace SAC_VALES.Web.Controllers
             }
         }
 
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var taloneraEntity = await _context.Talonera
+                .Include(item => item.Empresa)
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (taloneraEntity == null)
+            {
+                return NotFound();
+            }
+
+            return View(taloneraEntity);
+        }
+
         [Authorize(Roles = "Distribuidor")]
-        public async Task<IActionResult> MarcarPagado(int? id) 
+        public async Task<IActionResult> MarcarPagado(int? id, int? navId) 
         {
             if (id == null)
             {
@@ -70,13 +88,15 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
+            ViewBag.navId = navId;
+
             return View(pago);
         }
 
         [Authorize(Roles = "Distribuidor")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> MarcarPagado(int id,
+        public async Task<IActionResult> MarcarPagado(int id, int? navId,
           [Bind("id,Cantidad,FechaLimite,Pagado,Valeid")]
         PagoEntity pagoEntity)
         {
@@ -124,7 +144,15 @@ namespace SAC_VALES.Web.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction("VerPagos/" + pagoEntity.Valeid);
+
+                Debug.WriteLine("NAVID");
+                Debug.WriteLine(navId);
+
+                if (navId == 1)
+                    return RedirectToAction("Index", "Home");
+                else
+                    return RedirectToAction("VerPagos/" + pagoEntity.Valeid);
+
             }
             return View(pagoEntity);
         }

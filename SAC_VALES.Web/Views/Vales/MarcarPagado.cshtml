@@ -20,7 +20,7 @@
             <input type="hidden" asp-for="Valeid" />
 
             <div class="form-group">
-                <input type="submit" value="Cambiar" class="btn btn-success" />
+                <input type="submit" value="Cambiar" class="btn btn-success" asp-route-navId="@ViewBag.navId" />
                 <a href="javascript:void(0);" onclick="history.go(-1);" style="margin-left: 10px;"
                    class="btn btn-primary">Regresar</a>
             </div>

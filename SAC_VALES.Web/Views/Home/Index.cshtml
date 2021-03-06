@@ -1,7 +1,73 @@
-﻿@{
+﻿@model IEnumerable<SAC_VALES.Web.Data.Entities.PagoEntity>
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="row">
-  <h1>EN CONSTRUCCIÓN</h1>  
+    <div class="col">
+        <h2>Pagos del Día de Hoy: @ViewBag.FechaDisplay </h2>
+    </div>
 </div>
+
+@if (Model.Any())
+{
+    <table class="table table-hover table-responsive table-striped" id="MyTable">
+        <thead>
+            <tr>
+                <th>
+                    Monto
+                </th>
+                <th>
+                    Cliente
+                </th>
+                <th>
+                    Empresa
+                </th>
+                <th>
+                    Pagado
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Cantidad)$
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vale.Cliente.Email)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Vale.Talonera.Empresa.NombreEmpresa)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Pagado)
+                    </td>
+                    @if (item.Pagado == false)
+                    {
+                        <td>
+                            <a asp-controller="Vales" asp-action="MarcarPagado"
+                               class="btn btn-default" asp-route-id="@item.id" asp-route-navId="1">Marcar Como Pagado</a>
+                        </td>
+                    }
+                    else if (item.Pagado == true)
+                    {
+                        <td>
+                            <a asp-controller="Vales" asp-action="MarcarPagado" class="btn btn-default"
+                               asp-route-id="@item.id" asp-route-navId="1">Marcar Como No Pagado</a>
+                        </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+
+}
+else
+{
+    <p>VACIO</p>
+}
+

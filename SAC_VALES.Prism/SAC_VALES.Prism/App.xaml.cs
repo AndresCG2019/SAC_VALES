@@ -2,6 +2,7 @@ using Prism;
 using Prism.Ioc;
 using SAC_VALES.Prism.ViewModels;
 using SAC_VALES.Prism.Views;
+using SAC_VALES.Common.Services;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Forms;
@@ -27,6 +28,7 @@ namespace SAC_VALES.Prism
             containerRegistry.RegisterSingleton<IAppInfo, AppInfoImplementation>();
 
             containerRegistry.RegisterForNavigation<NavigationPage>();
+            containerRegistry.Register<IApiService, ApiService>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<ValesMasterDetailPage, ValesMasterDetailPageViewModel>();
             containerRegistry.RegisterForNavigation<HistoryPage, HistoryPageViewModel>();

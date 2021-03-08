@@ -6,6 +6,9 @@
   <Application.Resources>
 
     <!-- Application resource dictionary -->
+        <ResourceDictionary>
+            <x:String x:Key="UrlAPI">https://192.168.1.67:45457</x:String>
+        </ResourceDictionary>
 
   </Application.Resources>
 </prism:PrismApplication>

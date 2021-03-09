@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Distribuidor,Admin")]
+    [Authorize(Roles = "Distribuidor,Admin, Cliente")]
     public class ValesController : Controller
     {
         private readonly DataContext _context;
@@ -267,7 +267,7 @@ namespace SAC_VALES.Web.Controllers
                 {
                     Monto = valeEntity.Monto,
                     CantidadPagos = valeEntity.CantidadPagos,
-                    FechaPrimerPago = valeEntity.FechaPrimerPago,
+                    //FechaPrimerPago = DateTime.Today,
                     FechaCreacion = DateTime.UtcNow,
                     status_vale = "Activo",
                     Talonera = talonera,
@@ -282,19 +282,65 @@ namespace SAC_VALES.Web.Controllers
                 await _context.SaveChangesAsync();
 
                 float division = valeEntity.Monto / valeEntity.CantidadPagos;
-                DateTime FechaLimite = valeEntity.FechaPrimerPago;
-               
+
+                //GET: FECHA DE HOY
+                DateTime FechaHoy = DateTime.Today;
+                int Dia = FechaHoy.Day;
+                int Mes = FechaHoy.Month;
+                int Año = FechaHoy.Year;
+
+                DateTime NuevaFecha = new DateTime(FechaHoy.Year, FechaHoy.Month, FechaHoy.Day);
 
                 for (int i = 0; i < valeEntity.CantidadPagos; i++)
                 {
-                    _context.Pago.Add(new PagoEntity
-                    {
-                        Cantidad = division,
-                        FechaLimite = FechaLimite,
-                        Vale = valeInsert
+
+                    //CONDICION PARA REDONDEAR LOS DIAS
+
+                    if (FechaHoy.Day > 1 || FechaHoy.Day < 15)
+                    { 
+                        Debug.WriteLine("entre al primer if");
+                        if (i == 0)
+                        {
+                            NuevaFecha = new DateTime(FechaHoy.Year, FechaHoy.Month, 15);
+                        }
                         
-                    });
-                    FechaLimite = FechaLimite.AddDays(15);
+                        FechaHoy = NuevaFecha;
+                        Debug.WriteLine("Fecha quincena1" + NuevaFecha);
+                       
+                        _context.Pago.Add(new PagoEntity
+                        {
+                            Cantidad = division,
+                            FechaLimite = NuevaFecha,
+                            Vale = valeInsert
+
+                        });
+
+                        NuevaFecha = NuevaFecha.AddDays(15);
+
+                    }
+                    else if (FechaHoy.Day > 15)
+                    {
+                        Debug.WriteLine("entre al segundo if");
+                        if (i == 0)
+                        {
+                            NuevaFecha = new DateTime(FechaHoy.Year, FechaHoy.Month, 1);
+                            NuevaFecha.AddMonths(1);
+                        }
+                        
+                        FechaHoy = NuevaFecha.ToLocalTime();
+                        Console.WriteLine("Fecha quincena2" + FechaHoy);
+                        FechaHoy = FechaHoy.AddDays(15);
+
+                        _context.Pago.Add(new PagoEntity
+                        {
+                            Cantidad = division,
+                            FechaLimite = FechaHoy,
+                            Vale = valeInsert
+
+                        });
+                    }
+
+                 
                 }
                 Debug.WriteLine("DIVISION");
 

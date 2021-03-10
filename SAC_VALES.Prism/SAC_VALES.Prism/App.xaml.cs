@@ -6,6 +6,7 @@ using SAC_VALES.Common.Services;
 using Xamarin.Essentials.Implementation;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Forms;
+using Syncfusion.Licensing;
 
 namespace SAC_VALES.Prism
 {
@@ -18,6 +19,8 @@ namespace SAC_VALES.Prism
 
         protected override async void OnInitialized()
         {
+            SyncfusionLicenseProvider.RegisterLicense("NDA5NzAyQDMxMzgyZTM0MmUzME1saHpGNllxTE82aHBqK0NHekk5eWVrWCs3U2JWMkw5YThKdjFIQ3dNSDA9");
+
             InitializeComponent();
 
             await NavigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/MainPage");

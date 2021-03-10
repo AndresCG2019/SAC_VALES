@@ -14,6 +14,7 @@ namespace SAC_VALES.Prism.ViewModels
         private readonly IApiService _apiService;
         private AdminResponse _admin;
         private DelegateCommand _checkIdCommand;
+        private bool _isRunning;
 
         public HistoryPageViewModel(
             INavigationService navigationService,
@@ -22,6 +23,13 @@ namespace SAC_VALES.Prism.ViewModels
             _apiService = apiService;
             Title = "History";
         }
+
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetProperty(ref _isRunning, value);
+        }
+
 
         public AdminResponse Admin
         {
@@ -45,11 +53,13 @@ namespace SAC_VALES.Prism.ViewModels
                 return;
             }
 
+            IsRunning = true;
             string url = App.Current.Resources["UrlAPI"].ToString();
             Debug.WriteLine("URL API");
             Debug.WriteLine(url);
 
             Response response = await _apiService.GetAdminAsync(id, url, "api", "/Administradores");
+            IsRunning = false;
             if (!response.IsSuccess)
             {
                 Debug.WriteLine("LA RESPUESTA FALLO");

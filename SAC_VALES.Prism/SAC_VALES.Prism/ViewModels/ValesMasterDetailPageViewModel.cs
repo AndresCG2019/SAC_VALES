@@ -41,7 +41,7 @@ namespace SAC_VALES.Prism.ViewModels
                 {
                     Icon = "ic_people",
                     PageName = "GroupPage",
-                    Title = "Admin my user group"
+                    Title = "Ver Vales"
                 },
                 new Menu
                 {

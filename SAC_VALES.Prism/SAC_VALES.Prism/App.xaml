@@ -7,7 +7,7 @@
 
     <!-- Application resource dictionary -->
         <ResourceDictionary>
-            <x:String x:Key="UrlAPI">https://192.168.1.67:45457</x:String>
+            <x:String x:Key="UrlAPI">https://sacvaleswebtest.azurewebsites.net</x:String>
         </ResourceDictionary>
 
   </Application.Resources>

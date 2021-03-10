@@ -5,5 +5,32 @@
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="SAC_VALES.Prism.Views.GroupPage"
              Title="{Binding Title}">
-  
+
+    <StackLayout Padding="5">
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Plaque"
+                   VerticalOptions="Center"/>
+            <Entry HorizontalOptions="FillAndExpand" 
+                   Placeholder="Enter ID..." 
+                   Text="{Binding id}"
+                   VerticalOptions="Center"/>
+            <Button BackgroundColor="Navy"
+                    Command="{Binding CheckIdCommand}"
+                    CornerRadius="20"
+                    HeightRequest="40"
+                    Margin="10,0"
+                    Text="Check id"
+                    TextColor="White"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Correo:"/>
+            <Label Text="{Binding Admin.Email, StringFormat='{0:N0}'}"/>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Nombre:"/>
+            <Label Text="{Binding Admin.Nombre, StringFormat='{0:N0}'}"/>
+        </StackLayout>
+
+    </StackLayout>
+
 </ContentPage>

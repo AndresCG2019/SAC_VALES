@@ -31,23 +31,29 @@ namespace SAC_VALES.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
-            DateTime hoyDate = DateTime.UtcNow.ToLocalTime();
-            string hoyString = DateTime.UtcNow.ToLocalTime().ToShortDateString();
+            if (User.Identity.IsAuthenticated && User.IsInRole("Distribuidor")) 
+            {
+                DateTime hoyDate = DateTime.UtcNow.ToLocalTime();
+                string hoyString = DateTime.UtcNow.ToLocalTime().ToShortDateString();
 
-            var pagos = await _context.Pago
-                .Where(p => p.FechaLimiteLocal.Date == hoyDate.Date && p.Vale.Distribuidor.Email == User.Identity.Name)
-                .Include(p => p.Vale.Cliente)
-                .Include(p => p.Vale.Talonera.Empresa)
-                .ToListAsync();
+                var pagos = await _context.Pago
+                    .Where(p => p.FechaLimiteLocal.Date == hoyDate.Date && p.Vale.Distribuidor.Email == User.Identity.Name)
+                    .Include(p => p.Vale.Cliente)
+                    .Include(p => p.Vale.Talonera.Empresa)
+                    .ToListAsync();
 
-            ViewBag.FechaDisplay = hoyString;
+                ViewBag.FechaDisplay = hoyString;
 
-            return View(pagos);
+                return View(pagos);
+            }
+
+            Debug.WriteLine("Llegue afuera del if");
+            return RedirectToAction("About");
         }
 
         public IActionResult About()
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Title"] = "EN CONSTRUCCION.";
 
             return View();
         }

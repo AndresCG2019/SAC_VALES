@@ -1,0 +1,70 @@
+﻿@model SAC_VALES.Web.Data.Entities.ValeEntity
+
+@{
+    ViewData["Title"] = "Vale Details";
+}
+
+<h2>Detalles del Vale</h2>
+
+<div>
+    <hr />
+    <dl>
+        <dt>
+            Fecha de Creación
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.FechaCreacionLocal)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Monto)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Monto)$
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.NumeroFolio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.NumeroFolio)
+        </dd>
+        <dt>
+            Email de la Empresa
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Empresa.Email)
+        </dd>
+        <dt>
+            Nombre de la Empresa
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Empresa.NombreEmpresa)
+        </dd>
+        <dt>
+            Talonera
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Talonera.RangoInicio) - @Html.DisplayFor(model => model.Talonera.RangoFin)
+        </dd>
+        <dt>
+            Pago
+        </dt>
+
+        @if (Model.Pagado == true)
+        {
+            <dd>
+                COMPLETO
+            </dd>
+        }
+        else 
+        {
+            <dd>
+                INCOMPLETO
+            </dd>
+        }
+
+    </dl>
+</div>
+<div>
+    <a href="javascript:void(0);" onclick="history.go(-1);" class="btn btn-default">Regresar</a>
+    <a asp-action="VerPagos" asp-route-id="@Model.id" class="btn btn-primary">Ver Pagos</a>
+</div>

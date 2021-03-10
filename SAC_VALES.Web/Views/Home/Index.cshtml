@@ -28,6 +28,7 @@
                     Pagado
                 </th>
                 <th></th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +61,11 @@
                                asp-route-id="@item.id" asp-route-navId="1">Marcar Como No Pagado</a>
                         </td>
                     }
+
+                    <td>
+                        <a asp-controller="Vales" asp-action="Details" class="btn btn-default"
+                           asp-route-id="@item.Valeid">Ver Vale</a>
+                    </td>
                 </tr>
             }
         </tbody>

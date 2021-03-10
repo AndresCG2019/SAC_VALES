@@ -80,15 +80,16 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var taloneraEntity = await _context.Talonera
-                .Include(item => item.Empresa)
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (taloneraEntity == null)
+            var valeEntity = await _context.Vale
+                .Include(v => v.Empresa)
+                .Include(v => v.Talonera)
+                .Where(v => v.id == id).FirstOrDefaultAsync();
+            if (valeEntity == null)
             {
                 return NotFound();
             }
 
-            return View(taloneraEntity);
+            return View(valeEntity);
         }
 
         [Authorize(Roles = "Distribuidor")]

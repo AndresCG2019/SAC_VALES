@@ -39,7 +39,7 @@ namespace SAC_VALES.Web.Controllers
                     .Where(v => v.Distribuidor.id == distribuidor.id && v.status_vale == "Activo")
                     .ToListAsync());
             }
-            else 
+            else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
             {
                 if (id == null)
                     return NotFound();
@@ -52,6 +52,23 @@ namespace SAC_VALES.Web.Controllers
                    .Include(i => i.Cliente)
                    .Include(i => i.Talonera)
                    .Where(v => v.Distribuidor.id == id && v.status_vale == "Activo")
+                   .ToListAsync());
+            }
+            else
+            {
+
+                if (id == null)
+                    return NotFound();
+
+                DistribuidorEntity dist = _context.Distribuidor.Where(d => d.id == id).FirstOrDefault();
+                ViewBag.EmailDist = dist.Email;
+
+                return View(await _context.Vale
+                   .Include(i => i.Empresa)
+                   .Include(i => i.Cliente)
+                   .Include(i => i.Talonera)
+                   .Where(v => v.Distribuidor.id == id && v.status_vale == "Activo" 
+                   && v.Cliente.Email == User.Identity.Name )
                    .ToListAsync());
             }
         }

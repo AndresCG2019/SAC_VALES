@@ -127,5 +127,25 @@ namespace SAC_VALES.Web.Helpers
         {
             return await _userManager.UpdateAsync(user);
         }
+
+        public async Task<UsuarioEntity> GetUserAsync(Guid userId)
+        {
+            return await _userManager.FindByIdAsync(userId.ToString());
+        }
+
+        public async Task<UsuarioEntity> GetUserAsync(string email)
+        {
+            return await _userManager.FindByEmailAsync(email);
+        }
+
+        public async Task<string> GeneratePasswordResetTokenAsync(UsuarioEntity user)
+        {
+            return await _userManager.GeneratePasswordResetTokenAsync(user);
+        }
+
+        public async Task<SignInResult> ValidatePasswordAsync(UsuarioEntity user, string password)
+        {
+            return await _signInManager.CheckPasswordSignInAsync(user, password, false);
+        }
     }
 }

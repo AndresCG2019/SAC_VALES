@@ -8,6 +8,11 @@
     <MasterDetailPage.Master>
         <ContentPage Title="Menu">
             <StackLayout Padding="20">
+                <Label FontAttributes="Bold"
+                    FontSize="Large"
+                    Text="{Binding User.Email}"
+                    TextColor="Black"/>
+
                 <ListView BackgroundColor="Transparent"
                 	      ItemsSource="{Binding Menus}"
                 	      HasUnevenRows="True"

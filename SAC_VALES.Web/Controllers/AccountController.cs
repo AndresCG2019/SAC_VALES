@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
@@ -10,8 +12,11 @@ using SAC_VALES.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Net.Mail;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 
@@ -23,14 +28,16 @@ namespace SAC_VALES.Web.Controllers
         private readonly ICombosHelper _combosHelper;
         private readonly DataContext _dataContext;
         private readonly UserManager<UsuarioEntity> _userManager;
+        private readonly IConfiguration _configuration;
 
         public AccountController(IUserHelper userHelper, ICombosHelper combosHelper
-            , DataContext dataContext, UserManager<UsuarioEntity> userManager)
+            , DataContext dataContext, UserManager<UsuarioEntity> userManager, IConfiguration configuration)
         {
             _userHelper = userHelper;
             _combosHelper = combosHelper;
             _dataContext = dataContext;
             _userManager = userManager;
+            _configuration = configuration;
         }
 
 
@@ -518,8 +525,6 @@ namespace SAC_VALES.Web.Controllers
 
             return View(model);
         }
-
-        
 
     }
 }

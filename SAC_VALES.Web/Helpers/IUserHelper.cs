@@ -31,5 +31,13 @@ namespace SAC_VALES.Web.Helpers
 
         Task<IdentityResult> UpdateUserAsync(UsuarioEntity user);
 
+        Task<UsuarioEntity> GetUserAsync(string email);
+
+        Task<UsuarioEntity> GetUserAsync(Guid userId);
+
+        Task<string> GeneratePasswordResetTokenAsync(UsuarioEntity user);
+
+        Task<SignInResult> ValidatePasswordAsync(UsuarioEntity user, string password);
+
     }
 }

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using SAC_VALES.Common.Models;
+using SAC_VALES.Common.Helpers;
 
 namespace SAC_VALES.Prism.ViewModels
 {
@@ -21,6 +22,14 @@ namespace SAC_VALES.Prism.ViewModels
 
         private async void SelectMenuAsync()
         {
+            if (PageName == "LoginPage" && Settings.IsLogin)
+            {
+                Settings.IsLogin = false;
+                Settings.User = null;
+                Settings.Token = null;
+            }
+
+
             await _navigationService.NavigateAsync($"/ValesMasterDetailPage/NavigationPage/{PageName}");
         }
 

@@ -1,0 +1,46 @@
+﻿@model SAC_VALES.Web.Data.Entities.TaloneraEntity
+
+@{
+    ViewData["Title"] = "Cuenta";
+}
+
+<h2>Estado de Cuenta de la Talonera </h2>
+
+<div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.RangoInicio)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RangoInicio)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.RangoFin)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RangoFin)
+        </dd>
+        <dt>
+            Monto total
+        </dt>
+        <dd>
+            @ViewBag.MontoTotal $
+        </dd>
+        <dt>
+            Monto Pagado
+        </dt>
+        <dd>
+            @ViewBag.MontoPagado $
+        </dd>
+        <dt>
+            Monto Pendiente
+        </dt>
+        <dd>
+            @ViewBag.MontoPendiente $
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-controller="Empresas" asp-action="EdoCuenta" asp-route-id="@Model.Empresa.id" class="btn btn-primary">Edo Cuenta Empresa</a>
+    <a href="javascript:void(0);" onclick="history.go(-1);" class="btn btn-default">Regresar</a>
+</div>

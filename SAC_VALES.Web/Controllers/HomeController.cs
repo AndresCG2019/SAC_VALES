@@ -37,7 +37,7 @@ namespace SAC_VALES.Web.Controllers
                 string hoyString = DateTime.UtcNow.ToLocalTime().ToShortDateString();
 
                 var pagos = await _context.Pago
-                    .Where(p => p.FechaLimiteLocal.Date == hoyDate.Date && p.Vale.Distribuidor.Email == User.Identity.Name)
+                    .Where(p => p.FechaLimite == hoyDate.Date && p.Vale.Distribuidor.Email == User.Identity.Name && p.Vale.status_vale == "Activo")
                     .Include(p => p.Vale.Cliente)
                     .Include(p => p.Vale.Talonera.Empresa)
                     .ToListAsync();

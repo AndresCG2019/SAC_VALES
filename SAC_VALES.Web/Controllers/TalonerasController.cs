@@ -168,6 +168,71 @@ namespace SAC_VALES.Web.Controllers
             return View(taloneraEntity);
         }
 
+        [Authorize(Roles = "Distribuidor")]
+        public async Task<IActionResult> EdoCuenta(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var taloneraEntity = await _context.Talonera
+                .Include(t => t.Empresa)
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (taloneraEntity == null)
+            {
+                return NotFound();
+            }
+
+            List<ValeEntity> vales = await _context.Vale
+                .Where(v => v.Talonera.id == id && v.status_vale == "Activo" && v.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync();
+
+            List<PagoEntity> pagosCompletos = await _context.Pago
+                .Where(p => p.Vale.Talonera.id == id && p.Pagado == true
+                    && p.Vale.status_vale == "Activo" && p.Vale.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync();
+
+            List<PagoEntity> pagosPendientes = await _context.Pago
+                .Where(p => p.Vale.Talonera.id == id && p.Pagado == false
+                    && p.Vale.status_vale == "Activo" && p.Vale.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync();
+
+            float montoTotal = 0;
+            float montoPendiente = 0;
+            float montoPagado = 0;
+
+            for (int i = 0; i < vales.Count; i++)
+            {
+                Debug.WriteLine("MONTO");
+                Debug.WriteLine(vales[i].Monto);
+
+                montoTotal = montoTotal + vales[i].Monto;
+            }
+
+            for (int i = 0; i < pagosCompletos.Count; i++)
+            {
+                Debug.WriteLine("MONTO PAGADO");
+                Debug.WriteLine(pagosCompletos[i].Cantidad);
+
+                montoPagado = montoPagado + pagosCompletos[i].Cantidad;
+            }
+
+            for (int i = 0; i < pagosPendientes.Count; i++)
+            {
+                Debug.WriteLine("MONTO PENDIENTE");
+                Debug.WriteLine(pagosPendientes[i].Cantidad);
+
+                montoPendiente = montoPendiente + pagosPendientes[i].Cantidad;
+            }
+
+            ViewBag.MontoTotal = montoTotal;
+            ViewBag.MontoPendiente = montoPendiente;
+            ViewBag.MontoPagado = montoPagado;
+
+            return View(taloneraEntity);
+        }
+
         // GET: Taloneras/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {

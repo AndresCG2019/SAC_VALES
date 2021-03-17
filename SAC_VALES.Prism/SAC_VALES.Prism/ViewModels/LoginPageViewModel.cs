@@ -4,6 +4,9 @@ using Prism.Navigation;
 using SAC_VALES.Common.Models;
 using SAC_VALES.Common.Services;
 using SAC_VALES.Common.Helpers;
+using SAC_VALES.Prism.Views;
+using System.Diagnostics;
+using SAC_VALES.Common.Enums;
 
 namespace SAC_VALES.Prism.ViewModels
 {
@@ -101,6 +104,15 @@ namespace SAC_VALES.Prism.ViewModels
             Response response2 = await _apiService.GetUserByEmail(url, "api", "/Account/GetUserByEmail", "bearer", token.Token, emailRequest);
             UserResponse userResponse = (UserResponse)response2.Result;
 
+            if (userResponse.UserType == UserType.Admin || userResponse.UserType == UserType.Empresa)
+            {
+                IsRunning = false;
+                IsEnabled = true;
+                await App.Current.MainPage.DisplayAlert("Error", "Solo puedes iniciar sesion como cliente o distribuidor", "Aceptar");
+                Password = string.Empty;
+                return;
+            }
+
             Settings.User = JsonConvert.SerializeObject(userResponse);
             Settings.Token = JsonConvert.SerializeObject(token);
             Settings.IsLogin = true;
@@ -113,8 +125,10 @@ namespace SAC_VALES.Prism.ViewModels
 
         }
 
-        private void RegisterAsync()
+        private async void RegisterAsync()
         {
+            Debug.WriteLine("LLEGUE A REGISTER ASYNC");
+            await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/RegisterPage");
         }
     }
 }

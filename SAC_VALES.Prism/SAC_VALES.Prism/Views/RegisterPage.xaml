@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+         	 xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="SAC_VALES.Prism.Views.RegisterPage"
+             Title="{Binding Title}">
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All"
+                     Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Text="Nombre"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="1"
+                               Grid.Column="1"
+                               Placeholder="Nombre placeholder"
+                               Text="{Binding User.FirstName}"/>
+
+                        <Label Grid.Row="2"
+                               Grid.Column="0"
+                               Text="Apellido"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="2"
+                               Grid.Column="1"
+                               Placeholder="Apellido placeholder"
+                               Text="{Binding User.LastName}"/>
+
+                        <Label Grid.Row="3"
+                               Grid.Column="0"
+                               Text="Domicilio"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="3"
+                               Grid.Column="1"
+                               Placeholder="Domicilio Placeholder"
+                               Text="{Binding User.Address}"/>
+                        <Label Grid.Row="4"
+                               Grid.Column="0"
+                               Text="Email"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="4"
+                               Grid.Column="1"
+                               Keyboard="Email"
+                               Placeholder="Email placeholder"
+                               Text="{Binding User.Email}"/>
+
+                        <Label Grid.Row="5"
+                               Grid.Column="0"
+                               Text="Telefono"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="5" 
+                               Grid.Column="1"
+                               Keyboard="Telephone"
+                               Placeholder="Telefono placeholder"
+                               Text="{Binding User.Phone}"/>
+
+                        <Label Grid.Row="6"
+                               Grid.Column="0"
+                               Text="Contraseña"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="6"
+                               Grid.Column="1"
+                               IsPassword="True"
+                               Placeholder="Contraseña placeholder"
+                               Text="{Binding User.Password}"/>
+
+                        <Label Grid.Row="7"
+                               Grid.Column="0"
+                               Text="Confirmación de Contraseña"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="7"
+                               Grid.Column="1"
+                               IsPassword="True"
+                               Placeholder="Confirmacion placeholder"
+                               Text="{Binding User.PasswordConfirm}"/>
+
+                        <Label Grid.Row="8"
+                               Grid.Column="0"
+                               Text="Registrar como"
+                               VerticalOptions="Center"/>
+                        <Picker Grid.Row="8"
+                                Grid.Column="1"
+                                ItemDisplayBinding="{Binding Name}"
+                                ItemsSource="{Binding Roles}"
+                                SelectedItem="{Binding Role}"
+                                Title="Registrar como placeholder">
+                        </Picker>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+            <Button Command="{Binding RegisterCommand}"
+                    IsEnabled="{Binding IsEnabled}"
+                    Text="Registrar"/>
+        </StackLayout>
+        <busyindicator:SfBusyIndicator AnimationType="Gear" 
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorAccent}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                                       IsBusy="{Binding IsRunning}"
+                	                   Title="Cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80" />
+    </AbsoluteLayout>
+</ContentPage>

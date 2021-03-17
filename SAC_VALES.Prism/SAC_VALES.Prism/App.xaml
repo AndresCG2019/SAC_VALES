@@ -10,7 +10,6 @@
             <x:String x:Key="UrlAPI">https://sacvaleswebtest.azurewebsites.net</x:String>
 
             <!-- Colors -->
-        <Color x:Key="ColorBackgroud">#FFFF05</Color>
         <Color x:Key="ColorPrimary">#3D3D3D</Color>
         <Color x:Key="ColorSecondary">#A6ABAB</Color>
         <Color x:Key="ColorDanger">#8D07F6</Color>

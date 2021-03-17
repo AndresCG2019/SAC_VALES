@@ -7,6 +7,7 @@ using Xamarin.Essentials.Implementation;
 using Xamarin.Essentials.Interfaces;
 using Xamarin.Forms;
 using Syncfusion.Licensing;
+using SAC_VALES.Common.Helpers;
 
 namespace SAC_VALES.Prism
 {
@@ -32,6 +33,7 @@ namespace SAC_VALES.Prism
 
             containerRegistry.RegisterForNavigation<NavigationPage>();
             containerRegistry.Register<IApiService, ApiService>();
+            containerRegistry.Register<IRegexHelper, RegexHelper>();
             containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
             containerRegistry.RegisterForNavigation<ValesMasterDetailPage, ValesMasterDetailPageViewModel>();
             containerRegistry.RegisterForNavigation<HistoryPage, HistoryPageViewModel>();
@@ -39,6 +41,7 @@ namespace SAC_VALES.Prism
             containerRegistry.RegisterForNavigation<ModifyUserPage, ModifyUserPageViewModel>();
             containerRegistry.RegisterForNavigation<ReportPage, ReportPageViewModel>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
+            containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
         }
     }
 }

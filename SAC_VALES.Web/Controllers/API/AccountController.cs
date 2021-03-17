@@ -71,6 +71,10 @@ namespace SAC_VALES.Web.Controllers.API
             };
 
             IdentityResult result = await _userHelper.AddUserAsync(user, request.Password);
+            await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+
+
+
             if (result != IdentityResult.Success)
             {
                 return BadRequest(result.Errors.FirstOrDefault().Description);

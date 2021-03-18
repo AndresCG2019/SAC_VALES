@@ -73,7 +73,34 @@ namespace SAC_VALES.Web.Controllers.API
             IdentityResult result = await _userHelper.AddUserAsync(user, request.Password);
             await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
 
+            if (user.UserType == UserType.Distribuidor)
+            {
+                _dataContext.Distribuidor.Add(new DistribuidorEntity
+                {
+                    Nombre = request.Nombre,
+                    Apellidos = request.Apellidos,
+                    Direccion = request.Direccion,
+                    Telefono = request.Telefono,
+                    Email = request.Email,
+                    DistribuidorAuth = user,
 
+                });
+                await _dataContext.SaveChangesAsync();
+            }
+            else if (user.UserType == UserType.Cliente) 
+            {
+                _dataContext.Cliente.Add(new ClienteEntity
+                {
+                    Nombre = request.Nombre,
+                    Apellidos = request.Apellidos,
+                    Direccion = request.Direccion,
+                    Telefono = request.Telefono,
+                    Email = request.Email,
+                    ClienteAuth = user,
+
+                });
+                await _dataContext.SaveChangesAsync();
+            }
 
             if (result != IdentityResult.Success)
             {

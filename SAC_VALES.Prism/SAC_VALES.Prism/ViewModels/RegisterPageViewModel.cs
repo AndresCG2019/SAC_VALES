@@ -10,6 +10,7 @@ using Xamarin.Forms;
 using SAC_VALES.Prism.ViewModels;
 using SAC_VALES.Prism;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace SAC_VALES.Prism.ViewModels
 {
@@ -96,11 +97,10 @@ namespace SAC_VALES.Prism.ViewModels
 
             if (!response.IsSuccess)
             {
+                Debug.WriteLine("LLEGUE AL ERROR");
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
                 return;
             }
-
-            //await App.Current.MainPage.DisplayAlert("Se registro correctamente", response.Message, "Aceptar");
 
             // SE LOGEA AL USUARIO TRAS REGISTRARSE
 
@@ -146,6 +146,18 @@ namespace SAC_VALES.Prism.ViewModels
             if (string.IsNullOrEmpty(User.Email) || !_regexHelper.IsValidEmail(User.Email))
             {
                 await App.Current.MainPage.DisplayAlert("Error", "Error de Correo", "Aceptar");
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(User.Nombre) || string.IsNullOrEmpty(User.Apellidos) || 
+                string.IsNullOrEmpty(User.Direccion) || string.IsNullOrEmpty(User.Telefono)) 
+            {
+                await App.Current.MainPage
+                    .DisplayAlert
+                    (
+                        "Error", "Es necesario que llene los campos de Nombre, Apellidos, Direccion y Telefono ",
+                         "Aceptar"
+                    );
                 return false;
             }
 

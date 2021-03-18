@@ -38,6 +38,7 @@ namespace SAC_VALES.Web.Data.Entities
         [DisplayFormat(DataFormatString = "{0:yyyy/MM/dd}", ApplyFormatInEditMode = true)]
         public DateTime FechaCreacionLocal => FechaCreacion.ToLocalTime();
 
+
         [Range(1, 48, ErrorMessage = "Por favor, ingrese un número de pagos válido")]
         [Display(Name = "Cantidad de pagos quincenales")]
         [Required(ErrorMessage = "Es necesario ingresar una cantidad de pagos")]

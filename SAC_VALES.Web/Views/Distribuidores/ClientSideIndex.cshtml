@@ -37,6 +37,11 @@
                 </td>
                 <td>
                     <a asp-action="Details" class="btn btn-default" asp-route-id="@item.Distribuidor.id">Mas Datos</a>
+                    
+                </td>
+                <td>
+                    <a asp-controller="ClienteEntities" asp-action="EdoCuentaCliente" class="btn btn-default" 
+                       asp-route-id="@item.Distribuidor.id">Edo Cuenta</a>
                 </td>
             </tr>
         }

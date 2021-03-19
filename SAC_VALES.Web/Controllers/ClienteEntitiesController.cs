@@ -14,7 +14,8 @@ using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers
 {
-    [Authorize(Roles = "Distribuidor")]
+
+  //  [Authorize(Roles = "Distribuidor")]
     public class ClienteEntitiesController : Controller
     {
         private readonly DataContext _context;
@@ -35,6 +36,71 @@ namespace SAC_VALES.Web.Controllers
                 .Include(item => item.Cliente)
                 .Where(cd => cd.DistribuidorId == distribuidor.id)
                 .ToListAsync());
+        }
+        [Authorize(Roles = "Cliente")]
+        public async Task<IActionResult> EdoCuentaCliente(int? id)
+        {
+            if (id == null)
+            {
+                Debug.WriteLine("Entre aqui 1");
+                return NotFound();
+            }
+
+            var clienteEntity = await _context.Cliente
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (clienteEntity == null)
+            {
+                Debug.WriteLine("Entre aqui 2");
+                return NotFound();
+            }
+
+            List<ValeEntity> vales = await _context.Vale
+                .Where(v => v.Cliente.id == id && v.status_vale == "Activo" && v.Cliente.Email == User.Identity.Name)
+                .ToListAsync();
+
+            List<PagoEntity> pagosCompletos = await _context.Pago
+                .Where(p => p.Vale.Cliente.id == id && p.Pagado == true
+                    && p.Vale.status_vale == "Activo" && p.Vale.Cliente.Email == User.Identity.Name)
+                .ToListAsync();
+
+            List<PagoEntity> pagosPendientes = await _context.Pago
+                .Where(p => p.Vale.Cliente.id == id && p.Pagado == false
+                    && p.Vale.status_vale == "Activo" && p.Vale.Cliente.Email == User.Identity.Name)
+                .ToListAsync();
+
+            float montoTotal = 0;
+            float montoPendiente = 0;
+            float montoPagado = 0;
+
+            for (int i = 0; i < vales.Count; i++)
+            {
+                Debug.WriteLine("MONTO");
+                Debug.WriteLine(vales[i].Monto);
+
+                montoTotal = montoTotal + vales[i].Monto;
+            }
+
+            for (int i = 0; i < pagosCompletos.Count; i++)
+            {
+                Debug.WriteLine("MONTO PAGADO");
+                Debug.WriteLine(pagosCompletos[i].Cantidad);
+
+                montoPagado = montoPagado + pagosCompletos[i].Cantidad;
+            }
+
+            for (int i = 0; i < pagosPendientes.Count; i++)
+            {
+                Debug.WriteLine("MONTO PENDIENTE");
+                Debug.WriteLine(pagosPendientes[i].Cantidad);
+
+                montoPendiente = montoPendiente + pagosPendientes[i].Cantidad;
+            }
+
+            ViewBag.MontoTotal = montoTotal;
+            ViewBag.MontoPendiente = montoPendiente;
+            ViewBag.MontoPagado = montoPagado;
+
+            return View(clienteEntity);
         }
 
         public async Task<IActionResult> SearchCliente()
@@ -224,6 +290,7 @@ namespace SAC_VALES.Web.Controllers
             return RedirectToAction(nameof(Index));
         }
 
+       
         private bool ClienteEntityExists(int id)
         {
             return _context.Cliente.Any(e => e.id == id);

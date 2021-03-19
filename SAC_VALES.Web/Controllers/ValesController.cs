@@ -313,7 +313,7 @@ namespace SAC_VALES.Web.Controllers
                 {
                     Monto = valeEntity.Monto,
                     CantidadPagos = valeEntity.CantidadPagos,
-                    //FechaPrimerPago = DateTime.Today,
+                    FechaPrimerPago = valeEntity.FechaPrimerPago,
                     FechaCreacion = DateTime.UtcNow,
                     status_vale = "Activo",
                     Talonera = talonera,
@@ -328,66 +328,188 @@ namespace SAC_VALES.Web.Controllers
                 await _context.SaveChangesAsync();
 
                 float division = valeEntity.Monto / valeEntity.CantidadPagos;
-
-                //GET: FECHA DE HOY
-                DateTime FechaHoy = DateTime.Today;
-                int Dia = FechaHoy.Day;
-                int Mes = FechaHoy.Month;
-                int Año = FechaHoy.Year;
-
-                DateTime NuevaFecha = new DateTime(FechaHoy.Year, FechaHoy.Month, FechaHoy.Day);
+                DateTime Fecha = valeEntity.FechaPrimerPago;
+                
 
                 for (int i = 0; i < valeEntity.CantidadPagos; i++)
                 {
-
-                    //CONDICION PARA REDONDEAR LOS DIAS
-
-                    if (FechaHoy.Day > 1 || FechaHoy.Day < 15)
-                    { 
-                        Debug.WriteLine("entre al primer if");
-                        if (i == 0)
-                        {
-                            NuevaFecha = new DateTime(FechaHoy.Year, FechaHoy.Month, 15);
-                        }
-                        
-                        FechaHoy = NuevaFecha;
-                        Debug.WriteLine("Fecha quincena1" + NuevaFecha);
-                       
-                        _context.Pago.Add(new PagoEntity
+                   
+                    _context.Pago.Add(new PagoEntity
                         {
                             Cantidad = division,
-                            FechaLimite = NuevaFecha,
+                            FechaLimite = Fecha,
                             Vale = valeInsert
 
                         });
-
-                        NuevaFecha = NuevaFecha.AddDays(15);
-
-                    }
-                    else if (FechaHoy.Day > 15)
+                    //ENERO
+                    if (Fecha.Month == 1 && Fecha.Day == 1)
                     {
-                        Debug.WriteLine("entre al segundo if");
-                        if (i == 0)
-                        {
-                            NuevaFecha = new DateTime(FechaHoy.Year, FechaHoy.Month, 1);
-                            NuevaFecha.AddMonths(1);
-                        }
-                        
-                        FechaHoy = NuevaFecha.ToLocalTime();
-                        Console.WriteLine("Fecha quincena2" + FechaHoy);
-                        FechaHoy = FechaHoy.AddDays(15);
-
-                        _context.Pago.Add(new PagoEntity
-                        {
-                            Cantidad = division,
-                            FechaLimite = FechaHoy,
-                            Vale = valeInsert
-
-                        });
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 1 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 1 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
                     }
 
-                 
+                    //FEBRERO
+                    else if (Fecha.Month == 2 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 2 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 2 && Fecha.Day == 28)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+
+                    //MARZO
+                    else if (Fecha.Month == 3 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 3 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 3 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
+                    }
+
+                    //ABRIL
+                    else if (Fecha.Month == 4 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 4 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 4 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+
+                    //MAYO
+                    else if (Fecha.Month == 5 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 5 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 5 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
+                    }
+
+                    //JUNIO
+                    else if (Fecha.Month == 6 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 6 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 6 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+
+                    //JULIO
+                    else if (Fecha.Month == 7 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 7 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 7 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
+                    }
+
+                    //AGOSTO
+                    else if (Fecha.Month == 8 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 8 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 8 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
+                    }
+
+                    //SEPTIEMBRE
+                    else if (Fecha.Month == 9 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 9 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 9 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+
+                    //OCTUBRE
+                    else if (Fecha.Month == 10 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 10 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 10 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
+                    }
+
+                    //NOVIEMBRE
+                    else if (Fecha.Month == 11 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 11 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 11 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    //DICIEMBRE
+                    else if (Fecha.Month == 12 && Fecha.Day == 1)
+                    {
+                        Fecha = Fecha.AddDays(14);
+                    }
+                    else if (Fecha.Month == 12 && Fecha.Day == 15)
+                    {
+                        Fecha = Fecha.AddDays(15);
+                    }
+                    else if (Fecha.Month == 12 && Fecha.Day == 30)
+                    {
+                        Fecha = Fecha.AddDays(16);
+                    }
+                    //Fecha = Fecha.AddDays(15);
                 }
+
                 Debug.WriteLine("DIVISION");
 
                 Debug.WriteLine(division);

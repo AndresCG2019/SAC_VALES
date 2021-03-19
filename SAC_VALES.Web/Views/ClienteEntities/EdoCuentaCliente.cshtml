@@ -1,0 +1,40 @@
+﻿@model SAC_VALES.Web.Data.Entities.ClienteEntity
+
+@{
+    ViewData["Title"] = "EdoCliente";
+}
+
+<h2>Estado de Cuenta de @Model.Nombre @Model.Apellidos</h2>
+
+<div>
+    <dl>
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+            @Html.DisplayFor(model => model.Apellidos)
+        </dd>
+        <dt>
+            Monto total
+        </dt>
+        <dd>
+            @ViewBag.MontoTotal $
+        </dd>
+        <dt>
+            Monto Pagado
+        </dt>
+        <dd>
+            @ViewBag.MontoPagado $
+        </dd>
+        <dt>
+            Monto Pendiente
+        </dt>
+        <dd>
+            @ViewBag.MontoPendiente $
+        </dd>
+    </dl>
+</div>
+<div>
+    <a href="javascript:void(0);" onclick="history.go(-1);" class="btn btn-default">Regresar</a>
+</div>

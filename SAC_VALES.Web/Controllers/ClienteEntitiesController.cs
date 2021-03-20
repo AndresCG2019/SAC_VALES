@@ -46,9 +46,9 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var clienteEntity = await _context.Cliente
+            var distribuidorEntity = await _context.Distribuidor
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (clienteEntity == null)
+            if (distribuidorEntity == null)
             {
                 Debug.WriteLine("Entre aqui 2");
                 return NotFound();
@@ -100,7 +100,7 @@ namespace SAC_VALES.Web.Controllers
             ViewBag.MontoPendiente = montoPendiente;
             ViewBag.MontoPagado = montoPagado;
 
-            return View(clienteEntity);
+            return View(distribuidorEntity);
         }
 
         public async Task<IActionResult> SearchCliente()

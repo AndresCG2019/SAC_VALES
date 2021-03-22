@@ -46,25 +46,25 @@ namespace SAC_VALES.Web.Controllers
                 return NotFound();
             }
 
-            var clienteEntity = await _context.Cliente
+            var distribuidorEntity = await _context.Cliente
                 .FirstOrDefaultAsync(m => m.id == id);
-            if (clienteEntity == null)
+            if (distribuidorEntity == null)
             {
                 Debug.WriteLine("Entre aqui 2");
                 return NotFound();
             }
 
             List<ValeEntity> vales = await _context.Vale
-                .Where(v => v.Cliente.id == id && v.status_vale == "Activo" && v.Cliente.Email == User.Identity.Name)
+                .Where(v => v.Distribuidor.id == id && v.status_vale == "Activo" && v.Cliente.Email == User.Identity.Name)
                 .ToListAsync();
 
             List<PagoEntity> pagosCompletos = await _context.Pago
-                .Where(p => p.Vale.Cliente.id == id && p.Pagado == true
+                .Where(p => p.Vale.Distribuidor.id == id && p.Pagado == true
                     && p.Vale.status_vale == "Activo" && p.Vale.Cliente.Email == User.Identity.Name)
                 .ToListAsync();
 
             List<PagoEntity> pagosPendientes = await _context.Pago
-                .Where(p => p.Vale.Cliente.id == id && p.Pagado == false
+                .Where(p => p.Vale.Distribuidor.id == id && p.Pagado == false
                     && p.Vale.status_vale == "Activo" && p.Vale.Cliente.Email == User.Identity.Name)
                 .ToListAsync();
 
@@ -100,7 +100,7 @@ namespace SAC_VALES.Web.Controllers
             ViewBag.MontoPendiente = montoPendiente;
             ViewBag.MontoPagado = montoPagado;
 
-            return View(clienteEntity);
+            return View(distribuidorEntity);
         }
 
         public async Task<IActionResult> SearchCliente()

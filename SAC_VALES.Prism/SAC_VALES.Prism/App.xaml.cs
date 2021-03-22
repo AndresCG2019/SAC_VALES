@@ -42,6 +42,8 @@ namespace SAC_VALES.Prism
             containerRegistry.RegisterForNavigation<ReportPage, ReportPageViewModel>();
             containerRegistry.RegisterForNavigation<LoginPage, LoginPageViewModel>();
             containerRegistry.RegisterForNavigation<RegisterPage, RegisterPageViewModel>();
+            containerRegistry.RegisterForNavigation<ValesDistPage, ValesDistPageViewModel>();
+            containerRegistry.RegisterForNavigation<ValesCliePage, ValesCliePageViewModel>();
         }
     }
 }

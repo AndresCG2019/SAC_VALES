@@ -28,6 +28,7 @@
             </th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -51,8 +52,12 @@
                    
                 </td>
                 <td>
-                    <a asp-controller="Taloneras" asp-action="EdoCuenta" class="btn btn-default"
-                       asp-route-id="@item.id">Edo Cuenta</a>
+                    <a asp-controller="Taloneras" asp-action="EdoCuenta" class="btn btn-primary"
+                       asp-route-id="@item.id">Edo Cuenta Talonera</a>
+                </td>
+                <td>
+                    <a asp-controller="Empresas" asp-action="EdoCuenta" class="btn btn-warning"
+                       asp-route-id="@item.Empresa.id">Edo Cuenta Empresa</a>
                 </td>
             </tr>
         }

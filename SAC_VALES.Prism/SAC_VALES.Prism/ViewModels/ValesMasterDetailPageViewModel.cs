@@ -2,11 +2,13 @@
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using SAC_VALES.Common.Enums;
 using SAC_VALES.Common.Helpers;
 using SAC_VALES.Common.Models;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SAC_VALES.Prism.ViewModels
@@ -20,7 +22,25 @@ namespace SAC_VALES.Prism.ViewModels
         {
             _navigationService = navigationService;
             LoadUser();
-            LoadMenus();
+
+            if (Settings.IsLogin)
+            {
+                if (User.UserType == UserType.Distribuidor)
+                {
+                    Debug.WriteLine("entre al if de menu dist");
+                    LoadMenusDist();
+                }
+                else if (User.UserType == UserType.Cliente)
+                {
+                    Debug.WriteLine("entre al if de menu cliente");
+                    LoadMenusCliente();
+                }
+            }
+            else 
+            {
+                Debug.WriteLine("entre al if de menu no logeado");
+                LoadMenusLoggedOut();
+            }
         }
 
         public ObservableCollection<MenuItemViewModel> Menus { get; set; }
@@ -39,8 +59,40 @@ namespace SAC_VALES.Prism.ViewModels
             }
         }
 
+        private void LoadMenusDist()
+        {
+            List<Menu> menus = new List<Menu>
+            {
+                 new Menu
+                {
+                    Icon = "ic_airport_shuttle",
+                    PageName = "MainPage",
+                    Title = "Main Page"
+                },
+                 new Menu
+                {
+                    Icon = "ic_report",
+                    PageName = "ValesDistPage",
+                    Title = "Vales Distribuidor"
+                },
+                new Menu
+                {
+                    Icon = "ic_exit_to_app",
+                    PageName = "LoginPage",
+                    Title = Settings.IsLogin ? "Logout" : "Login"
+                }
+            };
 
-        private void LoadMenus()
+            Menus = new ObservableCollection<MenuItemViewModel>(
+                menus.Select(m => new MenuItemViewModel(_navigationService)
+                {
+                    Icon = m.Icon,
+                    PageName = m.PageName,
+                    Title = m.Title
+                }).ToList());
+        }
+
+        private void LoadMenusCliente()
         {
             List<Menu> menus = new List<Menu>
             {
@@ -48,31 +100,41 @@ namespace SAC_VALES.Prism.ViewModels
                 {
                     Icon = "ic_airport_shuttle",
                     PageName = "MainPage",
-                    Title = "New trip"
+                    Title = "Main Page"
                 },
-                new Menu
-                {
-                    Icon = "ic_local_taxi",
-                    PageName = "HistoryPage",
-                    Title = "See taxi history"
-                },
-                new Menu
-                {
-                    Icon = "ic_people",
-                    PageName = "GroupPage",
-                    Title = "Ver Vales"
-                },
-                new Menu
-                {
-                    Icon = "ic_account_circle",
-                    PageName = "ModifyUserPage",
-                    Title = "Modify User"
-                },
-                new Menu
+                 new Menu
                 {
                     Icon = "ic_report",
-                    PageName = "ReportPage",
-                    Title = "Report an incident"
+                    PageName = "ValesCliePage",
+                    Title = "Vales Cliente"
+                },
+                new Menu
+                {
+                    Icon = "ic_exit_to_app",
+                    PageName = "LoginPage",
+                    Title = Settings.IsLogin ? "Logout" : "Login"
+                }
+            };
+
+            Menus = new ObservableCollection<MenuItemViewModel>(
+                menus.Select(m => new MenuItemViewModel(_navigationService)
+                {
+                    Icon = m.Icon,
+                    PageName = m.PageName,
+                    Title = m.Title
+                }).ToList());
+        }
+
+
+        private void LoadMenusLoggedOut()
+        {
+            List<Menu> menus = new List<Menu>
+            {
+                new Menu
+                {
+                    Icon = "ic_airport_shuttle",
+                    PageName = "MainPage",
+                    Title = "Main Page"
                 },
                 new Menu
                 {

@@ -76,7 +76,17 @@ namespace SAC_VALES.Prism.ViewModels
             IsEnabled = false;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
-           
+
+            var connection = await _apiService.CheckConnectionAsync(url);
+            if (!connection)
+            {
+                IsRunning = false;
+                IsEnabled = true;
+                await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
+                return;
+            }
+
+
             TokenRequest request = new TokenRequest
             {
                 Contraseña = Password,

@@ -103,6 +103,71 @@ namespace SAC_VALES.Web.Controllers
             return View(distribuidorEntity);
         }
 
+        [Authorize(Roles = "Distribuidor")]
+        public async Task<IActionResult> EdoCuentaClienteDis(int? id)
+        {
+            if (id == null)
+            {
+                Debug.WriteLine("Entre aqui 1");
+                return NotFound();
+            }
+
+            var distribuidorEntity = await _context.Cliente
+                .FirstOrDefaultAsync(m => m.id == id);
+            if (distribuidorEntity == null)
+            {
+                Debug.WriteLine("Entre aqui 2");
+                return NotFound();
+            }
+
+            List<ValeEntity> vales = await _context.Vale
+                .Where(v => v.Cliente.id == id && v.status_vale == "Activo" && v.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync();
+
+            List<PagoEntity> pagosCompletos = await _context.Pago
+                .Where(p => p.Vale.Cliente.id == id && p.Pagado == true
+                    && p.Vale.status_vale == "Activo" && p.Vale.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync();
+
+            List<PagoEntity> pagosPendientes = await _context.Pago
+                .Where(p => p.Vale.Cliente.id == id && p.Pagado == false
+                    && p.Vale.status_vale == "Activo" && p.Vale.Distribuidor.Email == User.Identity.Name)
+                .ToListAsync();
+
+            float montoTotal = 0;
+            float montoPendiente = 0;
+            float montoPagado = 0;
+
+            for (int i = 0; i < vales.Count; i++)
+            {
+                Debug.WriteLine("MONTO");
+                Debug.WriteLine(vales[i].Monto);
+
+                montoTotal = montoTotal + vales[i].Monto;
+            }
+
+            for (int i = 0; i < pagosCompletos.Count; i++)
+            {
+                Debug.WriteLine("MONTO PAGADO");
+                Debug.WriteLine(pagosCompletos[i].Cantidad);
+
+                montoPagado = montoPagado + pagosCompletos[i].Cantidad;
+            }
+
+            for (int i = 0; i < pagosPendientes.Count; i++)
+            {
+                Debug.WriteLine("MONTO PENDIENTE");
+                Debug.WriteLine(pagosPendientes[i].Cantidad);
+
+                montoPendiente = montoPendiente + pagosPendientes[i].Cantidad;
+            }
+
+            ViewBag.MontoTotal = montoTotal;
+            ViewBag.MontoPendiente = montoPendiente;
+            ViewBag.MontoPagado = montoPagado;
+
+            return View(distribuidorEntity);
+        }
         public async Task<IActionResult> SearchCliente()
         {
             return View();

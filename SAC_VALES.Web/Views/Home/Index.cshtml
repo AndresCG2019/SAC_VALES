@@ -3,12 +3,13 @@
 }
 
 <div class="row">
-    <h1>EN CONSTRUCCIÓN</h1>
+    <h1>DashBoard</h1>
 </div>
 
 <head>
 
     <!--JS-->
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script type="text/javascript">
 
@@ -23,6 +24,7 @@
         // draws it.
         function drawChart() {
 
+            //1
             // Create the data table.
             var data = new google.visualization.DataTable();
             data.addColumn('string', 'Topping');
@@ -37,13 +39,61 @@
 
             // Set chart options
             var options = {
-                'title': 'How Much Pizza I Ate Last Night',
+                'title': 'VALES',
                 'width': 400,
                 'height': 300
             };
 
             // Instantiate and draw our chart, passing in some options.
             var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+
+            //2
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Mushrooms', 3],
+                ['Onions', 1],
+                ['Olives', 1],
+                ['Zucchini', 1],
+                ['Pepperoni', 2]
+            ]);
+
+            // Set chart options
+            var options = {
+                'title': 'TALONERAS',
+                'width': 400,
+                'height': 300
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+            chart.draw(data, options);
+
+            //3
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Mushrooms', 3],
+                ['Onions', 1],
+                ['Olives', 1],
+                ['Zucchini', 1],
+                ['Pepperoni', 2]
+            ]);
+
+            // Set chart options
+            var options = {
+                'title': 'PAGOS',
+                'width': 400,
+                'height': 300
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
             chart.draw(data, options);
         }
 
@@ -54,4 +104,8 @@
 <body>
     <!--Div that will hold the pie chart-->
     <div id="chart_div"></div>
+    <!--Div that will hold the pie chart-->
+    <!--<div id="chart_div2"></div>->
+    <!--Div that will hold the pie chart-->
+    <!--<div id="chart_div3"></div>-->
 </body> 

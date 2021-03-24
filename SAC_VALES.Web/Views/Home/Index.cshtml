@@ -3,7 +3,7 @@
 }
 
 <div class="row">
-    <h1>DashBoard</h1>
+    <h1>Dashboard</h1>
 </div>
 
 <head>
@@ -30,11 +30,8 @@
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
             data.addRows([
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2]
+                ['Pagados', @ViewBag.valesActivos],
+                ['No pagados', @ViewBag.valesFalsos]
             ]);
 
             // Set chart options
@@ -54,11 +51,8 @@
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
             data.addRows([
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2]
+                ['Dispobibles', 3],
+                ['No disponibles', 1],
             ]);
 
             // Set chart options
@@ -78,11 +72,8 @@
             data.addColumn('string', 'Topping');
             data.addColumn('number', 'Slices');
             data.addRows([
-                ['Mushrooms', 3],
-                ['Onions', 1],
-                ['Olives', 1],
-                ['Zucchini', 1],
-                ['Pepperoni', 2]
+                ['Pagos', 5],
+                ['Pagos', 10]
             ]);
 
             // Set chart options
@@ -102,10 +93,38 @@
 </head>
 
 <body>
-    <!--Div that will hold the pie chart-->
-    <div id="chart_div"></div>
-    <!--Div that will hold the pie chart-->
-    <!--<div id="chart_div2"></div>->
-    <!--Div that will hold the pie chart-->
-    <!--<div id="chart_div3"></div>-->
+
+    <table class="default">
+
+        <tr>
+
+            <td>
+                <div id="chart_div"></div>
+                Vales Pagados: @ViewBag.valesActivos
+                <br />
+                Vales No Pagados: @ViewBag.valesFalsos
+            </td>
+
+            <td> 
+            <!--<div id="chart_div2"></div>-->
+            </td>
+
+            <td>
+                <!--<div id="chart_div3"></div>-->
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+        </tr>
+
+    </table>
+
 </body> 

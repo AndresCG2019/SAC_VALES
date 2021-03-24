@@ -78,6 +78,7 @@ namespace SAC_VALES.Web.Controllers
                 Debug.WriteLine(vales[i].Monto);
 
                 montoTotal = montoTotal + vales[i].Monto;
+                
             }
 
             for (int i = 0; i < pagosCompletos.Count; i++)
@@ -86,6 +87,7 @@ namespace SAC_VALES.Web.Controllers
                 Debug.WriteLine(pagosCompletos[i].Cantidad);
 
                 montoPagado = montoPagado + pagosCompletos[i].Cantidad;
+               
             }
 
             for (int i = 0; i < pagosPendientes.Count; i++)
@@ -94,6 +96,7 @@ namespace SAC_VALES.Web.Controllers
                 Debug.WriteLine(pagosPendientes[i].Cantidad);
 
                 montoPendiente = montoPendiente + pagosPendientes[i].Cantidad;
+                
             }
 
             ViewBag.MontoTotal = montoTotal;

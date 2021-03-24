@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SAC_VALES.Web.Data;
+using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 using SAC_VALES.Web.Models;
 using System;
 using System.Collections.Generic;
@@ -10,6 +15,14 @@ namespace SAC_VALES.Web.Controllers
 {
     public class HomeController : Controller
     {
+        private readonly DataContext _context;
+        private readonly IUserHelper _userHelper;
+
+        public HomeController(DataContext context, IUserHelper userHelper)
+        {
+            _context = context;
+            _userHelper = userHelper;
+        }
 
         [Route("error/404")]
         public IActionResult Error404()
@@ -17,10 +30,7 @@ namespace SAC_VALES.Web.Controllers
             return View();
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+     
 
         public IActionResult About()
         {
@@ -41,11 +51,47 @@ namespace SAC_VALES.Web.Controllers
             return View();
         }
 
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });        
                 
         }
+        public async Task<IActionResult> Index()
+        {
+            
+            //Enlista los vales activos
+            List<ValeEntity> valesActivos = await _context.Vale
+               .Where(v =>  v.Pagado == true )
+               .ToListAsync();
+
+            //Enlista los vales Falsos
+            List<ValeEntity> valesFalsos = await _context.Vale
+              .Where(v =>  v.Pagado == false )
+              .ToListAsync();
+
+            int iActivos = 0; // Iterador de vales Pagados
+            int iFalsos = 0; // Iterador de vales No Pagados
+
+            for (int i = 0; i < valesActivos.Count; i++)
+            {
+                iActivos++; // Acumula los vales que son pagados
+
+            }
+
+            for (int i = 0; i < valesFalsos.Count; i++)
+            {
+                iFalsos++; // Acumula los vales que son no pagados
+
+            }
+
+            ViewBag.valesActivos = iActivos;
+            ViewBag.valesFalsos = iFalsos;
+            return View();
+        }
+
+        
+    
     }
 }

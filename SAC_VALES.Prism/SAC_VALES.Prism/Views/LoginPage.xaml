@@ -53,10 +53,10 @@
                         Style="{StaticResource DangerButton}"/>
             </StackLayout>
         </StackLayout>
-        <busyindicator:SfBusyIndicator AnimationType="Gear" 
+        <busyindicator:SfBusyIndicator AnimationType="Ball" 
                                        AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
                 	                   AbsoluteLayout.LayoutFlags="All"
-                	                   BackgroundColor="{StaticResource ColorAccent}"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
                 	                   HorizontalOptions="Center"
                 	                   TextColor="{StaticResource ColorFontInverse}"
                 	                   IsBusy="{Binding IsRunning}"

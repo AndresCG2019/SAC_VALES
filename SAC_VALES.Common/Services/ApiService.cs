@@ -6,6 +6,7 @@ using SAC_VALES.Common.Models;
 using System.Text;
 using System.Net.Http.Headers;
 using Plugin.Connectivity;
+using System.Collections.Generic;
 
 namespace SAC_VALES.Common.Services
 {
@@ -206,6 +207,51 @@ namespace SAC_VALES.Common.Services
                 string answer = await response.Content.ReadAsStringAsync();
                 Response obj = JsonConvert.DeserializeObject<Response>(answer);
                 return obj;
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public async Task<Response> GetValesByDist(
+            string urlBase,
+            string servicePrefix,
+            string controller,
+            DistValesRequest request)
+        {
+            try
+            {
+                string requestString = JsonConvert.SerializeObject(request);
+                StringContent content = new StringContent(requestString, Encoding.UTF8, "application/json");
+                HttpClient client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                string url = $"{servicePrefix}{controller}";
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                List<ValeResponse> valeResponse = JsonConvert.DeserializeObject<List <ValeResponse>>(result);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Result = valeResponse
+                };
             }
             catch (Exception ex)
             {

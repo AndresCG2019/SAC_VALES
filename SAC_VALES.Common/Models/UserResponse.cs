@@ -21,5 +21,9 @@ namespace SAC_VALES.Common.Models
         public string PicturePath { get; set; }
 
         public UserType UserType { get; set; }
+
+        public DistResponse Dist { get; set; }
+
+        public ClieResponse Clie { get; set; }
     }
 }

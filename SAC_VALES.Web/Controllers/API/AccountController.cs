@@ -242,7 +242,22 @@ namespace SAC_VALES.Web.Controllers.API
                 return NotFound("no se encontro el usuario");
             }
 
-            return Ok(_converterHelper.ToUserResponse(userEntity));
+            if (userEntity.UserType == UserType.Distribuidor)
+            {
+                DistribuidorEntity dist = _dataContext.Distribuidor
+                    .Where(d => d.Email == emailRequest.Email)
+                    .FirstOrDefault();
+
+                return Ok(_converterHelper.ToDistUserResponse(userEntity, dist));
+            }
+            else
+            {
+                ClienteEntity clie = _dataContext.Cliente
+                    .Where(c => c.Email == emailRequest.Email)
+                    .FirstOrDefault();
+
+                return Ok(_converterHelper.ToClieUserResponse(userEntity, clie));
+            }
         }
 
 

@@ -25,5 +25,14 @@ namespace SAC_VALES.Common.Models
         public bool Pagado { get; set; }
 
         public string status_vale { get; set; }
+
+        public DistResponse Dist { get; set; }
+
+        public ClieResponse Cliente { get; set; }
+
+        public EmpresaResponse Empresa { get; set; }
+
+        public TaloneraResponse Talonera { get; set; }
+
     }
 }

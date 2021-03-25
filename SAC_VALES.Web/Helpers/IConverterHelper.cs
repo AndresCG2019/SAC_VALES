@@ -6,6 +6,12 @@ namespace SAC_VALES.Web.Helpers
 {
     public interface IConverterHelper
     {
-        UserResponse ToUserResponse(UsuarioEntity user);
+        UserResponse ToDistUserResponse(UsuarioEntity user, DistribuidorEntity dist);
+        UserResponse ToClieUserResponse(UsuarioEntity user, ClienteEntity clie);
+        List <ValeResponse> ToValesResponse(List<ValeEntity> vales);
+        DistResponse ToDistResponse(DistribuidorEntity dist);
+        ClieResponse ToClieResponse(ClienteEntity cliente);
+        EmpresaResponse ToEmpResponse(EmpresaEntity empresa);
+        TaloneraResponse ToTaloneraResponse(TaloneraEntity talonera);
     }
 }

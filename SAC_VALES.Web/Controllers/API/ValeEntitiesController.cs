@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SAC_VALES.Common.Models;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers.API
 {
@@ -15,10 +17,42 @@ namespace SAC_VALES.Web.Controllers.API
     public class ValeEntitiesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConverterHelper _converterHelper;
 
-        public ValeEntitiesController(DataContext context)
+        public ValeEntitiesController(DataContext context, IConverterHelper converterHelper)
         {
             _context = context;
+            _converterHelper = converterHelper;
+        }
+
+        [HttpPost]
+        [Route("GetValesByDist")]
+        public async Task<IActionResult> GetValesByDist([FromBody] DistValesRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var dist = _context.Distribuidor.Where(d => d.id == request.DistId).FirstOrDefault();
+
+            if (dist == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El distribuidor especificado no existe."
+                });
+            }
+
+            var vales = await _context.Vale
+                .Include(v => v.Distribuidor)
+                .Include(v => v.Empresa)
+                .Include(v => v.Cliente)
+                .Include(v => v.Talonera)
+                .Where(v => v.Distribuidor.id == request.DistId && v.status_vale == "Activo").ToListAsync();
+
+            return Ok(_converterHelper.ToValesResponse(vales));
         }
 
         // GET: api/ValeEntities

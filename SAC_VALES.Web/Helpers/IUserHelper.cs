@@ -30,6 +30,6 @@ namespace SAC_VALES.Web.Helpers
         Task<IdentityResult> ChangePasswordAsync(UsuarioEntity user, string oldPassword, string newPassword);
 
         Task<IdentityResult> UpdateUserAsync(UsuarioEntity user);
-
+        
     }
 }

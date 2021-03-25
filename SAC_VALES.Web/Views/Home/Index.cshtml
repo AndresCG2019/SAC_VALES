@@ -5,75 +5,131 @@
 }
 
 <div class="row">
-    <div class="col">
-        <h2>Pagos del Día de Hoy: @ViewBag.FechaDisplay </h2>
-    </div>
+    <h1>Dashboard</h1>
 </div>
 
-@if (Model.Any())
-{
-    <table class="table table-hover table-responsive table-striped" id="MyTable">
-        <thead>
-            <tr>
-                <th>
-                    Monto
-                </th>
-                <th>
-                    Cliente
-                </th>
-                <th>
-                    Empresa
-                </th>
-                <th>
-                    Pagado
-                </th>
-                <th></th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Cantidad)$
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Vale.Cliente.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Vale.Talonera.Empresa.NombreEmpresa)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Pagado)
-                    </td>
-                    @if (item.Pagado == false)
-                    {
-                        <td>
-                            <a asp-controller="Vales" asp-action="MarcarPagado"
-                               class="btn btn-default" asp-route-id="@item.id" asp-route-navId="1">Marcar Como Pagado</a>
-                        </td>
-                    }
-                    else if (item.Pagado == true)
-                    {
-                        <td>
-                            <a asp-controller="Vales" asp-action="MarcarPagado" class="btn btn-default"
-                               asp-route-id="@item.id" asp-route-navId="1">Marcar Como No Pagado</a>
-                        </td>
-                    }
+<head>
 
-                    <td>
-                        <a asp-controller="Vales" asp-action="Details" class="btn btn-default"
-                           asp-route-id="@item.Valeid">Ver Vale</a>
-                    </td>
-                </tr>
-            }
-        </tbody>
+    <!--JS-->
+
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+
+        // Load the Visualization API and the corechart package.
+        google.charts.load('current', { 'packages': ['corechart'] });
+
+        // Set a callback to run when the Google Visualization API is loaded.
+        google.charts.setOnLoadCallback(drawChart);
+
+        // Callback that creates and populates a data table,
+        // instantiates the pie chart, passes in the data and
+        // draws it.
+        function drawChart() {
+
+            //1
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Pagados', @ViewBag.valesActivos],
+                ['No pagados', @ViewBag.valesFalsos]
+            ]);
+
+            // Set chart options
+            var options = {
+                'title': 'VALES',
+                'width': 400,
+                'height': 300
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+            chart.draw(data, options);
+
+            //2
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Dispobibles', 3],
+                ['No disponibles', 1],
+            ]);
+
+            // Set chart options
+            var options = {
+                'title': 'TALONERAS',
+                'width': 400,
+                'height': 300
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
+            chart.draw(data, options);
+
+            //3
+            // Create the data table.
+            var data = new google.visualization.DataTable();
+            data.addColumn('string', 'Topping');
+            data.addColumn('number', 'Slices');
+            data.addRows([
+                ['Pagos', 5],
+                ['Pagos', 10]
+            ]);
+
+            // Set chart options
+            var options = {
+                'title': 'PAGOS',
+                'width': 400,
+                'height': 300
+            };
+
+            // Instantiate and draw our chart, passing in some options.
+            var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
+            chart.draw(data, options);
+        }
+
+    </script>
+
+</head>
+
+<body>
+
+    <table class="default">
+
+        <tr>
+
+            <td>
+                <div id="chart_div"></div>
+                @ViewBag.texto1
+                @ViewBag.texto2
+                <br />
+                Vales Pagados: @ViewBag.valesActivos
+                <br />
+                Vales No Pagados: @ViewBag.valesFalsos
+            </td>
+
+            <td> 
+            <!--<div id="chart_div2"></div>-->
+            </td>
+
+            <td>
+                <!--<div id="chart_div3"></div>-->
+            </td>
+
+        </tr>
+
+        <tr>
+
+            <td></td>
+
+            <td></td>
+
+            <td></td>
+
+        </tr>
+
     </table>
 
-}
-else
-{
-    <p>VACIO</p>
-}
-
+</body> 

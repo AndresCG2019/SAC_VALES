@@ -324,8 +324,6 @@ namespace SAC_VALES.Web.Controllers
                     
                 };
 
-                //_context.Vale.FromSql("select * from Vale");
-
                 _context.Vale.Add(valeInsert);
 
                 await _context.SaveChangesAsync();

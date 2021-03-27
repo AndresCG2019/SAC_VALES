@@ -1,20 +1,14 @@
-﻿@model SAC_VALES.Web.Data.Entities.DistribuidorEntity
+﻿@model SAC_VALES.Web.Data.Entities.ClienteEntity
 
 @{
     ViewData["Title"] = "EdoCliente";
 }
 
-<h2>Estado de Cuenta de @Model.Nombre @Model.Apellidos</h2>
+<h2>Estado de Cuenta</h2>
 
 <div>
     <dl>
-        <dt>
-            @Html.DisplayNameFor(model => model.Nombre)
-        </dt>
-        <dd>
-            @Html.DisplayFor(model => model.Nombre)
-            @Html.DisplayFor(model => model.Apellidos)
-        </dd>
+        
         <dt>
             Monto total
         </dt>

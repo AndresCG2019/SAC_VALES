@@ -31,8 +31,37 @@ namespace SAC_VALES.Web.Controllers
             return View();
         }
 
-     
 
+        public ActionResult getTaloneras() 
+        {
+            List<TaloneraEntity> taloneras = _context.Talonera
+                .Where(t => t.Distribuidor.Email == User.Identity.Name)
+                .Include(t => t.Empresa)
+                .ToList();
+
+            List<TaloneraChartData> talonerasChartData = new List<TaloneraChartData>();
+
+            for (int i = 0; i < taloneras.Count; i++)
+            {
+
+                List<ValeEntity> vales = _context.Vale
+                    .Where(v => v.Talonera.id == taloneras[i].id)
+                    .ToList();
+
+                TaloneraChartData data = new TaloneraChartData();
+
+                data.NumFolios = taloneras[i].RangoFin - taloneras[i].RangoInicio;
+                data.FoliosOcupados = vales.Count;
+                data.FoliosDisponible = data.NumFolios - data.FoliosOcupados;
+                data.EmailEmpresa = taloneras[i].Empresa.Email + ": " + 
+                    taloneras[i].RangoInicio + " - " + taloneras[i].RangoFin;
+
+                talonerasChartData.Add(data);
+
+            }
+
+            return Json(talonerasChartData);
+        }
         public IActionResult About()
         {
             ViewData["Title"] = "EN CONSTRUCCION.";
@@ -64,34 +93,24 @@ namespace SAC_VALES.Web.Controllers
 
            if (User.IsInRole("Distribuidor"))
             {
-                //Enlista los vales activos
+                
+                // DATOS PARA LA GRAFICA DE VALES ACTIVOS E INACTIVOS
+                
                 List<ValeEntity> valesActivos = await _context.Vale
                    .Where(v => v.Pagado == true)
                    .ToListAsync();
 
-                //Enlista los vales Falsos
+                
                 List<ValeEntity> valesFalsos = await _context.Vale
                   .Where(v => v.Pagado == false)
                   .ToListAsync();
 
-                int iActivos = 0; // Iterador de vales Pagados
-                int iFalsos = 0; // Iterador de vales No Pagados
-
-                for (int i = 0; i < valesActivos.Count; i++)
-                {
-                    iActivos++; // Acumula los vales que son pagados
-
-                }
-
-                for (int i = 0; i < valesFalsos.Count; i++)
-                {
-                    iFalsos++; // Acumula los vales que son no pagados
-
-                }
-
-                ViewBag.valesActivos = iActivos;
-                ViewBag.valesFalsos = iFalsos;
+                ViewBag.valesActivos = valesActivos.Count;
+                ViewBag.valesFalsos = valesFalsos.Count;
                 ViewBag.texto1 = "Dashboard del distribuidor";
+
+                // DATOS PARA SIGUIENTE GRAFICA ...
+
                 return View();
             }
             else if (User.IsInRole("Cliente"))

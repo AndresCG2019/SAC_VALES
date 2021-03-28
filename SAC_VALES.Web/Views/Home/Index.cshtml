@@ -8,128 +8,85 @@
     <h1>Dashboard</h1>
 </div>
 
-<head>
+<div id="chart_div"></div>
+<div id="chart_div2"></div>
 
-    <!--JS-->
-
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
     <script type="text/javascript">
 
-        // Load the Visualization API and the corechart package.
+
         google.charts.load('current', { 'packages': ['corechart'] });
 
-        // Set a callback to run when the Google Visualization API is loaded.
-        google.charts.setOnLoadCallback(drawChart);
+        $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("getTaloneras", "Home")',
+                success: function (result) {
+                    google.charts.setOnLoadCallback(function () {
+                        drawChartTaloneras(result);
+                    });
+                }
+            });
+        });
 
-        // Callback that creates and populates a data table,
-        // instantiates the pie chart, passes in the data and
-        // draws it.
-        function drawChart() {
+            google.charts.setOnLoadCallback(drawValesChart);
 
-            //1
-            // Create the data table.
+            function drawValesChart() {
+
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'TipoVale');
+                data.addColumn('number', 'Cantidad');
+                data.addRows([
+                    ['Pagados', @ViewBag.valesActivos],
+                    ['No pagados', @ViewBag.valesFalsos]
+                ]);
+
+                var options = {
+                    'title': 'VALES',
+                    'width': 1000,
+                    'height': 400
+                };
+
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
+                chart.draw(data, options);
+        }
+
+        function drawChartTaloneras(result) {
+
+            console.log(result);
             var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Pagados', @ViewBag.valesActivos],
-                ['No pagados', @ViewBag.valesFalsos]
-            ]);
+            
+            data.addColumn('string', 'display');
+            data.addColumn('number', 'Folios Disponibles');
+            data.addColumn('number', 'Folios no Disponibles');
 
-            // Set chart options
-            var options = {
-                'title': 'VALES',
-                'width': 400,
-                'height': 300
+            var dataArray = [];
+
+            $.each(result, function (i, obj) {
+                dataArray.push([ obj.emailEmpresa ,obj.foliosDisponible, obj.foliosOcupados]);
+            });
+            data.addRows(dataArray);
+
+            console.log(dataArray);
+            console.log(data)
+
+            var columnChartOptions = {
+                title: "Disponibilidad de Taloneras",
+                width: 1000,
+                height: 400,
+                bar: { groupWidth: "20%" },
             };
 
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
-            chart.draw(data, options);
+            var columnChart = new google.visualization.ColumnChart(document
+                .getElementById('chart_div2'));
 
-            //2
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Dispobibles', 3],
-                ['No disponibles', 1],
-            ]);
-
-            // Set chart options
-            var options = {
-                'title': 'TALONERAS',
-                'width': 400,
-                'height': 300
-            };
-
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div2'));
-            chart.draw(data, options);
-
-            //3
-            // Create the data table.
-            var data = new google.visualization.DataTable();
-            data.addColumn('string', 'Topping');
-            data.addColumn('number', 'Slices');
-            data.addRows([
-                ['Pagos', 5],
-                ['Pagos', 10]
-            ]);
-
-            // Set chart options
-            var options = {
-                'title': 'PAGOS',
-                'width': 400,
-                'height': 300
-            };
-
-            // Instantiate and draw our chart, passing in some options.
-            var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
-            chart.draw(data, options);
+            columnChart.draw(data, columnChartOptions);
         }
 
     </script>
-
-</head>
-
-<body>
-
-    <table class="default">
-
-        <tr>
-
-            <td>
-                <div id="chart_div"></div>
-                @ViewBag.texto1
-                @ViewBag.texto2
-                <br />
-                Vales Pagados: @ViewBag.valesActivos
-                <br />
-                Vales No Pagados: @ViewBag.valesFalsos
-            </td>
-
-            <td> 
-            <!--<div id="chart_div2"></div>-->
-            </td>
-
-            <td>
-                <!--<div id="chart_div3"></div>-->
-            </td>
-
-        </tr>
-
-        <tr>
-
-            <td></td>
-
-            <td></td>
-
-            <td></td>
-
-        </tr>
-
-    </table>
-
-</body> 
+}

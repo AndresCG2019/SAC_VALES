@@ -17,6 +17,7 @@ namespace SAC_VALES.Web.Data.Entities
         [Display(Name = "Ultimo numero de folio")]
         [Required(ErrorMessage = "Es necesario ingresar un final del rango")]
         public int RangoFin { get; set; }
+        public string StatusTalonera { get; set; }
         public EmpresaEntity Empresa { get; set; }
 
         public DistribuidorEntity Distribuidor { get; set; }

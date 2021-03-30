@@ -9,6 +9,9 @@
 
     <AbsoluteLayout>
         <StackLayout>
+            <SearchBar x:Name="search" Placeholder="Buscar" CancelButtonColor="Orange"
+                       PlaceholderColor="Orange" HorizontalTextAlignment="Center" 
+                       TextChanged="search_TextChanged"></SearchBar>
             <CollectionView ItemsSource="{Binding Vales}" Margin="5, 10, 5, 5" EmptyView="Aun no se han registrado vales.">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"/>

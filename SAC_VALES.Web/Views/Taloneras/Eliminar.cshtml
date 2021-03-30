@@ -1,11 +1,11 @@
 ﻿
-@model SAC_VALES.Web.Data.Entities.ValeEntity
+@model SAC_VALES.Web.Data.Entities.TaloneraEntity
 
 @{
-    ViewData["Title"] = "Cancelar Vale";
+    ViewData["Title"] = "Cancelar Talonera";
 }
 
-<h2>¿Estás seguro de que quieres cancelar este vale?</h2>
+<h2>¿Estás seguro de que quieres cancelar esta talonera?</h2>
 
 <hr />
 <div class="row">
@@ -14,13 +14,9 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div>@Html.ValidationSummary()</div>
             <input type="hidden" asp-for="id" />
-            <input type="hidden" asp-for="Monto" />
-            <input type="hidden" asp-for="status_vale" />
-            <input type="hidden" asp-for="NumeroFolio" />
-            <input type="hidden" asp-for="CantidadPagos" />
-            <input type="hidden" asp-for="FechaPrimerPago" />
-            <input type="hidden" asp-for="FechaCreacion" />
-
+            <input type="hidden" asp-for="RangoInicio" />
+            <input type="hidden" asp-for="RangoFin" />
+            <input type="hidden" asp-for="StatusTalonera" />
             <div class="form-group">
                 <input type="submit" value="Cancelar" class="btn btn-success" />
             </div>

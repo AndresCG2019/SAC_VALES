@@ -191,7 +191,7 @@ namespace SAC_VALES.Web.Controllers
         public async Task<IActionResult> SelectTalonera()
         {
             return View(await _context.Talonera
-                .Where(t => t.Distribuidor.Email == User.Identity.Name)
+                .Where(t => t.Distribuidor.Email == User.Identity.Name && t.StatusTalonera == "Activo")
                 .Include(i => i.Empresa)
                 .ToListAsync());
         }

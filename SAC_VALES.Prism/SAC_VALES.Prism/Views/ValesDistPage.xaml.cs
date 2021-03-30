@@ -8,5 +8,10 @@ namespace SAC_VALES.Prism.Views
         {
             InitializeComponent();
         }
+
+        private void search_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var searchResult = Vales.
+        }
     }
 }

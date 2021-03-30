@@ -29,37 +29,43 @@
             <th></th>
             <th></th>
             <th></th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RangoInicio)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.RangoFin)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Empresa.NombreEmpresa)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Empresa.Email)
-                </td>
-                <td>
-                    <a asp-action="Details" class="btn btn-default" asp-route-id="@item.id">Detalles</a>
-                   
-                </td>
-                <td>
-                    <a asp-controller="Taloneras" asp-action="EdoCuenta" class="btn btn-primary"
-                       asp-route-id="@item.id">Edo Cuenta Talonera</a>
-                </td>
-                <td>
-                    <a asp-controller="Empresas" asp-action="EdoCuenta" class="btn btn-warning"
-                       asp-route-id="@item.Empresa.id">Edo Cuenta Empresa</a>
-                </td>
-            </tr>
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.RangoInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RangoFin)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.NombreEmpresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Empresa.Email)
+            </td>
+            <td>
+                <a asp-action="Details" class="btn btn-default" asp-route-id="@item.id">Detalles</a>
+
+            </td>
+            <td>
+                <a asp-controller="Taloneras" asp-action="EdoCuenta" class="btn btn-primary"
+                   asp-route-id="@item.id">Edo Cuenta Talonera</a>
+            </td>
+            <td>
+                <a asp-controller="Empresas" asp-action="EdoCuenta" class="btn btn-warning"
+                   asp-route-id="@item.Empresa.id">Edo Cuenta Empresa</a>
+            </td>
+            <td>
+                <a asp-action="Eliminar" class="btn btn-danger"
+                   asp-route-id="@item.id">Cancelar</a>
+            </td>
+
+        </tr>
         }
     </tbody>
 </table>

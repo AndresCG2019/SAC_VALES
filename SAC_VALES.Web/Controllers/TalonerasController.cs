@@ -27,7 +27,7 @@ namespace SAC_VALES.Web.Controllers
         {
             return View(await _context.Talonera
                 .Include(item => item.Empresa)
-                .Where(t => t.Distribuidor.Email == User.Identity.Name)
+                .Where(t => t.Distribuidor.Email == User.Identity.Name && t.StatusTalonera == "Activo")
                 .ToListAsync());
         }
 
@@ -107,8 +107,9 @@ namespace SAC_VALES.Web.Controllers
                     RangoInicio = taloneraEntity.RangoInicio,
                     RangoFin = taloneraEntity.RangoFin,
                     Empresa = empresa,
-                    Distribuidor = distribuidor
-                });
+                    Distribuidor = distribuidor,
+                    StatusTalonera = "Activo"
+                });;
 
                 await _context.SaveChangesAsync();
 
@@ -132,6 +133,58 @@ namespace SAC_VALES.Web.Controllers
             }
             return View(taloneraEntity);
         }
+
+        public async Task<IActionResult> Eliminar(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var talonera = await _context.Talonera.FindAsync(id);
+            if (talonera == null)
+            {
+                return NotFound();
+            }
+            return View(talonera);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Eliminar(int id,
+           [Bind("id, RangoInicio, RangoFin")] TaloneraEntity talonera)
+        {
+
+            if (id != talonera.id)
+            {
+                return NotFound();
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    talonera.StatusTalonera = "Inactivo";
+
+                    _context.Update(talonera);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!TaloneraEntityExists(talonera.id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction(nameof(Index));
+            }
+            return View(talonera);
+        }
+
 
         // POST: Taloneras/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
@@ -232,36 +285,6 @@ namespace SAC_VALES.Web.Controllers
 
             return View(taloneraEntity);
         }
-
-        // GET: Taloneras/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var taloneraEntity = await _context.Talonera
-                .FirstOrDefaultAsync(m => m.id == id);
-            if (taloneraEntity == null)
-            {
-                return NotFound();
-            }
-
-            return View(taloneraEntity);
-        }
-
-        // POST: Taloneras/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var taloneraEntity = await _context.Talonera.FindAsync(id);
-            _context.Talonera.Remove(taloneraEntity);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
         private bool TaloneraEntityExists(int id)
         {
             return _context.Talonera.Any(e => e.id == id);

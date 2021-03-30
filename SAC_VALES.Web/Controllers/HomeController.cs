@@ -35,7 +35,7 @@ namespace SAC_VALES.Web.Controllers
         public ActionResult getTaloneras() 
         {
             List<TaloneraEntity> taloneras = _context.Talonera
-                .Where(t => t.Distribuidor.Email == User.Identity.Name)
+                .Where(t => t.Distribuidor.Email == User.Identity.Name && t.StatusTalonera == "Activo")
                 .Include(t => t.Empresa)
                 .ToList();
 
@@ -113,13 +113,8 @@ namespace SAC_VALES.Web.Controllers
 
                 return View();
             }
-            else if (User.IsInRole("Cliente"))
-            {
-                ViewBag.texto2 = "Dashboard del cliente";
-                return View();
-            }
 
-            return View();
+            return View("TestView");
         }
 
     

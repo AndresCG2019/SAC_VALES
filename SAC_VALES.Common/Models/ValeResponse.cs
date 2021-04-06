@@ -34,5 +34,7 @@ namespace SAC_VALES.Common.Models
 
         public TaloneraResponse Talonera { get; set; }
 
+        public List<PagoResponse> Pagos { get; set; }
+
     }
 }

@@ -2,9 +2,9 @@
 
 namespace SAC_VALES.Prism.Views
 {
-    public partial class ValesDistPage : ContentPage
+    public partial class PagosDistPage : ContentPage
     {
-        public ValesDistPage()
+        public PagosDistPage()
         {
             InitializeComponent();
         }

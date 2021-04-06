@@ -11,5 +11,7 @@ namespace SAC_VALES.Common.Models
         public int RangoInicio { get; set; }
 
         public int RangoFin { get; set; }
+
+        public EmpresaResponse Empresa { get; set; }
     }
 }

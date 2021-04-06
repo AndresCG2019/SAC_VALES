@@ -9,24 +9,35 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace SAC_VALES.Prism.ViewModels
 {
     public class ValesDistPageViewModel : ViewModelBase
     {
+        private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
         private List <ValeResponse> _vales;
+        private List<PagoResponse> _pagos;
+        private List<ValeResponse> _valesFiltered;
         private bool _isRunning;
         private UserResponse _user;
+        private DelegateCommand<object> _GoToValeCommand;
 
         public ValesDistPageViewModel(INavigationService navigationService,
             IApiService apiService) : base(navigationService)
         {
             Title = "Vales Distribuidor";
             _apiService = apiService;
+            _navigationService = navigationService;
             LoadUser();
             LoadVales();
         }
+
+        public ICommand searchCommand => new Command<string>(SearchVales);
+        public DelegateCommand<object> GoToValeCommand => _GoToValeCommand 
+            ?? (_GoToValeCommand = new DelegateCommand<object>(GoToVale));
 
         public bool IsRunning
         {
@@ -38,6 +49,20 @@ namespace SAC_VALES.Prism.ViewModels
         {
             get => _vales;
             set => SetProperty(ref _vales, value);
+
+        }
+
+        public List<PagoResponse> Pagos
+        {
+            get => _pagos;
+            set => SetProperty(ref _pagos, value);
+
+        }
+
+        public List<ValeResponse> ValesFiltered
+        {
+            get => _valesFiltered;
+            set => SetProperty(ref _valesFiltered, value);
 
         }
 
@@ -88,9 +113,41 @@ namespace SAC_VALES.Prism.ViewModels
             }
 
             Vales = (List<ValeResponse>)response.Result;
-            IsRunning = false;
+            Pagos = new List<PagoResponse>();
 
-            Debug.WriteLine("LLEGUE AL FINAL");
+            for (int i = 0; i < Vales.Count; i++)
+            {
+                Debug.WriteLine("HOLA");
+                for (int j = 0; j < Vales[i].Pagos.Count; j++)
+                {
+                    Debug.WriteLine("HOLA");
+                    Debug.WriteLine(Vales[i].Pagos[j].id);
+                    Pagos.Add(Vales[i].Pagos[j]);
+                }
+                Debug.WriteLine("HOLA");
+            }
+
+            ValesFiltered = (List<ValeResponse>)response.Result;
+
+            IsRunning = false;
+        }
+
+        public void SearchVales(string query)
+        {
+            List<ValeResponse> result = Vales
+                .Where(v => v.NumeroFolio.ToString().Contains(query) || 
+                v.Monto.ToString().Contains(query) ||
+                v.Cliente.Email.ToLower().Contains(query.ToLower())).ToList();
+
+            ValesFiltered = result;
+        }
+
+        public async void GoToVale(object parameter) 
+        {
+            var p = new NavigationParameters();
+            p.Add("Vale", parameter);
+            
+            await _navigationService.NavigateAsync("PagosDistPage", p);
         }
 
     }

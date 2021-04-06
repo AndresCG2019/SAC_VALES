@@ -50,9 +50,15 @@ namespace SAC_VALES.Web.Controllers.API
                 .Include(v => v.Empresa)
                 .Include(v => v.Cliente)
                 .Include(v => v.Talonera)
+                .Include(v => v.Talonera.Empresa)
                 .Where(v => v.Distribuidor.id == request.DistId && v.status_vale == "Activo").ToListAsync();
 
-            return Ok(_converterHelper.ToValesResponse(vales));
+            var pagos = await _context.Pago
+                .Include(p => p.Vale)
+                .Where(p => p.Vale.Distribuidor.id == request.DistId)
+                .ToListAsync();
+
+            return Ok(_converterHelper.ToValesResponse(vales, pagos));
         }
 
         // GET: api/ValeEntities

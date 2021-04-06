@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using SAC_VALES.Common.Models;
 using SAC_VALES.Web.Data.Entities;
@@ -41,7 +42,7 @@ namespace SAC_VALES.Web.Helpers
             };
         }
 
-        public List <ValeResponse> ToValesResponse(List<ValeEntity> vales)
+        public List <ValeResponse> ToValesResponse(List<ValeEntity> vales, List<PagoEntity> pagos)
         {
             return vales.Select(v => new ValeResponse
             {
@@ -56,9 +57,41 @@ namespace SAC_VALES.Web.Helpers
                 Dist = ToDistResponse(v.Distribuidor),
                 Cliente = ToClieResponse(v.Cliente),
                 Empresa = ToEmpResponse(v.Empresa),
-                Talonera = ToTaloneraResponse(v.Talonera)
+                Talonera = ToTaloneraResponse(v.Talonera),
+                Pagos = ToPagosResponse(pagos, v.id)
+
 
             }).ToList();
+        }
+
+        public List<PagoResponse> ToPagosResponse(List<PagoEntity> pagos, int ValeId)
+        {
+            if (pagos == null)
+            {
+                return null;
+            }
+
+            List<PagoResponse> pagosResponse = new List<PagoResponse>();
+            PagoResponse pago = new PagoResponse();
+
+            for (int i = 0; i < pagos.Count; i++)
+            {
+                if (pagos[i].Vale.id == ValeId)
+                {
+                    pago.id = pagos[i].id;
+                    pago.Cantidad = pagos[i].Cantidad;
+                    pago.FechaLimite = pagos[i].FechaLimite;
+                    pago.Pagado = pagos[i].Pagado;
+
+                    pagosResponse.Add(pago);
+
+                    pago = new PagoResponse();
+
+                    Debug.WriteLine("LLEGUE");
+                }
+            }
+
+            return pagosResponse;
         }
 
         public DistResponse ToDistResponse(DistribuidorEntity dist)
@@ -129,7 +162,8 @@ namespace SAC_VALES.Web.Helpers
             {
                 id = talonera.id,
                 RangoInicio = talonera.RangoInicio,
-                RangoFin = talonera.RangoFin
+                RangoFin = talonera.RangoFin,
+                Empresa = ToEmpResponse(talonera.Empresa)
 
             };
         }

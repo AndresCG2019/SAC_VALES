@@ -8,10 +8,11 @@ namespace SAC_VALES.Web.Helpers
     {
         UserResponse ToDistUserResponse(UsuarioEntity user, DistribuidorEntity dist);
         UserResponse ToClieUserResponse(UsuarioEntity user, ClienteEntity clie);
-        List <ValeResponse> ToValesResponse(List<ValeEntity> vales);
+        List <ValeResponse> ToValesResponse(List<ValeEntity> vales, List<PagoEntity> pagos);
         DistResponse ToDistResponse(DistribuidorEntity dist);
         ClieResponse ToClieResponse(ClienteEntity cliente);
         EmpresaResponse ToEmpResponse(EmpresaEntity empresa);
         TaloneraResponse ToTaloneraResponse(TaloneraEntity talonera);
+        List<PagoResponse> ToPagosResponse(List<PagoEntity> pagos, int ValeId);
     }
 }

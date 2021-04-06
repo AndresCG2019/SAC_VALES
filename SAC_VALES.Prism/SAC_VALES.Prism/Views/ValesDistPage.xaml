@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="SAC_VALES.Prism.Views.ValesDistPage"
@@ -9,21 +10,31 @@
 
     <AbsoluteLayout>
         <StackLayout>
-            <SearchBar x:Name="search" Placeholder="Buscar" CancelButtonColor="Orange"
-                       PlaceholderColor="Orange" HorizontalTextAlignment="Center" 
-                       TextChanged="search_TextChanged"></SearchBar>
-            <CollectionView ItemsSource="{Binding Vales}" Margin="5, 10, 5, 5" EmptyView="Aun no se han registrado vales.">
+            <SearchBar x:Name="search" Placeholder="Buscar por Folio, Monto o Cliente" HorizontalTextAlignment="Center"
+                       FontSize="Small">
+                <SearchBar.Behaviors>
+                    <behaviors:EventToCommandBehavior EventName="TextChanged"
+                                                  Command="{Binding searchCommand}"
+                                                  CommandParameter="{Binding Text, Source={x:Reference search}}"/>
+                </SearchBar.Behaviors>
+            </SearchBar>
+            <CollectionView ItemsSource="{Binding ValesFiltered}" 
+                            x:Name="ValesCollectionView"
+                            Margin="5, 10, 5, 5" 
+                            EmptyView="Aun no se han registrado vales."
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding GoToValeCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, 
+                                Source={x:Reference ValesCollectionView}}">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame
-                        Padding="5"
-                        CornerRadius="20"
-                        IsClippedToBounds="False"
-                        BorderColor="Black">
-                            <Grid HeightRequest="75">
+                        <Frame IsClippedToBounds="True"
+                        OutlineColor="Black"
+                            HasShadow="False">
+                            <Grid>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="0.2*"  />
                                     <ColumnDefinition Width="0.2*" />
@@ -40,7 +51,7 @@
                                 <Label Grid.Column="2" Text="CLIENTE" FontAttributes="Bold" />
                                 
                                 <Label Grid.Row="1" Text="{Binding NumeroFolio}" />
-                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Monto} " />
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Monto , StringFormat='${0}'}" />
                                 <Label Grid.Column="2" Grid.Row="1"  Text="{Binding Cliente.Email}" />
                                 
                             </Grid>

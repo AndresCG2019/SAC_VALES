@@ -49,22 +49,27 @@ namespace SAC_VALES.Web.Controllers.API
 
         // PUT: api/PagoEntities/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutPagoEntity([FromRoute] int id, [FromBody] PagoEntity pagoEntity)
+        public async Task<IActionResult> MarcarPago([FromRoute] int id)
         {
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            if (id != pagoEntity.id)
-            {
-                return BadRequest();
-            }
+            PagoEntity pago = _context.Pago.Where(p => p.id == id).FirstOrDefault();
 
-            _context.Entry(pagoEntity).State = EntityState.Modified;
+            if (pago.Pagado == true)
+            {
+                pago.Pagado = false;
+            }
+            else
+            {
+                pago.Pagado = true;
+            }
 
             try
             {
+                _context.Update(pago);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

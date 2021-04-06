@@ -23,7 +23,8 @@ namespace SAC_VALES.Web.Migrations
                 column: "Valeid",
                 principalTable: "ValeEntity",
                 principalColumn: "id",
-                onDelete: ReferentialAction.Cascade);
+                onDelete: ReferentialAction.Cascade,
+                onUpdate: ReferentialAction.Cascade);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

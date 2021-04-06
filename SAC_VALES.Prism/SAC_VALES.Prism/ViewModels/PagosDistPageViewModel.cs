@@ -2,6 +2,7 @@
 using Prism.Mvvm;
 using Prism.Navigation;
 using SAC_VALES.Common.Models;
+using SAC_VALES.Common.Services;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -17,10 +18,12 @@ namespace SAC_VALES.Prism.ViewModels
         private ValeResponse _vale;
         private List<PagoResponse> _pagos;
         private DelegateCommand<object> _MarcarPagadoCommand;
+        private readonly IApiService _apiService;
 
-        public PagosDistPageViewModel(INavigationService navigationService): base(navigationService)
+        public PagosDistPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
             Title = "Pago Page";
+            _apiService = apiService;
         }
 
         public DelegateCommand<object> MarcarPagadoCommand => _MarcarPagadoCommand
@@ -71,6 +74,21 @@ namespace SAC_VALES.Prism.ViewModels
             bool answer = await App.Current.MainPage
                 .DisplayAlert("Marcar Pago", "¿Quieres marcar este pago como completado?", "Si", "No");
             Debug.WriteLine("Answer: " + answer);
+
+            if (answer == true)
+            {
+                string url = App.Current.Resources["UrlAPI"].ToString();
+                Response response = await _apiService.MarcarPago(url, "/api/PagoEntities", "/1");
+
+                if (!response.IsSuccess)
+                {
+                    //IsRunning = false;
+                    await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
+                    Debug.WriteLine("MENSAJE DE ERROR");
+                    Debug.WriteLine(response.Message);
+                    return;
+                }
+            }
         }
     }
 }

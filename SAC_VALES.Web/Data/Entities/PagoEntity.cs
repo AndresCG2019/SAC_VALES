@@ -28,5 +28,7 @@ namespace SAC_VALES.Web.Data.Entities
         public int Valeid { get; set; }
 
         public ValeEntity Vale { get; set; }
+
+        public DistribuidorEntity Distribuidor { get; set; }
     }
 }

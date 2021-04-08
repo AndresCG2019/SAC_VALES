@@ -61,6 +61,42 @@ namespace SAC_VALES.Web.Controllers.API
             return Ok(_converterHelper.ToValesResponse(vales, pagos));
         }
 
+        [HttpPost]
+        [Route("GetValesByClie")]
+        public async Task<IActionResult> GetValesByClie([FromBody] ClieValesRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var clie = _context.Cliente.Where(d => d.id == request.ClieId).FirstOrDefault();
+
+            if (clie == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El cliente especificado no existe."
+                });
+            }
+
+            var vales = await _context.Vale
+                .Include(v => v.Distribuidor)
+                .Include(v => v.Empresa)
+                .Include(v => v.Cliente)
+                .Include(v => v.Talonera)
+                .Include(v => v.Talonera.Empresa)
+                .Where(v => v.Cliente.id == request.ClieId && v.status_vale == "Activo").ToListAsync();
+
+            var pagos = await _context.Pago
+                .Include(p => p.Vale)
+                .Where(p => p.Vale.Cliente.id == request.ClieId)
+                .ToListAsync();
+
+            return Ok(_converterHelper.ToValesResponse(vales, pagos));
+        }
+
         // GET: api/ValeEntities
         [HttpGet]
         public IEnumerable<ValeEntity> GetVale()

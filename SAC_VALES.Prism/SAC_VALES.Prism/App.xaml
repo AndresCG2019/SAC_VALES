@@ -7,7 +7,7 @@
 
     <!-- Application resource dictionary -->
         <ResourceDictionary>
-            <x:String x:Key="UrlAPI">https://sacvaleswebtest.azurewebsites.net</x:String>
+            <x:String x:Key="UrlAPI">https://sacvales.azurewebsites.net</x:String>
 
             <!-- Colors -->
         <Color x:Key="ColorPrimary">#3D3D3D</Color>

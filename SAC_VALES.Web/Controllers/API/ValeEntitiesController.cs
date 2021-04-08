@@ -157,7 +157,6 @@ namespace SAC_VALES.Web.Controllers.API
 
             return Ok(valeEntity);
         }
-
         private bool ValeEntityExists(int id)
         {
             return _context.Vale.Any(e => e.id == id);

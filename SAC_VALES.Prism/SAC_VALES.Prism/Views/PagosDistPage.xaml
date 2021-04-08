@@ -3,70 +3,84 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="SAC_VALES.Prism.Views.PagosDistPage"
              Title="{Binding Title}">
 
-    <StackLayout>
-        <Label Text="FOLIO" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.NumeroFolio}" Margin="5, 0, 0, 0" />
+    <AbsoluteLayout>
+        <StackLayout>
+            <Label Text="FOLIO" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Vale.NumeroFolio}" Margin="5, 0, 0, 0" />
 
-        <Label Text="MONTO" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.Monto , StringFormat='${0}'}" Margin="5" />
+            <Label Text="MONTO" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Vale.Monto , StringFormat='${0}'}" Margin="5" />
 
-        <Label Text="CLIENTE" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.Cliente.Email}" Margin="5, 0, 0, 0" />
+            <Label Text="CLIENTE" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Vale.Cliente.Email}" Margin="5, 0, 0, 0" />
 
-        <Label Text="TALONERA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.Talonera.RangoInicio}" Margin="5, 0, 0, 0" />
+            <Label Text="TALONERA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Vale.Talonera.RangoInicio}" Margin="5, 0, 0, 0" />
 
-        <Label Text="Fecha de Creación" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.FechaCreacion}" Margin="5" />
+            <Label Text="Fecha de Creación" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Vale.FechaCreacion}" Margin="5" />
 
-        <CollectionView ItemsSource="{Binding Pagos}" 
+            <CollectionView ItemsSource="{Binding Pagos}" 
                             x:Name="PagosCollectionView"
                             Margin="5, 10, 5, 5"
                             EmptyView="No hay resultados"
                             SelectionMode="Single"
                             SelectionChangedCommand="{Binding MarcarPagadoCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, 
+                            SelectionChangedCommandParameter="{Binding SelectedItem.id, 
                                 Source={x:Reference PagosCollectionView}}">
-            <CollectionView.ItemsLayout>
-                <GridItemsLayout Orientation="Vertical"/>
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate>
-                    <Frame IsClippedToBounds="True"
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout Orientation="Vertical"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame IsClippedToBounds="True"
                         OutlineColor="CadetBlue"
                             HasShadow="False">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="0.3*"  />
-                                <ColumnDefinition Width="0.3*" />
-                                <ColumnDefinition Width="0.3*" />
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="20" />
-                                <RowDefinition Height="20" />
-                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="0.3*"  />
+                                    <ColumnDefinition Width="0.3*" />
+                                    <ColumnDefinition Width="0.3*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="20" />
+                                    <RowDefinition Height="20" />
+                                </Grid.RowDefinitions>
 
-                            <Label Text="CANTIDAD" FontAttributes="Bold" />
-                            <Label Grid.Column="1" Text="LIMITE" FontAttributes="Bold" />
-                            <Label Grid.Column="2" Text="PAGADO" FontAttributes="Bold" />
+                                <Label Text="CANTIDAD" FontAttributes="Bold" />
+                                <Label Grid.Column="1" Text="LIMITE" FontAttributes="Bold" />
+                                <Label Grid.Column="2" Text="PAGADO" FontAttributes="Bold" />
 
-                            <Label Grid.Row="1" Text="{Binding Cantidad , StringFormat='${0}'}" />
-                            <Label Grid.Column="1" Grid.Row="1" Text="{Binding FechalString}" />
-                            <CheckBox x:Name="cbx" Grid.Column="2" Grid.Row="1" IsChecked="{Binding Pagado}"
+                                <Label Grid.Row="1" Text="{Binding Cantidad , StringFormat='${0}'}" />
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding FechalString}" />
+                                <CheckBox x:Name="cbx" Grid.Column="2" Grid.Row="1" IsChecked="{Binding Pagado}"
                                       IsEnabled="False">
-                            </CheckBox>
-                        </Grid>
-                    </Frame>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-        </CollectionView>
+                                </CheckBox>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
 
-    </StackLayout>
+        </StackLayout>
+        <busyindicator:SfBusyIndicator AnimationType="Ball" 
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                	                   IsBusy="{Binding IsRunning}"
+                	                   Title="cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80" />
+    </AbsoluteLayout>
 
 
 </ContentPage>

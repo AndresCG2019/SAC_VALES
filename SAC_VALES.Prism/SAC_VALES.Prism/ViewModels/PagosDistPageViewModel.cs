@@ -19,15 +19,22 @@ namespace SAC_VALES.Prism.ViewModels
         private List<PagoResponse> _pagos;
         private DelegateCommand<object> _MarcarPagadoCommand;
         private readonly IApiService _apiService;
+        private bool _isRunning;
 
         public PagosDistPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
-            Title = "Pago Page";
+            Title = "Pagos";
             _apiService = apiService;
         }
 
         public DelegateCommand<object> MarcarPagadoCommand => _MarcarPagadoCommand
            ?? (_MarcarPagadoCommand = new DelegateCommand<object>(MarcarPagado));
+
+        public bool IsRunning
+        {
+            get => _isRunning;
+            set => SetProperty(ref _isRunning, value);
+        }
 
         public ValeResponse Vale
         {
@@ -71,24 +78,79 @@ namespace SAC_VALES.Prism.ViewModels
         {
             Debug.WriteLine("LLEGUE A MARCAR PAGADO");
 
+            string url = App.Current.Resources["UrlAPI"].ToString();
+
             bool answer = await App.Current.MainPage
-                .DisplayAlert("Marcar Pago", "¿Quieres marcar este pago como completado?", "Si", "No");
+                .DisplayAlert("Marcar Pago", "¿Quieres cambiar el estado de este pago?", "Si", "No");
             Debug.WriteLine("Answer: " + answer);
 
             if (answer == true)
             {
-                string url = App.Current.Resources["UrlAPI"].ToString();
-                Response response = await _apiService.MarcarPago(url, "/api/PagoEntities", "/1");
+                IsRunning = true;
+
+                var connection = await _apiService.CheckConnectionAsync(url);
+                if (!connection)
+                {
+                    IsRunning = false;
+                    await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
+                    return;
+                }
+
+                Response response = await _apiService.MarcarPago(url, "/api/PagoEntities", ("/") + parameter.ToString());
 
                 if (!response.IsSuccess)
                 {
-                    //IsRunning = false;
+                    IsRunning = false;
                     await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
                     Debug.WriteLine("MENSAJE DE ERROR");
                     Debug.WriteLine(response.Message);
                     return;
                 }
+
+                PagosByValeRequest request = new PagosByValeRequest
+                {
+                    ValeId = Vale.id
+                };
+
+                Response responsePagos = await _apiService.GetPagosByVale(url, "/api/PagoEntities", "/GetPagosByVale", request );
+
+                if (!responsePagos.IsSuccess)
+                {
+                    IsRunning = false;
+                    await App.Current.MainPage.DisplayAlert("Error", responsePagos.Message, "Aceptar");
+                    Debug.WriteLine("MENSAJE DE ERROR");
+                    Debug.WriteLine(responsePagos.Message);
+                    return;
+                }
+
+                Pagos = (List<PagoResponse>)responsePagos.Result;
+
+                IsRunning = false;
+
+                Debug.WriteLine("ACABE");
             }
+
+            IsRunning = true;
+
+            PagosByValeRequest request2 = new PagosByValeRequest
+            {
+                ValeId = Vale.id
+            };
+
+            Response responsePagos2 = await _apiService.GetPagosByVale(url, "/api/PagoEntities", "/GetPagosByVale", request2);
+
+            if (!responsePagos2.IsSuccess)
+            {
+                IsRunning = false;
+                await App.Current.MainPage.DisplayAlert("Error", responsePagos2.Message, "Aceptar");
+                Debug.WriteLine("MENSAJE DE ERROR");
+                Debug.WriteLine(responsePagos2.Message);
+                return;
+            }
+
+            Pagos = (List<PagoResponse>)responsePagos2.Result;
+
+            IsRunning = false;
         }
     }
 }

@@ -301,5 +301,50 @@ namespace SAC_VALES.Common.Services
             }
         }
 
+        public async Task<Response> GetPagosByVale(
+            string urlBase,
+            string servicePrefix,
+            string controller,
+            PagosByValeRequest request)
+        {
+            try
+            {
+                string requestString = JsonConvert.SerializeObject(request);
+                StringContent content = new StringContent(requestString, Encoding.UTF8, "application/json");
+                HttpClient client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                string url = $"{servicePrefix}{controller}";
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                List<PagoResponse> pagoResponse = JsonConvert.DeserializeObject<List<PagoResponse>>(result);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Result = pagoResponse
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
     }
 }

@@ -13,6 +13,7 @@ namespace SAC_VALES.Common.Services
         Task<Response> RegisterUserAsync(string urlBase, string servicePrefix, string controller, UserRequest userRequest);
         Task<Response> GetValesByDist(string urlBase, string servicePrefix, string controller, DistValesRequest request);
         Task<Response> MarcarPago(string urlBase, string servicePrefix, string controller);
+        Task<Response> GetPagosByVale(string urlBase, string servicePrefix, string controller, PagosByValeRequest request);
         Task<bool> CheckConnectionAsync(string url);
 
     }

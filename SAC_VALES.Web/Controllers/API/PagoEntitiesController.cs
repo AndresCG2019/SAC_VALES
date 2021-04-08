@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SAC_VALES.Common.Models;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers.API
 {
@@ -15,10 +17,12 @@ namespace SAC_VALES.Web.Controllers.API
     public class PagoEntitiesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConverterHelper _converterHelper;
 
-        public PagoEntitiesController(DataContext context)
+        public PagoEntitiesController(DataContext context, IConverterHelper converterHelper)
         {
             _context = context;
+            _converterHelper = converterHelper;
         }
 
         // GET: api/PagoEntities
@@ -122,6 +126,35 @@ namespace SAC_VALES.Web.Controllers.API
 
             return Ok(pagoEntity);
         }
+
+        [HttpPost]
+        [Route("GetPagosByVale")]
+        public async Task<IActionResult> GetPagosByVale([FromBody] PagosByValeRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var vale = _context.Vale.Where(v => v.id == request.ValeId).FirstOrDefault();
+
+            if (vale == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El vale especificado no existe."
+                });
+            }
+
+            var pagos = await _context.Pago
+                .Include(p => p.Vale)
+                .Where(p => p.Vale.id == vale.id)
+                .ToListAsync();
+
+            return Ok(_converterHelper.ToPagosResponse(pagos, vale.id));
+        }
+
 
         private bool PagoEntityExists(int id)
         {

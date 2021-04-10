@@ -5,55 +5,47 @@
              xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="SAC_VALES.Prism.Views.ValesCliePage"
-             Title ="{Binding Title}">
+             x:Class="SAC_VALES.Prism.Views.PagosCliePage"
+             Title="{Binding Title}">
 
     <AbsoluteLayout>
         <StackLayout>
-            <SearchBar x:Name="search" Placeholder="Buscar por Folio, Monto o Cliente" HorizontalTextAlignment="Center"
-                       FontSize="Small">
-                <SearchBar.Behaviors>
-                    <behaviors:EventToCommandBehavior EventName="TextChanged"
-                                                  Command="{Binding searchCommand}"
-                                                  CommandParameter="{Binding Text, Source={x:Reference search}}"/>
-                </SearchBar.Behaviors>
-            </SearchBar>
-            <CollectionView ItemsSource="{Binding ValesFiltered}" 
-                            x:Name="ValesCollectionView"
-                            Margin="5, 10, 5, 5" 
-                            EmptyView="Aun no se han registrado vales."
-                            SelectionMode="Single"
-                            SelectionChangedCommand="{Binding GoToValeCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, 
-                                Source={x:Reference ValesCollectionView}}">
+            
+
+            <CollectionView ItemsSource="{Binding Pagos}" 
+                            x:Name="PagosCollectionView"
+                            Margin="5, 10, 5, 5"
+                            EmptyView="No hay resultados"
+                            SelectionMode="Single">
                 <CollectionView.ItemsLayout>
                     <GridItemsLayout Orientation="Vertical"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Frame IsClippedToBounds="True"
-                        OutlineColor="Black"
+                        OutlineColor="CadetBlue"
                             HasShadow="False">
                             <Grid>
                                 <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="0.2*"  />
-                                    <ColumnDefinition Width="0.2*" />
-                                    <ColumnDefinition Width="0.5*" />
+                                    <ColumnDefinition Width="0.3*"  />
+                                    <ColumnDefinition Width="0.3*" />
+                                    <ColumnDefinition Width="0.3*" />
                                 </Grid.ColumnDefinitions>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="20" />
                                     <RowDefinition Height="20" />
-                                    <RowDefinition Height="40" />
+                                    <RowDefinition Height="20" />
                                 </Grid.RowDefinitions>
 
-                                <Label Text="FOLIO" FontAttributes="Bold" />
-                                <Label Grid.Column="1" Text="MONTO" FontAttributes="Bold" />
-                                <Label Grid.Column="2" Text="DISTRIBUIDOR" FontAttributes="Bold" />
+                                <Label Text="CANTIDAD" FontAttributes="Bold" />
+                                <Label Grid.Column="1" Text="LIMITE" FontAttributes="Bold" />
+                                <Label Grid.Column="2" Text="PAGADO" FontAttributes="Bold" />
 
-                                <Label Grid.Row="1" Text="{Binding NumeroFolio}" />
-                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding Monto , StringFormat='${0}'}" />
-                                <Label Grid.Column="2" Grid.Row="1"  Text="{Binding Dist.Email}" />
-
+                                <Label Grid.Row="1" Text="{Binding Cantidad , StringFormat='${0}'}" />
+                                <Label Grid.Column="1" Grid.Row="1" Text="{Binding FechalString}" />
+                                <CheckBox x:Name="cbx" Grid.Column="2" Grid.Row="1" IsChecked="{Binding Pagado}"
+                                      IsEnabled="False">
+                                </CheckBox>
                             </Grid>
                         </Frame>
                     </DataTemplate>
@@ -73,5 +65,6 @@
                 	                   ViewBoxWidth="80"
                 	                   ViewBoxHeight="80" />
     </AbsoluteLayout>
+
 
 </ContentPage>

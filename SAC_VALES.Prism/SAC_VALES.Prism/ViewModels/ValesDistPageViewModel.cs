@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 namespace SAC_VALES.Prism.ViewModels
 {
-    public class ValesDistPageViewModel : ViewModelBase
+    public class ValesDistPageViewModel : ViewModelBase, INavigatedAware
     {
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
@@ -81,9 +81,7 @@ namespace SAC_VALES.Prism.ViewModels
         }
 
         private async void LoadVales() 
-        {
-            Debug.WriteLine("LLEGUE A LOAD VALES");
-            
+        {   
             IsRunning = true;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
@@ -107,8 +105,6 @@ namespace SAC_VALES.Prism.ViewModels
             {
                 IsRunning = false;
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(response.Message);
                 return;
             }
 
@@ -117,14 +113,10 @@ namespace SAC_VALES.Prism.ViewModels
 
             for (int i = 0; i < Vales.Count; i++)
             {
-                Debug.WriteLine("HOLA");
                 for (int j = 0; j < Vales[i].Pagos.Count; j++)
                 {
-                    Debug.WriteLine("HOLA");
-                    Debug.WriteLine(Vales[i].Pagos[j].id);
                     Pagos.Add(Vales[i].Pagos[j]);
                 }
-                Debug.WriteLine("HOLA");
             }
 
             ValesFiltered = (List<ValeResponse>)response.Result;
@@ -148,6 +140,16 @@ namespace SAC_VALES.Prism.ViewModels
             p.Add("Vale", parameter);
             
             await _navigationService.NavigateAsync("PagosDistPage", p);
+        }
+
+        void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
+        {
+            LoadVales();
+        }
+
+        void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)
+        {
+
         }
 
     }

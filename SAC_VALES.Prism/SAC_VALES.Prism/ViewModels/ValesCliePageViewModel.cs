@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 namespace SAC_VALES.Prism.ViewModels
 {
-    public class ValesCliePageViewModel : ViewModelBase
+    public class ValesCliePageViewModel : ViewModelBase, INavigatedAware
     {
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
@@ -98,12 +98,12 @@ namespace SAC_VALES.Prism.ViewModels
                 return;
             }
 
-            DistValesRequest request = new DistValesRequest
+            ClieValesRequest request = new ClieValesRequest
             {
-                DistId = User.Dist.id
+                ClieId = User.Clie.id
             };
 
-            Response response = await _apiService.GetValesByDist(url, "/api/ValeEntities", "/GetValesByClie", request);
+            Response response = await _apiService.GetValesByClie(url, "/api/ValeEntities", "/GetValesByClie", request);
 
             if (!response.IsSuccess)
             {
@@ -149,7 +149,17 @@ namespace SAC_VALES.Prism.ViewModels
             var p = new NavigationParameters();
             p.Add("Vale", parameter);
 
-            await _navigationService.NavigateAsync("PagosDistPage", p);
+            await _navigationService.NavigateAsync("PagosCliePage", p);
+        }
+
+        void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
+        {
+            LoadVales();
+        }
+
+        void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)
+        {
+
         }
 
     }

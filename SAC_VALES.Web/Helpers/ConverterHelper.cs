@@ -163,8 +163,8 @@ namespace SAC_VALES.Web.Helpers
                 id = talonera.id,
                 RangoInicio = talonera.RangoInicio,
                 RangoFin = talonera.RangoFin,
+                Display = talonera.Empresa.Email + " " + talonera.RangoInicio.ToString() + "-" + talonera.RangoFin.ToString(),
                 Empresa = ToEmpResponse(talonera.Empresa)
-
             };
         }
 

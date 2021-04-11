@@ -75,6 +75,20 @@ namespace SAC_VALES.Web.Controllers.API
             {
                 _context.Update(pago);
                 await _context.SaveChangesAsync();
+
+                ValeEntity vale = _context.Vale.Where(v => v.id == pago.Valeid).FirstOrDefault();
+
+                List<PagoEntity> pagos = await _context.Pago
+                    .Where(p => p.Valeid == pago.Valeid && p.Pagado == true)
+                    .ToListAsync();
+
+                if (pagos.Count == vale.CantidadPagos)
+                    vale.Pagado = true;
+                else
+                    vale.Pagado = false;
+
+                _context.Update(vale);
+                await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {

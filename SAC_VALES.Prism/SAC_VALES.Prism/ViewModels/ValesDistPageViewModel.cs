@@ -22,6 +22,7 @@ namespace SAC_VALES.Prism.ViewModels
         private List<PagoResponse> _pagos;
         private List<ValeResponse> _valesFiltered;
         private bool _isRunning;
+        private bool _showCollection;
         private UserResponse _user;
         private DelegateCommand<object> _GoToValeCommand;
 
@@ -31,6 +32,7 @@ namespace SAC_VALES.Prism.ViewModels
             Title = "Vales Distribuidor";
             _apiService = apiService;
             _navigationService = navigationService;
+            ShowCollection = true;
             LoadUser();
             LoadVales();
         }
@@ -43,6 +45,12 @@ namespace SAC_VALES.Prism.ViewModels
         {
             get => _isRunning;
             set => SetProperty(ref _isRunning, value);
+        }
+
+        public bool ShowCollection
+        {
+            get => _showCollection;
+            set => SetProperty(ref _showCollection, value);
         }
 
         public List<ValeResponse> Vales
@@ -83,6 +91,7 @@ namespace SAC_VALES.Prism.ViewModels
         private async void LoadVales() 
         {   
             IsRunning = true;
+            ShowCollection = false;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
 
@@ -90,6 +99,8 @@ namespace SAC_VALES.Prism.ViewModels
             if (!connection)
             {
                 IsRunning = false;
+                ShowCollection = true;
+
                 await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
                 return;
             }
@@ -104,6 +115,8 @@ namespace SAC_VALES.Prism.ViewModels
             if (!response.IsSuccess)
             {
                 IsRunning = false;
+                ShowCollection = true;
+
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
                 return;
             }
@@ -122,6 +135,7 @@ namespace SAC_VALES.Prism.ViewModels
             ValesFiltered = (List<ValeResponse>)response.Result;
 
             IsRunning = false;
+            ShowCollection = true;
         }
 
         public void SearchVales(string query)

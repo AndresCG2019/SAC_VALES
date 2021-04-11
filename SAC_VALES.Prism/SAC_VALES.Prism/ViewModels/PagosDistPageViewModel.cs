@@ -20,11 +20,13 @@ namespace SAC_VALES.Prism.ViewModels
         private DelegateCommand<object> _MarcarPagadoCommand;
         private readonly IApiService _apiService;
         private bool _isRunning;
+        private bool _showCollection;
 
         public PagosDistPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
             Title = "Pagos";
             _apiService = apiService;
+            ShowCollection = true;
         }
 
         public DelegateCommand<object> MarcarPagadoCommand => _MarcarPagadoCommand
@@ -34,6 +36,12 @@ namespace SAC_VALES.Prism.ViewModels
         {
             get => _isRunning;
             set => SetProperty(ref _isRunning, value);
+        }
+
+        public bool ShowCollection
+        {
+            get => _showCollection;
+            set => SetProperty(ref _showCollection, value);
         }
 
         public ValeResponse Vale
@@ -87,11 +95,14 @@ namespace SAC_VALES.Prism.ViewModels
             if (answer == true)
             {
                 IsRunning = true;
+                ShowCollection = false;
 
                 var connection = await _apiService.CheckConnectionAsync(url);
                 if (!connection)
                 {
                     IsRunning = false;
+                    ShowCollection = true;
+
                     await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
                     return;
                 }
@@ -101,6 +112,8 @@ namespace SAC_VALES.Prism.ViewModels
                 if (!response.IsSuccess)
                 {
                     IsRunning = false;
+                    ShowCollection = true;
+
                     await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
                     Debug.WriteLine("MENSAJE DE ERROR");
                     Debug.WriteLine(response.Message);
@@ -117,6 +130,8 @@ namespace SAC_VALES.Prism.ViewModels
                 if (!responsePagos.IsSuccess)
                 {
                     IsRunning = false;
+                    ShowCollection = true;
+
                     await App.Current.MainPage.DisplayAlert("Error", responsePagos.Message, "Aceptar");
                     Debug.WriteLine("MENSAJE DE ERROR");
                     Debug.WriteLine(responsePagos.Message);
@@ -126,11 +141,13 @@ namespace SAC_VALES.Prism.ViewModels
                 Pagos = (List<PagoResponse>)responsePagos.Result;
 
                 IsRunning = false;
+                ShowCollection = true;
 
                 Debug.WriteLine("ACABE");
             }
 
             IsRunning = true;
+            ShowCollection = false;
 
             PagosByValeRequest request2 = new PagosByValeRequest
             {
@@ -142,6 +159,8 @@ namespace SAC_VALES.Prism.ViewModels
             if (!responsePagos2.IsSuccess)
             {
                 IsRunning = false;
+                ShowCollection = true;
+
                 await App.Current.MainPage.DisplayAlert("Error", responsePagos2.Message, "Aceptar");
                 Debug.WriteLine("MENSAJE DE ERROR");
                 Debug.WriteLine(responsePagos2.Message);
@@ -151,6 +170,7 @@ namespace SAC_VALES.Prism.ViewModels
             Pagos = (List<PagoResponse>)responsePagos2.Result;
 
             IsRunning = false;
+            ShowCollection = true;
         }
     }
 }

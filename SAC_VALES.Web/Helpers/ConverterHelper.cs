@@ -190,5 +190,48 @@ namespace SAC_VALES.Web.Helpers
             return talonerasResponse;
         }
 
+        public ClieResponse ToClientResponse(ClienteDistribuidor cliente)
+        {
+            if (cliente == null)
+            {
+                return null;
+            }
+
+            return new ClieResponse
+            {
+                id = cliente.Cliente.id,
+                Nombre = cliente.Cliente.Nombre,
+                Apellidos = cliente.Cliente.Apellidos,
+                Direccion = cliente.Cliente.Direccion,
+                Telefono = cliente.Cliente.Telefono,
+                Email = cliente.Cliente.Email,
+                Status = cliente.Cliente.status_cliente
+            };
+        }
+
+        public List<ClieResponse> ToClientsResponse(List<ClienteDistribuidor> clientes)
+        {
+            if (clientes == null)
+            {
+                return null;
+            }
+
+            List<ClieResponse> clientesResponse = new List<ClieResponse>();
+            ClieResponse cliente = new ClieResponse();
+
+            for (int i = 0; i < clientes.Count; i++)
+            {
+                clientesResponse.Add(ToClientResponse(clientes[i]));
+
+                //talonera = new TaloneraResponse();
+
+                Debug.WriteLine("LLEGUE");
+            }
+
+            return clientesResponse;
+        }
+
+
+
     }
 }

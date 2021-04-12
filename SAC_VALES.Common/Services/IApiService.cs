@@ -15,6 +15,7 @@ namespace SAC_VALES.Common.Services
         Task<Response> MarcarPago(string urlBase, string servicePrefix, string controller);
         Task<Response> GetPagosByVale(string urlBase, string servicePrefix, string controller, PagosByValeRequest request);
         Task<Response> GetValesByClie(string urlBase, string servicePrefix, string controller, ClieValesRequest request);
+        Task<Response> GetTalonerasByDist(string urlBase, string servicePrefix, string controller, TalonerasByDistRequest request);
         Task<bool> CheckConnectionAsync(string url);
 
     }

@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SAC_VALES.Common.Models;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers.API
 {
@@ -15,10 +17,12 @@ namespace SAC_VALES.Web.Controllers.API
     public class ClienteEntitiesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConverterHelper _converterHelper;
 
-        public ClienteEntitiesController(DataContext context)
+        public ClienteEntitiesController(DataContext context, IConverterHelper converterHelper)
         {
             _context = context;
+            _converterHelper = converterHelper;
         }
 
         // GET: api/ClienteEntities
@@ -116,6 +120,34 @@ namespace SAC_VALES.Web.Controllers.API
             await _context.SaveChangesAsync();
 
             return Ok(clienteEntity);
+        }
+
+        [HttpPost]
+        [Route("GetClientesByDist")]
+        public async Task<IActionResult> GetValesByClie([FromBody] ClientesByDistRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var dist = _context.Distribuidor.Where(d => d.id == request.DistId).FirstOrDefault();
+
+            if (dist == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El distribuidor especificado no existe."
+                });
+            }
+
+            var clientes = await _context.ClienteDistribuidor
+                .Include(item => item.Cliente)
+                .Where(cd => cd.DistribuidorId == dist.id)
+                .ToListAsync();
+
+            return Ok(_converterHelper.ToClientsResponse(clientes));
         }
 
         private bool ClienteEntityExists(int id)

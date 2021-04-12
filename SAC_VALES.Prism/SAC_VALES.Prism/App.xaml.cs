@@ -46,6 +46,7 @@ namespace SAC_VALES.Prism
             containerRegistry.RegisterForNavigation<ValesCliePage, ValesCliePageViewModel>();
             containerRegistry.RegisterForNavigation<PagosDistPage, PagosDistPageViewModel>();
             containerRegistry.RegisterForNavigation<PagosCliePage, PagosCliePageViewModel>();
+            containerRegistry.RegisterForNavigation<TalonerasPage, TalonerasPageViewModel>();
         }
     }
 }

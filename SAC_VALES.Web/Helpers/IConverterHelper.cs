@@ -13,6 +13,7 @@ namespace SAC_VALES.Web.Helpers
         ClieResponse ToClieResponse(ClienteEntity cliente);
         EmpresaResponse ToEmpResponse(EmpresaEntity empresa);
         TaloneraResponse ToTaloneraResponse(TaloneraEntity talonera);
+        List<TaloneraResponse> ToTalonerasResponse(List<TaloneraEntity> taloneras);
         List<PagoResponse> ToPagosResponse(List<PagoEntity> pagos, int ValeId);
     }
 }

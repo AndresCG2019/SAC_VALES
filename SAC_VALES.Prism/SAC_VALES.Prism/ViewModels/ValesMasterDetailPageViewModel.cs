@@ -75,6 +75,12 @@ namespace SAC_VALES.Prism.ViewModels
                     PageName = "ValesDistPage",
                     Title = "Vales Distribuidor"
                 },
+                 new Menu
+                {
+                    Icon = "ic_add",
+                    PageName = "TalonerasPage",
+                    Title = "Taloneras"
+                },
                 new Menu
                 {
                     Icon = "ic_exit_to_app",

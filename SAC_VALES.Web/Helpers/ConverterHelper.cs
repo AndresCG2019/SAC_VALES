@@ -168,5 +168,27 @@ namespace SAC_VALES.Web.Helpers
             };
         }
 
+        public List<TaloneraResponse> ToTalonerasResponse(List<TaloneraEntity> taloneras)
+        {
+            if (taloneras == null)
+            {
+                return null;
+            }
+
+            List<TaloneraResponse> talonerasResponse = new List<TaloneraResponse>();
+            TaloneraResponse talonera = new TaloneraResponse();
+
+            for (int i = 0; i < taloneras.Count; i++)
+            {
+                talonerasResponse.Add(ToTaloneraResponse(taloneras[i]));
+
+                talonera = new TaloneraResponse();
+
+                Debug.WriteLine("LLEGUE");
+            }
+
+            return talonerasResponse;
+        }
+
     }
 }

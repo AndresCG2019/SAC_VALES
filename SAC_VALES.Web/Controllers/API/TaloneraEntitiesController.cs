@@ -5,8 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using SAC_VALES.Common.Models;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers.API
 {
@@ -15,10 +17,12 @@ namespace SAC_VALES.Web.Controllers.API
     public class TaloneraEntitiesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConverterHelper _converterHelper;
 
-        public TaloneraEntitiesController(DataContext context)
+        public TaloneraEntitiesController(DataContext context, IConverterHelper converterHelper)
         {
             _context = context;
+            _converterHelper = converterHelper;
         }
 
         // GET: api/TaloneraEntities
@@ -116,6 +120,31 @@ namespace SAC_VALES.Web.Controllers.API
             await _context.SaveChangesAsync();
 
             return Ok(taloneraEntity);
+        }
+
+        [HttpPost]
+        [Route("GetTalonerasByDist")]
+        public async Task<IActionResult> GetTalonerasByDist([FromBody] TalonerasByDistRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            List <TaloneraEntity> taloneras = await _context.Talonera
+                .Include(t => t.Empresa)
+                .Where(t => t.Distribuidor.id == request.DistId && t.StatusTalonera == "Activo").ToListAsync();
+
+            if (taloneras == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "La talonera especificada no existe."
+                });
+            }
+
+            return Ok(_converterHelper.ToTalonerasResponse(taloneras));
         }
 
         private bool TaloneraEntityExists(int id)

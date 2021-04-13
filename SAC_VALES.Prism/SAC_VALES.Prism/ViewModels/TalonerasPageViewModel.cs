@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Windows.Input;
+using Xamarin.Forms;
 
 namespace SAC_VALES.Prism.ViewModels
 {
@@ -31,6 +33,8 @@ namespace SAC_VALES.Prism.ViewModels
             LoadUser();
             LoadTaloneras();
         }
+
+        public ICommand searchCommand => new Command<string>(SearchTaloneras);
 
         public bool IsRunning
         {
@@ -122,9 +126,21 @@ namespace SAC_VALES.Prism.ViewModels
             ShowCollection = true;
         }
 
+        public void SearchTaloneras(string query)
+        {
+            List<TaloneraResponse> result = Taloneras
+                .Where(t => t.Empresa.Email.ToLower().Contains(query.ToLower()) ||
+                t.RangoInicio.ToString().Contains(query) ||
+                t.RangoFin.ToString().Contains(query)).ToList();
+
+            TalonerasFiltered = result;
+        }
+
         private async void AddTalonera() 
         {
             Debug.WriteLine("LLEGUE A ADD TALONERA");
+
+            await _navigationService.NavigateAsync("PickEmpresaPage");
         }
     }
 }

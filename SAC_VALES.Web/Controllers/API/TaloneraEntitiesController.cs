@@ -147,6 +147,51 @@ namespace SAC_VALES.Web.Controllers.API
             return Ok(_converterHelper.ToTalonerasResponse(taloneras));
         }
 
+        [HttpPost]
+        [Route("PostTalonera")]
+        public async Task<IActionResult> PostTalonera([FromBody] CreateTaloneraRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            EmpresaEntity empresa = _context.Empresa.Where(e => e.id == request.EmpresaId).FirstOrDefault();
+
+            if (empresa == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "La empresa especificada no existe."
+                });
+            }
+
+            DistribuidorEntity dist = _context.Distribuidor.Where(d => d.id == request.DistId).FirstOrDefault();
+
+            if (dist == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El distribuidor especificado no existe."
+                });
+            }
+
+            _context.Talonera.Add(new TaloneraEntity
+            {
+                RangoInicio = request.RangoInicio,
+                RangoFin = request.RangoFin,
+                Empresa = empresa,
+                Distribuidor = dist,
+                StatusTalonera = "Activo"
+            }); ;
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         private bool TaloneraEntityExists(int id)
         {
             return _context.Talonera.Any(e => e.id == id);

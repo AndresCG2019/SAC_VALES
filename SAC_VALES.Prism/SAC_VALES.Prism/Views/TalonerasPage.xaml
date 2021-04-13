@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              x:Class="SAC_VALES.Prism.Views.TalonerasPage"
              Title="{Binding Title}">
 
@@ -11,38 +13,54 @@
             AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="SizeProportional">
             <StackLayout>
-                <Label
-                    BackgroundColor="LightGray"
-                    FontSize="30"
-                    HeightRequest="200"
-                    HorizontalOptions="Fill"
-                    HorizontalTextAlignment="Center"
-                    Text="Welcome to Xamarin.Forms!"
-                    VerticalOptions="Start" />
-                <Label
-                    BackgroundColor="LightCyan"
-                    FontSize="30"
-                    HeightRequest="200"
-                    HorizontalOptions="Fill"
-                    HorizontalTextAlignment="Center"
-                    Text="Welcome to Xamarin.Forms!"
-                    VerticalOptions="Start" />
-                <Label
-                    BackgroundColor="LightPink"
-                    FontSize="30"
-                    HeightRequest="200"
-                    HorizontalOptions="Fill"
-                    HorizontalTextAlignment="Center"
-                    Text="Welcome to Xamarin.Forms!"
-                    VerticalOptions="Start" />
-                <Label
-                    BackgroundColor="LightGreen"
-                    FontSize="30"
-                    HeightRequest="200"
-                    HorizontalOptions="Fill"
-                    HorizontalTextAlignment="Center"
-                    Text="Welcome to Xamarin.Forms!"
-                    VerticalOptions="Start" />
+
+                <SearchBar x:Name="search" Placeholder="Buscar por Empresa o Rango de Folio" HorizontalTextAlignment="Center"
+                       FontSize="Small">
+                    <SearchBar.Behaviors>
+                        <behaviors:EventToCommandBehavior EventName="TextChanged"
+                                                  Command="{Binding searchCommand}"
+                                                  CommandParameter="{Binding Text, Source={x:Reference search}}"/>
+                    </SearchBar.Behaviors>
+                </SearchBar>
+
+                <CollectionView ItemsSource="{Binding TalonerasFiltered}" 
+                            x:Name="TalonerasCollectionView"
+                            Margin="5, 10, 5, 5"
+                            EmptyView="No hay resultados"
+                            SelectionMode="Single">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame IsClippedToBounds="True"
+                        OutlineColor="Orange"
+                            HasShadow="False">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.6*"  />
+                                        <ColumnDefinition Width="0.2*" />
+                                        <ColumnDefinition Width="0.2*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="20" />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Text="EMPRESA" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="INICIO" FontAttributes="Bold" />
+                                    <Label Grid.Column="2" Text="FIN" FontAttributes="Bold" />
+
+                                    <Label Grid.Row="1" Text="{Binding Empresa.Email }" />
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding RangoInicio}" />
+                                    <Label Grid.Column="2" Grid.Row="1" Text="{Binding RangoFin}" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                
             </StackLayout>
         </ScrollView>
         <ImageButton
@@ -54,6 +72,19 @@
             Source="ic_add.png"
             WidthRequest="50"
             Command="{Binding AddCommand}"/>
+
+        <busyindicator:SfBusyIndicator AnimationType="Ball"
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                	                   IsBusy="{Binding IsRunning}"
+                	                   Title="cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80"/>
+
     </AbsoluteLayout>
 
 </ContentPage>

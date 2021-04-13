@@ -217,13 +217,10 @@ namespace SAC_VALES.Web.Helpers
             }
 
             List<ClieResponse> clientesResponse = new List<ClieResponse>();
-            ClieResponse cliente = new ClieResponse();
 
             for (int i = 0; i < clientes.Count; i++)
             {
                 clientesResponse.Add(ToClientResponse(clientes[i]));
-
-                //talonera = new TaloneraResponse();
 
                 Debug.WriteLine("LLEGUE");
             }
@@ -231,7 +228,25 @@ namespace SAC_VALES.Web.Helpers
             return clientesResponse;
         }
 
+        public List<EmpresaResponse> ToEmpsResponse(List<EmpresaEntity> empresas)
+        {
+            if (empresas == null)
+            {
+                return null;
+            }
 
+            List<EmpresaResponse> empresasResponse = new List<EmpresaResponse>();
+            EmpresaResponse empresa = new EmpresaResponse();
+
+            for (int i = 0; i < empresas.Count; i++)
+            {
+                empresasResponse.Add(ToEmpResponse(empresas[i]));
+
+                Debug.WriteLine("LLEGUE");
+            }
+
+            return empresasResponse;
+        }
 
     }
 }

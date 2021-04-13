@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
+using SAC_VALES.Web.Helpers;
 
 namespace SAC_VALES.Web.Controllers.API
 {
@@ -15,17 +16,21 @@ namespace SAC_VALES.Web.Controllers.API
     public class EmpresaEntitiesController : ControllerBase
     {
         private readonly DataContext _context;
+        private readonly IConverterHelper _converterHelper;
 
-        public EmpresaEntitiesController(DataContext context)
+        public EmpresaEntitiesController(DataContext context, IConverterHelper converterHelper)
         {
             _context = context;
+            _converterHelper = converterHelper;
         }
 
-        // GET: api/EmpresaEntities
-        [HttpGet]
-        public IEnumerable<EmpresaEntity> GetEmpresa()
+        [HttpPost]
+        [Route("GetEmpresas")]
+        public async Task<IActionResult> GetEmpresa()
         {
-            return _context.Empresa;
+            var empresas = await _context.Empresa.ToListAsync();
+
+            return Ok(_converterHelper.ToEmpsResponse(empresas));
         }
 
         // GET: api/EmpresaEntities/5

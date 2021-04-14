@@ -52,6 +52,8 @@ namespace SAC_VALES.Web.Controllers.API
                 .Include(v => v.Talonera)
                 .Where(v => v.Distribuidor.id == request.DistId && v.status_vale == "Activo").ToListAsync();
 
+
+
             return Ok(_converterHelper.ToValesResponse(vales));
         }
 

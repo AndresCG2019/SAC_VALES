@@ -116,17 +116,20 @@
 
         function drawAdeudos(result) {
 
+            console.log("fijate aqui jaja");
             console.log(result);
             var data = new google.visualization.DataTable();
 
+           
             data.addColumn('string', 'display');
             //data.addColumn('number', '');
-            data.addColumn('number', 'Adeudo en $');
+            data.addColumn('number', 'Adeudo de $');
+            
 
             var dataArray = [];
 
             $.each(result, function (i, obj) {
-                dataArray.push([obj.emailCliente, /*obj.adeudoCliente*/ 300]);
+                dataArray.push([obj.emailCliente, obj.adeudoCliente]);
             });
             data.addRows(dataArray);
 

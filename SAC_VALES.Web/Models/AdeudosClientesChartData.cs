@@ -9,5 +9,6 @@ namespace SAC_VALES.Web.Models
     {
         public string EmailCliente { get; set; }
         public double AdeudoCliente { get; set; }
+        public string EmpresaDisplay { get; set; }
     }
 }

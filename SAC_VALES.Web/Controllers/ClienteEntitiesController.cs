@@ -11,6 +11,7 @@ using SAC_VALES.Common.Enums;
 using SAC_VALES.Web.Data;
 using SAC_VALES.Web.Data.Entities;
 using SAC_VALES.Web.Helpers;
+using SAC_VALES.Web.Models;
 
 namespace SAC_VALES.Web.Controllers
 {
@@ -105,6 +106,7 @@ namespace SAC_VALES.Web.Controllers
 
             return View(distribuidorEntity);
         }
+       
 
         [Authorize(Roles = "Distribuidor")]
         public async Task<IActionResult> EdoCuentaClienteDis(int? id)

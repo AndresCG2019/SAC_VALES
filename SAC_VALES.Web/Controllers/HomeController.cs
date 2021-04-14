@@ -63,51 +63,48 @@ namespace SAC_VALES.Web.Controllers
             return Json(talonerasChartData);
         }
 
-        public async Task <IActionResult> getAdeudos()
+        public async Task<IActionResult> getAdeudos()
         {
             //OBTENER USUARIO LOGUEADO
             DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
-            //OBTENER CORREOS DE LOS CLIENTES ASOCIADOS AL DISTRIBUIDOR LOGUEADO
-                List<ClienteDistribuidor> clienteDistribuidor = await _context.ClienteDistribuidor
+
+            List<AdeudosClientesChartData> AdeudosChartData = new List<AdeudosClientesChartData>();
+
+          
+            //Obtener adeudos
+            List<PagoEntity> adeudos = _context.Pago
+                .Include(p => p.Vale.Cliente)
+                .Include(p => p.Vale.Talonera)
+                .Include(p => p.Vale.Talonera.Empresa)
+                .Where(p => p.Distribuidor.id == distribuidor.id && p.Pagado == false)  
+                .ToList();
+
+
+            for (int i = 0; i < adeudos.Count; i++)
+            {
+
+                AdeudosClientesChartData data = new AdeudosClientesChartData();
+                data.AdeudoCliente = adeudos[i].Cantidad;
+                data.EmailCliente = adeudos[i].Vale.Cliente.Email + ": "+adeudos[i].Vale.Talonera.Empresa.Email +
+                   " " + adeudos[i].Vale.Talonera.RangoInicio.ToString() +
+                  "-" + adeudos[i].Vale.Talonera.RangoFin.ToString();
+
+
+
+
+                AdeudosChartData.Add(data);
+            }
+
+
+            //obtener correos
+            List<ClienteDistribuidor> clienteDistribuidor = await _context.ClienteDistribuidor
                     .Include(item => item.Cliente)
                     .Where(cd => cd.DistribuidorId == distribuidor.id)
                     .ToListAsync();
 
-                var correos = clienteDistribuidor[0].Cliente.Email;
+            
 
-            List<AdeudosClientesChartData> AdeudosChartData = new List<AdeudosClientesChartData>();
-
-            //adeudos
-            /*List<PagoEntity> adeudosClienteDistribuidor = await _context.Pago
-                   .Where(p => p.Pagado == false)
-                   .ToListAsync();
-            var adeudos = adeudosClienteDistribuidor[0].Cantidad;
-
-            AdeudosClientesChartData data1 = new AdeudosClientesChartData();
-            for (int i = 0; i < adeudosClienteDistribuidor.Count; i++)
-            {
-                //OBTENER LOS SALDOS ADEUDADOS
-                
-                adeudos = adeudosClienteDistribuidor[i].Cantidad;
-                
-            }
-
-            double acumAdeudos = 0.0;
-            acumAdeudos = acumAdeudos + adeudos;
-            data1.AdeudoCliente = acumAdeudos;
-            Debug.WriteLine("adeudos: " + acumAdeudos);
-            AdeudosChartData.Add(data1);*/
-            //end adeudos
-
-            for (int i = 0; i < clienteDistribuidor.Count; i++)
-            {
-                AdeudosClientesChartData data = new AdeudosClientesChartData();
-                correos = clienteDistribuidor[i].Cliente.Email;
-                data.EmailCliente = correos;
-                //AdeudosChartData.Add(data);
-                Debug.WriteLine("correos: " + correos);
-                AdeudosChartData.Add(data);
-            }
+            Debug.WriteLine("apara aqui");
 
 
             return Json(AdeudosChartData);
@@ -163,11 +160,14 @@ namespace SAC_VALES.Web.Controllers
 
                 // DATOS PARA PAGOS GRAFICA...
 
+                //DistribuidorEntity distribuidor1 = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
                 List<PagoEntity> pagosTrue = await _context.Pago
-                   .Where(p => p.Pagado == true)
+                    .Include(p => p.Distribuidor)
+                   .Where(p => p.Pagado == true && p.Distribuidor.Email == User.Identity.Name)
                    .ToListAsync();
                 List<PagoEntity> pagosFalse = await _context.Pago
-                  .Where(p => p.Pagado == false)
+                  .Where(p => p.Pagado == false && p.Distribuidor.Email == User.Identity.Name)
                   .ToListAsync();
 
 

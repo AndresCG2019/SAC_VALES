@@ -16,6 +16,8 @@ namespace SAC_VALES.Common.Services
         Task<Response> GetPagosByVale(string urlBase, string servicePrefix, string controller, PagosByValeRequest request);
         Task<Response> GetValesByClie(string urlBase, string servicePrefix, string controller, ClieValesRequest request);
         Task<Response> GetTalonerasByDist(string urlBase, string servicePrefix, string controller, TalonerasByDistRequest request);
+        Task<Response> GetEmpresas(string urlBase, string servicePrefix, string controller);
+        Task<Response> PostTalonera(string urlBase, string servicePrefix, string controller, CreateTaloneraRequest request);
         Task<bool> CheckConnectionAsync(string url);
 
     }

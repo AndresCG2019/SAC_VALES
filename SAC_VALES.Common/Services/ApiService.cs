@@ -436,5 +436,92 @@ namespace SAC_VALES.Common.Services
             }
         }
 
+        public async Task<Response> GetEmpresas(
+           string urlBase,
+           string servicePrefix,
+           string controller)
+        {
+            try
+            {
+                StringContent content = new StringContent("", Encoding.UTF8, "application/json");
+                HttpClient client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                string url = $"{servicePrefix}{controller}";
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                List<EmpresaResponse> empresaResponse = JsonConvert.DeserializeObject<List<EmpresaResponse>>(result);
+                return new Response
+                {
+                    IsSuccess = true,
+                    Result = empresaResponse
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
+        public async Task<Response> PostTalonera(
+           string urlBase,
+           string servicePrefix,
+           string controller,
+           CreateTaloneraRequest request)
+        {
+            try
+            {
+                string requestString = JsonConvert.SerializeObject(request);
+                StringContent content = new StringContent(requestString, Encoding.UTF8, "application/json");
+                HttpClient client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase)
+                };
+
+                string url = $"{servicePrefix}{controller}";
+                HttpResponseMessage response = await client.PostAsync(url, content);
+                string result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                return new Response
+                {
+                    IsSuccess = true,
+                    Result = "exitoso"
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
+
     }
 }

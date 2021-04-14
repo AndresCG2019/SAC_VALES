@@ -1,0 +1,68 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+         	 xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="SAC_VALES.Prism.Views.CreateTaloneraPage"
+             Title="{Binding Title}">
+
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All" 
+                     Padding="5">
+
+            <Label Text="EMPRESA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Empresa.NombreEmpresa}" Margin="5, 0, 0, 0" />
+
+            <Label Text="EMAIL DE LA EMPRESA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Empresa.Email}" Margin="5" />
+
+            <Label Text="DIRECCION DE LA EMPRESA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+            <Label Text="{Binding Empresa.Direccion}" Margin="5, 0, 0, 0" />
+
+            <Grid Margin="20" 
+                  VerticalOptions="CenterAndExpand">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="3*"/>
+                </Grid.ColumnDefinitions>
+                <Label Grid.Column="0" 
+                       Grid.Row="0"
+                       HorizontalTextAlignment="End"
+                       Text="Rango Inicio"
+                       VerticalOptions="Center"/>
+                <Entry Grid.Column="1"
+                       Grid.Row="0"
+                       Keyboard="Numeric"
+                       BackgroundColor="{StaticResource ColorFontInverse}"
+                       Text="{Binding Talonera.RangoInicio}"/>
+                <Label Grid.Column="0" 
+                       Grid.Row="1"
+                       HorizontalTextAlignment="End"
+                       Text="Rango Fin"
+                       VerticalOptions="Center"/>
+                <Entry Grid.Column="1"
+                       Grid.Row="1"
+                       Keyboard="Numeric"
+                       BackgroundColor="{StaticResource ColorFontInverse}"
+                       Text="{Binding Talonera.RangoFin}"/>
+            </Grid>
+            <StackLayout>
+                <Button Command="{Binding CreateTaloneraCommand}" 
+                        Text="Crear"/>
+            </StackLayout>
+        </StackLayout>
+        <busyindicator:SfBusyIndicator AnimationType="Ball" 
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                	                   IsBusy="{Binding IsRunning}"
+                	                   Title="cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80" />
+    </AbsoluteLayout>
+</ContentPage>

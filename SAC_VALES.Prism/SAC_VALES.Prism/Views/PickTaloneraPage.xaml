@@ -2,18 +2,19 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
-             xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="SAC_VALES.Prism.Views.ValesDistPage"
-             Title ="{Binding Title}">
+             xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
+             x:Class="SAC_VALES.Prism.Views.PickTaloneraPage"
+             Title="{Binding Title}">
 
     <AbsoluteLayout>
-        <ScrollView
-             AbsoluteLayout.LayoutBounds="0,0,1,1"
+        <ScrollView 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="SizeProportional">
             <StackLayout>
-                <SearchBar x:Name="search" Placeholder="Buscar por Folio, Monto o Cliente" HorizontalTextAlignment="Center"
+
+                <SearchBar x:Name="search" Placeholder="Buscar por Empresa o Rango de Folio" HorizontalTextAlignment="Center"
                        FontSize="Small">
                     <SearchBar.Behaviors>
                         <behaviors:EventToCommandBehavior EventName="TextChanged"
@@ -22,62 +23,49 @@
                     </SearchBar.Behaviors>
                 </SearchBar>
 
-                <CollectionView ItemsSource="{Binding ValesFiltered}" 
-                            x:Name="ValesCollectionView"
-                            IsVisible="{Binding ShowCollection}"
-                            Margin="5, 10, 5, 5" 
-                            EmptyView="Aun no se han registrado vales."
+                <CollectionView ItemsSource="{Binding TalonerasFiltered}" 
+                            x:Name="TalonerasCollectionView"
+                            Margin="5, 10, 5, 5"
+                            EmptyView="No hay resultados"
                             SelectionMode="Single"
-                            SelectionChangedCommand="{Binding GoToValeCommand}"
+                                SelectionChangedCommand="{Binding CreateValeCommand}"
                             SelectionChangedCommandParameter="{Binding SelectedItem, 
-                                Source={x:Reference ValesCollectionView}}">
+                                Source={x:Reference TalonerasCollectionView}}">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame IsClippedToBounds="True"
-                        OutlineColor="Black"
+                        OutlineColor="Orange"
                             HasShadow="False">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.2*"  />
+                                        <ColumnDefinition Width="0.6*"  />
                                         <ColumnDefinition Width="0.2*" />
-                                        <ColumnDefinition Width="0.5*" />
+                                        <ColumnDefinition Width="0.2*" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20" />
                                         <RowDefinition Height="20" />
-                                        <RowDefinition Height="40" />
+                                        <RowDefinition Height="20" />
                                     </Grid.RowDefinitions>
 
-                                    <Label Text="FOLIO" FontAttributes="Bold" />
-                                    <Label Grid.Column="1" Text="MONTO" FontAttributes="Bold" />
-                                    <Label Grid.Column="2" Text="CLIENTE" FontAttributes="Bold" />
+                                    <Label Text="EMPRESA" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="INICIO" FontAttributes="Bold" />
+                                    <Label Grid.Column="2" Text="FIN" FontAttributes="Bold" />
 
-                                    <Label Grid.Row="1" Text="{Binding NumeroFolio}" />
-                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding Monto , StringFormat='${0}'}" />
-                                    <Label Grid.Column="2" Grid.Row="1"  Text="{Binding Cliente.Email}" />
-
+                                    <Label Grid.Row="1" Text="{Binding Empresa.Email }" />
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding RangoInicio}" />
+                                    <Label Grid.Column="2" Grid.Row="1" Text="{Binding RangoFin}" />
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
+
             </StackLayout>
-
         </ScrollView>
-        
-        <ImageButton
-            AbsoluteLayout.LayoutBounds="0.95,0.95,50,50"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            BackgroundColor="Blue"
-            CornerRadius="50"
-            HeightRequest="20"
-            Source="ic_add.png"
-            WidthRequest="50"
-            Command="{Binding AddCommand}"/>
-
         <busyindicator:SfBusyIndicator AnimationType="Ball"
                                        AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
                 	                   AbsoluteLayout.LayoutFlags="All"
@@ -89,7 +77,7 @@
                 	                   VerticalOptions="Center"
                 	                   ViewBoxWidth="80"
                 	                   ViewBoxHeight="80"/>
+
     </AbsoluteLayout>
-    
-   
+
 </ContentPage>

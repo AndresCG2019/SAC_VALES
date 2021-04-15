@@ -14,25 +14,28 @@ using Xamarin.Forms;
 
 namespace SAC_VALES.Prism.ViewModels
 {
-    public class PickClientPageViewModel : ViewModelBase, INavigatedAware
+    public class PickTaloneraPageViewModel : ViewModelBase, INavigatedAware
     {
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
-        private List<ClieResponse> _clientes;
-        private List<ClieResponse> _clientesFiltered;
+        private List<TaloneraResponse> _taloneras;
+        private List<TaloneraResponse> _talonerasFiltered;
+        private ClieResponse _cliente;
         private bool _isRunning;
+        private bool _showCollection;
         private UserResponse _user;
         private DelegateCommand<object> _CreateValeCommand;
 
-        public PickClientPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
+        public PickTaloneraPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
         {
-            Title = "Elegir Cliente";
+            Title = "Elegir Talonera";
             _navigationService = navigationService;
             _apiService = apiService;
             LoadUser();
-            LoadClientes();
+            LoadTaloneras();
         }
-        public ICommand searchCommand => new Command<string>(SearchClientes);
+
+        public ICommand searchCommand => new Command<string>(SearchTaloneras);
         public DelegateCommand<object> CreateValeCommand => _CreateValeCommand
            ?? (_CreateValeCommand = new DelegateCommand<object>(CreateVale));
 
@@ -42,23 +45,35 @@ namespace SAC_VALES.Prism.ViewModels
             set => SetProperty(ref _isRunning, value);
         }
 
+        public bool ShowCollection
+        {
+            get => _showCollection;
+            set => SetProperty(ref _showCollection, value);
+        }
+
         public UserResponse User
         {
             get => _user;
             set => SetProperty(ref _user, value);
         }
 
-        public List<ClieResponse> Clientes
+        public List<TaloneraResponse> Taloneras
         {
-            get => _clientes;
-            set => SetProperty(ref _clientes, value);
+            get => _taloneras;
+            set => SetProperty(ref _taloneras, value);
+        }
+
+        public List<TaloneraResponse> TalonerasFiltered
+        {
+            get => _talonerasFiltered;
+            set => SetProperty(ref _talonerasFiltered, value);
 
         }
 
-        public List<ClieResponse> ClientesFiltered
+        public ClieResponse Cliente
         {
-            get => _clientesFiltered;
-            set => SetProperty(ref _clientesFiltered, value);
+            get => _cliente;
+            set => SetProperty(ref _cliente, value);
 
         }
 
@@ -72,11 +87,12 @@ namespace SAC_VALES.Prism.ViewModels
             }
         }
 
-        private async void LoadClientes()
+        private async void LoadTaloneras()
         {
-            Debug.WriteLine("LLEGUE A LOAD Clientes");
+            Debug.WriteLine("LLEGUE A LOAD TALONERAS");
 
             IsRunning = true;
+            ShowCollection = false;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
 
@@ -84,22 +100,24 @@ namespace SAC_VALES.Prism.ViewModels
             if (!connection)
             {
                 IsRunning = false;
+                ShowCollection = true;
 
                 await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
                 return;
             }
 
-            ClientesByDistRequest request = new ClientesByDistRequest
+            TalonerasByDistRequest request = new TalonerasByDistRequest
             {
                 DistId = User.Dist.id
             };
 
             Response response = await _apiService
-                .GetClientsByDist(url, "/api/ClienteEntities", "/GetClientesByDist", request);
+                .GetTalonerasByDist(url, "/api/TaloneraEntities", "/GetTalonerasByDist", request);
 
             if (!response.IsSuccess)
             {
                 IsRunning = false;
+                ShowCollection = true;
 
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
                 Debug.WriteLine("MENSAJE DE ERROR");
@@ -107,36 +125,41 @@ namespace SAC_VALES.Prism.ViewModels
                 return;
             }
 
-            Clientes = (List<ClieResponse>)response.Result;
+            Taloneras = (List<TaloneraResponse>)response.Result;
 
-            ClientesFiltered = (List<ClieResponse>)response.Result;
+            TalonerasFiltered = (List<TaloneraResponse>)response.Result;
 
             IsRunning = false;
+            ShowCollection = true;
         }
 
-        public void SearchClientes(string query)
+        public void SearchTaloneras(string query)
         {
-            List<ClieResponse> result = Clientes
-                .Where(c => c.Nombre.ToLower().Contains(query.ToLower()) ||
-                c.Apellidos.ToLower().Contains(query.ToLower()) ||
-                c.Email.ToLower().Contains(query.ToLower())).ToList();     
+            List<TaloneraResponse> result = Taloneras
+                .Where(t => t.Empresa.Email.ToLower().Contains(query.ToLower()) ||
+                t.RangoInicio.ToString().Contains(query) ||
+                t.RangoFin.ToString().Contains(query)).ToList();
 
-            ClientesFiltered = result;
+            TalonerasFiltered = result;
         }
 
         public async void CreateVale(object parameter)
         {
             var p = new NavigationParameters();
-            p.Add("Cliente", parameter);
+            p.Add("Talonera", parameter);
+            p.Add("Cliente", Cliente);
 
             Debug.WriteLine("LLEGUE A IR A CREAR VALE");
 
-            await _navigationService.NavigateAsync("PickTaloneraPage", p);
+            await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/CreateValePage", p);
         }
 
         void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
         {
-            LoadClientes();
+            Cliente = new ClieResponse();
+            Cliente = parameters.GetValue<ClieResponse>("Cliente");
+
+            Debug.WriteLine("LLEGUE");
         }
 
         void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)

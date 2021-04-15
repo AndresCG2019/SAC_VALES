@@ -235,5 +235,14 @@
   <ItemGroup>
     <BundleResource Include="Resources\ic_add.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_valesMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\evolsoftLogo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\sacLogo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

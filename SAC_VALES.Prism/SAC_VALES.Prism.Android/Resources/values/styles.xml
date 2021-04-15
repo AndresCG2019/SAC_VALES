@@ -25,7 +25,7 @@
   </style>
 
   <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
-    <item name="colorAccent">#FF4081</item>
+    <item name="colorAccent">#2196F3</item>
   </style>
 
   <style name="MainTheme.Splash" parent="Theme.AppCompat.Light.NoActionBar">

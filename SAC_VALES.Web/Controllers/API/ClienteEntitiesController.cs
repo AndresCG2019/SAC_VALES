@@ -124,7 +124,7 @@ namespace SAC_VALES.Web.Controllers.API
 
         [HttpPost]
         [Route("GetClientesByDist")]
-        public async Task<IActionResult> GetValesByClie([FromBody] ClientesByDistRequest request)
+        public async Task<IActionResult> GetClientesByClie([FromBody] ClientesByDistRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -148,6 +148,48 @@ namespace SAC_VALES.Web.Controllers.API
                 .ToListAsync();
 
             return Ok(_converterHelper.ToClientsResponse(clientes));
+        }
+
+        [HttpPost]
+        [Route("VincularCliente")]
+        public async Task<IActionResult> VincularCliente([FromBody] VincularClienteRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var dist = _context.Distribuidor.Where(d => d.id == request.DistId).FirstOrDefault();
+
+            if (dist == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El distribuidor especificado no existe."
+                });
+            }
+
+            var clie = _context.Cliente.Where(c => c.id == request.ClienteId).FirstOrDefault();
+
+            if (clie == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El cliente especificado no existe."
+                });
+            }
+
+            _context.ClienteDistribuidor.Add(new ClienteDistribuidor
+            {
+                ClienteId = clie.id,
+                DistribuidorId = dist.id,
+            });
+
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
 
         private bool ClienteEntityExists(int id)

@@ -36,14 +36,12 @@ namespace SAC_VALES.Prism.ViewModels
         {
             get => _vale;
             set => SetProperty(ref _vale, value);
-
         }
 
         public List<PagoResponse> Pagos
         {
             get => _pagos;
             set => SetProperty(ref _pagos, value);
-
         }
 
         void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)

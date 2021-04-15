@@ -19,7 +19,7 @@
         <Label Text="{Binding Vale.Cliente.Email}" Margin="5, 0, 0, 0" />
 
         <Label Text="TALONERA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.Talonera.RangoInicio}" Margin="5, 0, 0, 0" />
+        <Label Text="{Binding Vale.Talonera.Display}" Margin="5, 0, 0, 0" />
 
         <Label Text="Fecha de Creación" FontAttributes="Bold" Margin="5, 0, 0, 0" />
         <Label Text="{Binding Vale.FechaCreacionLocal}" Margin="5" />

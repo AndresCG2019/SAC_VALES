@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             x:Class="SAC_VALES.Prism.Views.CreateValePage"
+             Title="{Binding Title}">
+
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All"
+                     Padding="5">
+            <ScrollView>
+                <StackLayout>
+
+                    <Label Text="Talonera Seleccionada" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+                    <Label Text="{Binding Talonera.Display}" Margin="5, 0, 0, 0" />
+
+                    <Label Text="Cliente Seleccionado" FontAttributes="Bold" Margin="5, 0, 0, 0" />
+                    <Label Text="{Binding Cliente.Email}" Margin="5, 0, 0, 0" />
+
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Text="Folio"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="1"
+                               Grid.Column="1"
+                               Keyboard="Numeric"
+                               Text="{Binding Vale.NumeroFolio}"/>
+
+                        <Label Grid.Row="2"
+                               Grid.Column="0"
+                               Text="Monto"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="2"
+                               Grid.Column="1"
+                               Keyboard="Numeric"
+                               Text="{Binding Vale.Monto}"/>
+
+                        <Label Grid.Row="3"
+                               Grid.Column="0"
+                               Text="Num. Pagos"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="3"
+                               Grid.Column="1"
+                               Keyboard="Numeric"
+                               Text="{Binding Vale.CantidadPagos}"/>
+                    </Grid>
+                    <Label Text="Fecha del Primer Pago"></Label>
+                    <DatePicker Date="{Binding Vale.FechaPrimerPago}" />    
+                </StackLayout>
+            </ScrollView>
+            <Button Command="{Binding GuardarValeCommand}"
+                    IsEnabled="{Binding IsEnabled}"
+                    Text="Guardar"/>
+        </StackLayout>
+        <busyindicator:SfBusyIndicator AnimationType="Ball" 
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                                       IsBusy="{Binding IsRunning}"
+                	                   Title="Cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80" />
+    </AbsoluteLayout>
+
+</ContentPage>

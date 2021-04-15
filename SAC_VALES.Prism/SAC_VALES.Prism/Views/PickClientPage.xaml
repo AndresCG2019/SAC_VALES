@@ -2,8 +2,78 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
+             xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              x:Class="SAC_VALES.Prism.Views.PickClientPage"
-             Title="PickClient">
-  
+             Title="{Binding Title}">
+
+    <AbsoluteLayout>
+        <ScrollView 
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutFlags="SizeProportional">
+            <StackLayout>
+
+                <SearchBar x:Name="search" Placeholder="Buscar por Nombre o Email de Cliente" HorizontalTextAlignment="Center"
+                       FontSize="Small">
+                    <SearchBar.Behaviors>
+                        <behaviors:EventToCommandBehavior EventName="TextChanged"
+                                                  Command="{Binding searchCommand}"
+                                                  CommandParameter="{Binding Text, Source={x:Reference search}}"/>
+                    </SearchBar.Behaviors>
+                </SearchBar>
+
+                <CollectionView ItemsSource="{Binding ClientesFiltered}" 
+                            x:Name="ClientesCollectionView"
+                            Margin="5, 10, 5, 5"
+                            EmptyView="No hay resultados"
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding CreateValeCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, 
+                                Source={x:Reference ClientesCollectionView}}">
+                    <CollectionView.ItemsLayout>
+                        <GridItemsLayout Orientation="Vertical"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame IsClippedToBounds="True"
+                        OutlineColor="Purple"
+                            HasShadow="False">
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="0.5*"  />
+                                        <ColumnDefinition Width="0.5*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="20" />
+                                    </Grid.RowDefinitions>
+
+                                    <Label Text="NOMBRE" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="CORREO" FontAttributes="Bold" />
+
+                                    <Label Grid.Row="1" Text="{Binding Nombre }" />
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding Email}" />
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </StackLayout>
+        </ScrollView>
+        <busyindicator:SfBusyIndicator AnimationType="Ball"
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                	                   IsBusy="{Binding IsRunning}"
+                	                   Title="cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80"/>
+
+    </AbsoluteLayout>
+
 </ContentPage>

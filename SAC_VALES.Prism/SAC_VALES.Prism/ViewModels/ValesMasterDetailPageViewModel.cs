@@ -71,13 +71,13 @@ namespace SAC_VALES.Prism.ViewModels
                 },
                  new Menu
                 {
-                    Icon = "ic_report",
+                    Icon = "ic_valesMenu",
                     PageName = "ValesDistPage",
                     Title = "Vales Distribuidor"
                 },
                  new Menu
                 {
-                    Icon = "ic_add",
+                    Icon = "ic_report",
                     PageName = "TalonerasPage",
                     Title = "Taloneras"
                 },
@@ -110,7 +110,7 @@ namespace SAC_VALES.Prism.ViewModels
                 },
                  new Menu
                 {
-                    Icon = "ic_report",
+                    Icon = "ic_valesMenu",
                     PageName = "ValesCliePage",
                     Title = "Vales Cliente"
                 },

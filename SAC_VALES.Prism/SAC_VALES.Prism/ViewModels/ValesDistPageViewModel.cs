@@ -25,6 +25,7 @@ namespace SAC_VALES.Prism.ViewModels
         private bool _showCollection;
         private UserResponse _user;
         private DelegateCommand<object> _GoToValeCommand;
+        private DelegateCommand _addCommand;
 
         public ValesDistPageViewModel(INavigationService navigationService,
             IApiService apiService) : base(navigationService)
@@ -64,7 +65,6 @@ namespace SAC_VALES.Prism.ViewModels
         {
             get => _pagos;
             set => SetProperty(ref _pagos, value);
-
         }
 
         public List<ValeResponse> ValesFiltered
@@ -87,6 +87,8 @@ namespace SAC_VALES.Prism.ViewModels
                 User = JsonConvert.DeserializeObject<UserResponse>(Settings.User);
             }
         }
+
+        public DelegateCommand AddCommand => _addCommand ?? (_addCommand = new DelegateCommand(AddVale));
 
         private async void LoadVales() 
         {   
@@ -146,6 +148,13 @@ namespace SAC_VALES.Prism.ViewModels
                 v.Cliente.Email.ToLower().Contains(query.ToLower())).ToList();
 
             ValesFiltered = result;
+        }
+
+        private async void AddVale()
+        {
+            Debug.WriteLine("LLEGUE A ADD VALE");
+
+            await _navigationService.NavigateAsync("PickClientPage");
         }
 
         public async void GoToVale(object parameter) 

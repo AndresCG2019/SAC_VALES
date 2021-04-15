@@ -14,7 +14,7 @@ namespace SAC_VALES.Common.Models
 
         public DateTime FechaLimiteLocal => FechaLimite.ToLocalTime();
 
-        public string FechalString => FechaLimiteLocal.ToShortDateString();
+        public string FechalString => FechaLimite.ToShortDateString();
 
         public bool Pagado { get; set; }
     }

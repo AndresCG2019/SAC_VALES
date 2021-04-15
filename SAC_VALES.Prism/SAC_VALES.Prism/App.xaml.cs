@@ -50,6 +50,8 @@ namespace SAC_VALES.Prism
             containerRegistry.RegisterForNavigation<PickClientPage, PickClientPageViewModel>();
             containerRegistry.RegisterForNavigation<PickEmpresaPage, PickEmpresaPageViewModel>();
             containerRegistry.RegisterForNavigation<CreateTaloneraPage, CreateTaloneraPageViewModel>();
+            containerRegistry.RegisterForNavigation<PickTaloneraPage, PickTaloneraPageViewModel>();
+            containerRegistry.RegisterForNavigation<CreateValePage, CreateValePageViewModel>();
         }
     }
 }

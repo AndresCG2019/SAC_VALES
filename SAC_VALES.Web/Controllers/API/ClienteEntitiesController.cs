@@ -181,6 +181,18 @@ namespace SAC_VALES.Web.Controllers.API
                 });
             }
 
+            List<ClienteDistribuidor> validacion = _context.ClienteDistribuidor
+                .Where(cd => cd.ClienteId == clie.id && cd.DistribuidorId == dist.id).ToList();
+
+            if (validacion.Count > 0)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "Los dos usuarios ya estan vinculados."
+                });
+            }
+
             _context.ClienteDistribuidor.Add(new ClienteDistribuidor
             {
                 ClienteId = clie.id,

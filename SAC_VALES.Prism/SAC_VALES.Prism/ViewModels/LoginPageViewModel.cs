@@ -130,7 +130,7 @@ namespace SAC_VALES.Prism.ViewModels
             IsRunning = false;
             IsEnabled = true;
 
-            await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/MainPage");
+            await _navigationService.NavigateAsync("ValesMasterDetailPage/NavigationPage/MainPage");
             Password = string.Empty;
 
         }

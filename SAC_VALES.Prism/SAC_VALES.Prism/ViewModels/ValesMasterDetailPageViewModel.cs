@@ -65,25 +65,19 @@ namespace SAC_VALES.Prism.ViewModels
             {
                  new Menu
                 {
-                    Icon = "ic_airport_shuttle",
-                    PageName = "MainPage",
-                    Title = "Main Page"
-                },
-                 new Menu
-                {
                     Icon = "ic_valesMenu",
                     PageName = "ValesDistPage",
                     Title = "Vales Distribuidor"
                 },
                  new Menu
                 {
-                    Icon = "ic_report",
+                    Icon = "ic_taloneras",
                     PageName = "TalonerasPage",
                     Title = "Taloneras"
                 },
                 new Menu
                 {
-                    Icon = "ic_exit_to_app",
+                    Icon = "ic_login",
                     PageName = "LoginPage",
                     Title = Settings.IsLogin ? "Logout" : "Login"
                 }
@@ -102,12 +96,6 @@ namespace SAC_VALES.Prism.ViewModels
         {
             List<Menu> menus = new List<Menu>
             {
-                new Menu
-                {
-                    Icon = "ic_airport_shuttle",
-                    PageName = "MainPage",
-                    Title = "Main Page"
-                },
                  new Menu
                 {
                     Icon = "ic_valesMenu",
@@ -116,7 +104,7 @@ namespace SAC_VALES.Prism.ViewModels
                 },
                 new Menu
                 {
-                    Icon = "ic_exit_to_app",
+                    Icon = "ic_login",
                     PageName = "LoginPage",
                     Title = Settings.IsLogin ? "Logout" : "Login"
                 }
@@ -138,13 +126,7 @@ namespace SAC_VALES.Prism.ViewModels
             {
                 new Menu
                 {
-                    Icon = "ic_airport_shuttle",
-                    PageName = "MainPage",
-                    Title = "Main Page"
-                },
-                new Menu
-                {
-                    Icon = "ic_exit_to_app",
+                    Icon = "ic_login",
                     PageName = "LoginPage",
                     Title = Settings.IsLogin ? "Logout" : "Login"
                 }

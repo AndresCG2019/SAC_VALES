@@ -114,6 +114,86 @@ namespace SAC_VALES.Web.Controllers.API
             });
         }
 
+        [HttpPost]
+        [Route("PostClientAsDist")]
+        public async Task<IActionResult> PostClientAsDist([FromBody] PostClieAsDistRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "Bad request",
+                    Result = ModelState
+                });
+            }
+
+            UsuarioEntity user = await _userHelper.GetUserAsync(request.Email);
+            if (user != null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El usuario ya existe"
+                });
+            }
+
+            user = new UsuarioEntity
+            {
+                Email = request.Email,
+                UserName = request.Email,
+                UserType = UserType.Cliente
+            };
+
+            IdentityResult result = await _userHelper.AddUserAsync(user, request.Password);
+            await _userHelper.AddUserToRoleAsync(user, user.UserType.ToString());
+
+            ClienteEntity cliente = new ClienteEntity()
+            {
+                Nombre = request.Nombre,
+                Apellidos = request.Apellidos,
+                Direccion = request.Direccion,
+                Telefono = request.Telefono,
+                Email = request.Email,
+                ClienteAuth = user,
+            };
+
+            _dataContext.Cliente.Add(cliente);
+            await _dataContext.SaveChangesAsync();
+
+            if (result != IdentityResult.Success)
+            {
+                return BadRequest(result.Errors.FirstOrDefault().Description);
+            }
+
+            var distribuidor = _dataContext.Distribuidor.Where(d => d.id == request.DistId).FirstOrDefault();
+
+            if (distribuidor == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El distribuidor especificado no existe."
+                });
+            }
+
+            _dataContext.ClienteDistribuidor.Add(new ClienteDistribuidor
+            {
+                Cliente = cliente,
+                ClienteId = cliente.id,
+                Distribuidor = distribuidor,
+                DistribuidorId = distribuidor.id
+            });
+
+            await _dataContext.SaveChangesAsync();
+
+            return Ok(new Response
+            {
+                IsSuccess = true,
+                Message = "completado"
+            });
+        }
+
         [HttpPut]
         [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
         public async Task<IActionResult> PutUser([FromBody] UserRequest request)

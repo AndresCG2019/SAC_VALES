@@ -244,5 +244,20 @@
   <ItemGroup>
     <BundleResource Include="Resources\sacLogo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\PrincipalSACV.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_taloneras.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_login.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\sacLogoMenu.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\sac_splash.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

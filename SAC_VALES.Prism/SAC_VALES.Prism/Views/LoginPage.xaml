@@ -5,16 +5,17 @@
          	 xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              prism:ViewModelLocator.AutowireViewModel="True"
              x:Class="SAC_VALES.Prism.Views.LoginPage"
+             BackgroundImageSource="PrincipalSACV.jpg"
              Title="{Binding Title}">
 
     <AbsoluteLayout>
         <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
                      AbsoluteLayout.LayoutFlags="All" 
                      Padding="5">
-            <Image HeightRequest="130"
-                   Margin="0,20,0,0"
+            <Image HeightRequest="240"
+                   Margin="0,5,0,0"
                    Source="sacLogo"/>
-            <Grid Margin="20,0,20,20" 
+            <Grid Margin="20,0,20,5" 
                   VerticalOptions="CenterAndExpand">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -29,21 +30,19 @@
                        Grid.Row="0"
                        BackgroundColor="{StaticResource ColorFontInverse}"
                        Keyboard="Email"
-                       Placeholder="email placeholder"
                        Text="{Binding Email}"/>
                 <Label Grid.Column="0" 
                        Grid.Row="1"
                        HorizontalTextAlignment="End"
-                       Text="password"
+                       Text="Contraseña"
                        VerticalOptions="Center"/>
                 <Entry Grid.Column="1"
                        Grid.Row="1"
                        BackgroundColor="{StaticResource ColorFontInverse}"
                        IsPassword="True"
-                       Placeholder="password placeholder"
                        Text="{Binding Password}"/>
             </Grid>
-            <StackLayout>
+            <StackLayout Margin="20">
                 <Button Command="{Binding LoginCommand}" 
                         IsEnabled="{Binding IsEnabled}"
                         Text="login"/>

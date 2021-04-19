@@ -8,8 +8,12 @@
     <MasterDetailPage.Master>
         <ContentPage Title="Menu">
             <StackLayout Padding="20">
+
+                <Image Source="sacLogoMenu"/>
+
                 <Label FontAttributes="Bold"
                     FontSize="Large"
+                    Margin="0,0,0,20"
                     Text="{Binding User.Email}"
                     TextColor="Black"/>
 

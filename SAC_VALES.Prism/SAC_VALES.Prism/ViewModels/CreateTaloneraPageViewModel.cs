@@ -75,6 +75,7 @@ namespace SAC_VALES.Prism.ViewModels
 
         private async void CreateTalonera()
         {
+            IsRunning = true;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
 
@@ -117,6 +118,8 @@ namespace SAC_VALES.Prism.ViewModels
             }
 
             Debug.WriteLine("ACABE");
+
+            IsRunning = false;
 
             await App.Current.MainPage.DisplayAlert("Exito", "Se ha creado la talonera exitosamente", "Aceptar");
 

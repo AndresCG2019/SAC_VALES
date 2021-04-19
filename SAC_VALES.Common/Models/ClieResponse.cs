@@ -19,5 +19,7 @@ namespace SAC_VALES.Common.Models
         public string Email { get; set; }
 
         public bool Status { get; set; }
+
+        public string ClieDisplay => Nombre + " " + Apellidos;
     }
 }

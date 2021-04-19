@@ -109,8 +109,6 @@ namespace SAC_VALES.Web.Controllers
                 ViewBag.valesFalsos = valesFalsos.Count;
                 ViewBag.texto1 = "Dashboard del distribuidor";
 
-                // DATOS PARA SIGUIENTE GRAFICA ...
-
                 return View();
             }
 

@@ -2,18 +2,19 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="SAC_VALES.Prism.Views.MisClientesPage"
              xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
-             prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="SAC_VALES.Prism.Views.ValesDistPage"
-             Title ="{Binding Title}">
+             Title="{Binding Title}">
 
     <AbsoluteLayout>
         <ScrollView
-             AbsoluteLayout.LayoutBounds="0,0,1,1"
+            AbsoluteLayout.LayoutBounds="0,0,1,1"
             AbsoluteLayout.LayoutFlags="SizeProportional">
             <StackLayout>
-                <SearchBar x:Name="search" Placeholder="Buscar por Folio, Monto o Cliente" HorizontalTextAlignment="Center"
+
+                <SearchBar x:Name="search" Placeholder="Buscar Cliente" HorizontalTextAlignment="Center"
                        FontSize="Small">
                     <SearchBar.Behaviors>
                         <behaviors:EventToCommandBehavior EventName="TextChanged"
@@ -22,52 +23,43 @@
                     </SearchBar.Behaviors>
                 </SearchBar>
 
-                <CollectionView ItemsSource="{Binding ValesFiltered}" 
-                            x:Name="ValesCollectionView"
-                            IsVisible="{Binding ShowCollection}"
-                            Margin="5, 10, 5, 5" 
-                            EmptyView="Aun no se han registrado vales."
-                            SelectionMode="Single"
-                            SelectionChangedCommand="{Binding GoToValeCommand}"
-                            SelectionChangedCommandParameter="{Binding SelectedItem, 
-                                Source={x:Reference ValesCollectionView}}">
+                <CollectionView ItemsSource="{Binding ClientesFiltered}" 
+                            x:Name="ClientesCollectionView"
+                            Margin="5, 10, 5, 5"
+                            EmptyView="No hay resultados"
+                            SelectionMode="Single">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Frame IsClippedToBounds="True"
-                        OutlineColor="Black"
+                        OutlineColor="Purple"
                             HasShadow="False">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.2*"  />
-                                        <ColumnDefinition Width="0.2*" />
+                                        <ColumnDefinition Width="0.5*"  />
                                         <ColumnDefinition Width="0.5*" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="20" />
                                         <RowDefinition Height="20" />
-                                        <RowDefinition Height="40" />
                                     </Grid.RowDefinitions>
 
-                                    <Label Text="FOLIO" FontAttributes="Bold" />
-                                    <Label Grid.Column="1" Text="MONTO" FontAttributes="Bold" />
-                                    <Label Grid.Column="2" Text="CLIENTE" FontAttributes="Bold" />
+                                    <Label Text="NOMBRE" FontAttributes="Bold" />
+                                    <Label Grid.Column="1" Text="CORREO" FontAttributes="Bold" />
 
-                                    <Label Grid.Row="1" Text="{Binding NumeroFolio}" />
-                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding Monto , StringFormat='${0}'}" />
-                                    <Label Grid.Column="2" Grid.Row="1"  Text="{Binding Cliente.ClieDisplay}" />
-
+                                    <Label Grid.Row="1" Text="{Binding ClieDisplay }" />
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding Email}" />
                                 </Grid>
                             </Frame>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                 </CollectionView>
-            </StackLayout>
 
+            </StackLayout>
         </ScrollView>
-        
+
         <ImageButton
             AbsoluteLayout.LayoutBounds="0.95,0.95,50,50"
             AbsoluteLayout.LayoutFlags="PositionProportional"
@@ -90,6 +82,5 @@
                 	                   ViewBoxWidth="80"
                 	                   ViewBoxHeight="80"/>
     </AbsoluteLayout>
-    
-   
+  
 </ContentPage>

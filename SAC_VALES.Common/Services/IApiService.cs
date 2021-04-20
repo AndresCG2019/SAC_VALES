@@ -20,6 +20,7 @@ namespace SAC_VALES.Common.Services
         Task<Response> PostTalonera(string urlBase, string servicePrefix, string controller, CreateTaloneraRequest request);
         Task<Response> PostVale(string urlBase, string servicePrefix, string controller, CreateValeRequest request);
         Task<Response> GetClientsByDist(string urlBase, string servicePrefix, string controller, ClientesByDistRequest request);
+        Task<Response> RegisterClient(string urlBase, string servicePrefix, string controller, PostClieAsDistRequest userRequest);
         Task<bool> CheckConnectionAsync(string url);
 
     }

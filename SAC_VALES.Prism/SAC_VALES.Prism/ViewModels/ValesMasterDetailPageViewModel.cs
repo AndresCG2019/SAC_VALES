@@ -77,10 +77,17 @@ namespace SAC_VALES.Prism.ViewModels
                 },
                 new Menu
                 {
+                    Icon = "ic_people",
+                    PageName = "MisClientesPage",
+                    Title = "Mis Clientes"
+                },
+                new Menu
+                {
                     Icon = "ic_login",
                     PageName = "LoginPage",
                     Title = Settings.IsLogin ? "Logout" : "Login"
                 }
+
             };
 
             Menus = new ObservableCollection<MenuItemViewModel>(

@@ -228,6 +228,25 @@ namespace SAC_VALES.Web.Helpers
             return clientesResponse;
         }
 
+        public List<ClieResponse> ToClientsFromAllResponse(List<ClienteEntity> clientes)
+        {
+            if (clientes == null)
+            {
+                return null;
+            }
+
+            List<ClieResponse> clientesResponse = new List<ClieResponse>();
+
+            for (int i = 0; i < clientes.Count; i++)
+            {
+                clientesResponse.Add(ToClieResponse(clientes[i]));
+
+                Debug.WriteLine("LLEGUE");
+            }
+
+            return clientesResponse;
+        }
+
         public List<EmpresaResponse> ToEmpsResponse(List<EmpresaEntity> empresas)
         {
             if (empresas == null)

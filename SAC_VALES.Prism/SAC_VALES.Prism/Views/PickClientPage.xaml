@@ -52,8 +52,8 @@
                                     <Label Text="NOMBRE" FontAttributes="Bold" />
                                     <Label Grid.Column="1" Text="CORREO" FontAttributes="Bold" />
 
-                                    <Label Grid.Row="1" Text="{Binding Nombre }" />
-                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding Email}" />
+                                    <Label Grid.Row="1" Text="{Binding ClieDisplay }" />
+                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding ClieDisplay}" />
                                 </Grid>
                             </Frame>
                         </DataTemplate>

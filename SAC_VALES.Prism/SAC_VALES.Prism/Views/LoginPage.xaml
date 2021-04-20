@@ -34,7 +34,7 @@
                 <Label Grid.Column="0" 
                        Grid.Row="1"
                        HorizontalTextAlignment="End"
-                       Text="Contraseña"
+                       Text="Password"
                        VerticalOptions="Center"/>
                 <Entry Grid.Column="1"
                        Grid.Row="1"

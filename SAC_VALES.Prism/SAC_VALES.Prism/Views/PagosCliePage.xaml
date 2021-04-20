@@ -16,7 +16,7 @@
         <Label Text="{Binding Vale.Monto , StringFormat='${0}'}" Margin="5" />
 
         <Label Text="DISTRIBUIDOR" FontAttributes="Bold" Margin="5, 0, 0, 0" />
-        <Label Text="{Binding Vale.Dist.Email}" Margin="5, 0, 0, 0" />
+        <Label Text="{Binding Vale.Dist.DistDisplay}" Margin="5, 0, 0, 0" />
 
         <Label Text="TALONERA" FontAttributes="Bold" Margin="5, 0, 0, 0" />
         <Label Text="{Binding Vale.Talonera.Display}" Margin="5, 0, 0, 0" />

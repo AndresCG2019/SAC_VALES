@@ -151,6 +151,48 @@ namespace SAC_VALES.Web.Controllers.API
         }
 
         [HttpPost]
+        [Route("GetAllClients")]
+        public async Task<IActionResult> GetAllClients()
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var clientes = await _context.Cliente.ToListAsync();
+
+            return Ok(_converterHelper.ToClientsFromAllResponse(clientes));
+        }
+
+        [HttpPost]
+        [Route("GetClientesNoVinculados")]
+        public async Task<IActionResult> GetClientesNoVinculados([FromBody] ClientesByDistRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+
+            var dist = _context.Distribuidor.Where(d => d.id == request.DistId).FirstOrDefault();
+
+            if (dist == null)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = "El distribuidor especificado no existe."
+                });
+            }
+
+            var clientes = await _context.ClienteDistribuidor
+                .Include(item => item.Cliente)
+                .Where(cd => cd.DistribuidorId != dist.id)
+                .ToListAsync();
+
+            return Ok(_converterHelper.ToClientsResponse(clientes));
+        }
+
+        [HttpPost]
         [Route("VincularCliente")]
         public async Task<IActionResult> VincularCliente([FromBody] VincularClienteRequest request)
         {

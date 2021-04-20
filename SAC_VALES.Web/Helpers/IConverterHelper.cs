@@ -18,5 +18,6 @@ namespace SAC_VALES.Web.Helpers
         ClieResponse ToClientResponse(ClienteDistribuidor cliente);
         List<ClieResponse> ToClientsResponse(List<ClienteDistribuidor> clientes);
         List<PagoResponse> ToPagosResponse(List<PagoEntity> pagos, int ValeId);
+        List<ClieResponse> ToClientsFromAllResponse(List<ClienteEntity> clientes);
     }
 }

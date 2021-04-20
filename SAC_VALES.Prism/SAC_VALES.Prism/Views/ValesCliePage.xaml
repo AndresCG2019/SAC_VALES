@@ -64,7 +64,7 @@
 
                             <Label Grid.Row="1" Text="{Binding NumeroFolio}" />
                             <Label Grid.Column="1" Grid.Row="1" Text="{Binding Monto , StringFormat='${0}'}" />
-                            <Label Grid.Column="2" Grid.Row="1"  Text="{Binding Dist.Email}" />
+                            <Label Grid.Column="2" Grid.Row="1"  Text="{Binding Dist.DistDisplay}" />
 
                         </Grid>
                     </Frame>

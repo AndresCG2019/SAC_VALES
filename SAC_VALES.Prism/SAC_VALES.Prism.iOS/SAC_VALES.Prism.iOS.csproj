@@ -227,9 +227,6 @@
     <BundleResource Include="Resources\ic_local_taxi.png" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Resources\ic_people.png" />
-  </ItemGroup>
-  <ItemGroup>
     <BundleResource Include="Resources\ic_report.png" />
   </ItemGroup>
   <ItemGroup>
@@ -258,6 +255,9 @@
   </ItemGroup>
   <ItemGroup>
     <BundleResource Include="Resources\sac_splash.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\ic_people.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
 </Project>

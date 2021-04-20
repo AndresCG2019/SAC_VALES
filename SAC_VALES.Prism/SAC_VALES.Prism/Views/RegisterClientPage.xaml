@@ -1,0 +1,111 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:prism="http://prismlibrary.com"
+         	 xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
+             prism:ViewModelLocator.AutowireViewModel="True"
+             x:Class="SAC_VALES.Prism.Views.RegisterClientPage"
+             Title="{Binding Title}">
+    <AbsoluteLayout>
+        <StackLayout AbsoluteLayout.LayoutBounds="0,0,1,1"
+                     AbsoluteLayout.LayoutFlags="All"
+                     Padding="5">
+            <ScrollView>
+                <StackLayout>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Label Grid.Row="1"
+                               Grid.Column="0"
+                               Text="Nombre"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="1"
+                               Grid.Column="1"
+                               Text="{Binding NewUser.Nombre}"/>
+
+                        <Label Grid.Row="2"
+                               Grid.Column="0"
+                               Text="Apellido"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="2"
+                               Grid.Column="1"
+                               Text="{Binding NewUser.Apellidos}"/>
+
+                        <Label Grid.Row="3"
+                               Grid.Column="0"
+                               Text="Domicilio"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="3"
+                               Grid.Column="1"
+                               Text="{Binding NewUser.Direccion}"/>
+                        <Label Grid.Row="4"
+                               Grid.Column="0"
+                               Text="Email"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="4"
+                               Grid.Column="1"
+                               Keyboard="Email"
+                               Text="{Binding NewUser.Email}"/>
+
+                        <Label Grid.Row="5"
+                               Grid.Column="0"
+                               Text="Telefono"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="5" 
+                               Grid.Column="1"
+                               Keyboard="Telephone"
+                               Text="{Binding NewUser.Telefono}"/>
+
+                        <Label Grid.Row="6"
+                               Grid.Column="0"
+                               Text="Contraseña"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="6"
+                               Grid.Column="1"
+                               IsPassword="True"
+                               Placeholder="**********"
+                               Text="{Binding NewUser.Password}"/>
+
+                        <Label Grid.Row="7"
+                               Grid.Column="0"
+                               Text="Confirmar Contraseña"
+                               VerticalOptions="Center"/>
+                        <Entry Grid.Row="7"
+                               Grid.Column="1"
+                               IsPassword="True"
+                               Placeholder="**********"
+                               Text="{Binding NewUser.PasswordConfirm}"/>
+                    </Grid>
+                </StackLayout>
+            </ScrollView>
+            <Button Command="{Binding RegisterCommand}"
+                    IsEnabled="{Binding IsEnabled}"
+                    Text="Registrar"/>
+        </StackLayout>
+        <busyindicator:SfBusyIndicator AnimationType="Ball" 
+                                       AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
+                	                   AbsoluteLayout.LayoutFlags="All"
+                	                   BackgroundColor="{StaticResource ColorPrimary}"
+                	                   HorizontalOptions="Center"
+                	                   TextColor="{StaticResource ColorFontInverse}"
+                                       IsBusy="{Binding IsRunning}"
+                	                   Title="Cargando"
+                	                   VerticalOptions="Center"
+                	                   ViewBoxWidth="80"
+                	                   ViewBoxHeight="80" />
+    </AbsoluteLayout>
+</ContentPage>

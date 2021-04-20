@@ -58,7 +58,7 @@ else if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                 @Html.DisplayFor(modelItem => item.FechaCreacionLocal)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Monto)$
+                $@Html.DisplayFor(modelItem => item.Monto)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.NumeroFolio)

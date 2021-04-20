@@ -23,12 +23,12 @@ namespace SAC_VALES.Web.Data.Entities
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string ApellidosRepresentante { get; set; }
 
-        [Display(Name = "Telefono")]
+        [Display(Name = "Teléfono")]
         [MaxLength(50, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
         [Required(ErrorMessage = "El campo {0} es obligatorio.")]
         public string TelefonoRepresentante { get; set; }
 
-        [Display(Name = "Direccion")]
+        [Display(Name = "Dirección")]
         [MaxLength(100, ErrorMessage = "El campo {0} no puede tener mas de {1} caracteres.")]
         public string Direccion { get; set; }
 

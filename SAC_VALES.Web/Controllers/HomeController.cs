@@ -53,14 +53,21 @@ namespace SAC_VALES.Web.Controllers
                 data.NumFolios = taloneras[i].RangoFin - taloneras[i].RangoInicio;
                 data.FoliosOcupados = vales.Count;
                 data.FoliosDisponible = data.NumFolios - data.FoliosOcupados;
-                data.EmailEmpresa = taloneras[i].Empresa.Email + ": " +
+                data.EmailEmpresa = taloneras[i].Empresa.NombreEmpresa + ": " +
                     taloneras[i].RangoInicio + " - " + taloneras[i].RangoFin;
 
                 talonerasChartData.Add(data);
 
             }
 
-            return Json(talonerasChartData);
+            if (taloneras.Count == 0)
+            {
+                return View("TestView");
+            }
+            else 
+            {
+                return Json(talonerasChartData);
+            }
         }
 
         public async Task<IActionResult> getAdeudos()
@@ -85,7 +92,7 @@ namespace SAC_VALES.Web.Controllers
 
                 AdeudosClientesChartData data = new AdeudosClientesChartData();
                 data.AdeudoCliente = adeudos[i].Cantidad;
-                data.EmailCliente = adeudos[i].Vale.Cliente.Email + ": "+adeudos[i].Vale.Talonera.Empresa.Email +
+                data.EmailCliente = adeudos[i].Vale.Cliente.Nombre+" "+adeudos[i].Vale.Cliente.Apellidos + ": "+adeudos[i].Vale.Talonera.Empresa.NombreEmpresa +
                    " " + adeudos[i].Vale.Talonera.RangoInicio.ToString() +
                   "-" + adeudos[i].Vale.Talonera.RangoFin.ToString();
 
@@ -107,7 +114,14 @@ namespace SAC_VALES.Web.Controllers
             Debug.WriteLine("apara aqui");
 
 
-            return Json(AdeudosChartData);
+            if (adeudos.Count == 0)
+            {
+                return View("TestView");
+            }
+            else 
+            {
+                return Json(AdeudosChartData);
+            }
 
         }
 
@@ -193,16 +207,23 @@ namespace SAC_VALES.Web.Controllers
 
                 }*/
 
-
-                return View();
+                if (valesActivos.Count == 0 && valesFalsos.Count == 0 && pagosFalse.Count == 0 && pagosTrue.Count == 0)
+                {
+                    return View("TestView");
+                }
+                else 
+                {
+                    return View();
+                }
+                
             }
             else if (User.IsInRole("Cliente"))
             {
                 ViewBag.texto2 = "Dashboard del cliente";
-                return View();
+                return View("TestView");
             }
 
-            return View();
+            return View("TestView");
         }
 
     

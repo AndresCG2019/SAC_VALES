@@ -54,6 +54,7 @@ namespace SAC_VALES.Prism
             containerRegistry.RegisterForNavigation<CreateValePage, CreateValePageViewModel>();
             containerRegistry.RegisterForNavigation<MisClientesPage, MisClientesPageViewModel>();
             containerRegistry.RegisterForNavigation<RegisterClientPage, RegisterClientPageViewModel>();
+            containerRegistry.RegisterForNavigation<VincularClientesPage, VincularClientesPageViewModel>();
         }
     }
 }

@@ -14,7 +14,7 @@ using Xamarin.Forms;
 
 namespace SAC_VALES.Prism.ViewModels
 {
-    public class MisClientesPageViewModel : ViewModelBase
+    public class VincularClientesPageViewModel : ViewModelBase
     {
         private readonly INavigationService _navigationService;
         private readonly IApiService _apiService;
@@ -22,19 +22,20 @@ namespace SAC_VALES.Prism.ViewModels
         private List<ClieResponse> _clientesFiltered;
         private bool _isRunning;
         private UserResponse _user;
-        private DelegateCommand _addCommand;
+        private DelegateCommand<ClieResponse> _vincularClienteCommand;
 
-        public MisClientesPageViewModel(INavigationService navigationService, IApiService apiService) : base(navigationService)
+        public VincularClientesPageViewModel(INavigationService navigationService, IApiService apiService) 
+            : base(navigationService)
         {
-            Title = "Mis Clientes";
+            Title = "Vincular Cliente";
             _navigationService = navigationService;
             _apiService = apiService;
             LoadUser();
             LoadClientes();
         }
-
-        public DelegateCommand AddCommand => _addCommand ?? (_addCommand = new DelegateCommand(AddCliente));
         public ICommand searchCommand => new Command<string>(SearchClientes);
+        public DelegateCommand<ClieResponse> VincularClienteCommand => _vincularClienteCommand
+           ?? (_vincularClienteCommand = new DelegateCommand<ClieResponse>(VincularCliente));
 
         public bool IsRunning
         {
@@ -93,7 +94,7 @@ namespace SAC_VALES.Prism.ViewModels
             };
 
             Response response = await _apiService
-                .GetClientsByDist(url, "/api/ClienteEntities", "/GetClientesByDist", request);
+                .GetAllClients(url, "/api/ClienteEntities", "/GetAllClients");
 
             if (!response.IsSuccess)
             {
@@ -112,6 +113,60 @@ namespace SAC_VALES.Prism.ViewModels
             IsRunning = false;
         }
 
+        public async void VincularCliente(ClieResponse parameter)
+        {
+            bool answer = await App.Current.MainPage
+                .DisplayAlert("Vincular Cliente", "¿Deses vincularte a este cliente?", "Si", "No");
+            Debug.WriteLine("Answer: " + answer);
+
+            if (answer == true)
+            {
+                int id = parameter.id;
+
+                IsRunning = true;
+
+                string url = App.Current.Resources["UrlAPI"].ToString();
+
+                var connection = await _apiService.CheckConnectionAsync(url);
+                if (!connection)
+                {
+                    IsRunning = false;
+
+                    await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
+                    return;
+                }
+
+
+                VincularClienteRequest request = new VincularClienteRequest
+                {
+                    DistId = User.Dist.id,
+                    ClienteId = id
+                };
+
+                Response response = await _apiService
+                    .VincularCliente(url, "/api/ClienteEntities", "/VincularCliente", request);
+
+                if (!response.IsSuccess)
+                {
+                    IsRunning = false;
+
+                    await App.Current.MainPage
+                        .DisplayAlert("Error", "Algo ha salido mal. Probablemente usted ya esta vinculado a este cliente", "Aceptar");
+                    Debug.WriteLine("MENSAJE DE ERROR");
+                    Debug.WriteLine(response.Message);
+                    return;
+                }
+
+                await App.Current.MainPage.DisplayAlert("Éxito", "El cliente ha sido vinculado exitosamente", "Aceptar");
+
+                IsRunning = false;
+
+                await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/MisClientesPage");
+            }
+
+            LoadClientes();
+        }
+
         public void SearchClientes(string query)
         {
             List<ClieResponse> result = Clientes
@@ -120,26 +175,6 @@ namespace SAC_VALES.Prism.ViewModels
                 c.Email.ToLower().Contains(query.ToLower())).ToList();
 
             ClientesFiltered = result;
-        }
-
-        private async void AddCliente()
-        {
-            Debug.WriteLine("LLEGUE A ADD CLIENTE");
-            bool answer = await App.Current.MainPage
-               .DisplayAlert("Agregar Cliente", "¿Deseas Registrar un nuevo cliente o vincularte a uno existente?", 
-               "Registrar", "Vincular");
-            Debug.WriteLine("Answer: " + answer);
-
-            if (answer == true)
-            {
-                await _navigationService.NavigateAsync("RegisterClientPage");
-            }
-            else if(answer == false)
-            {
-                await _navigationService.NavigateAsync("VincularClientesPage");
-            }
-
-            return;
         }
     }
 }

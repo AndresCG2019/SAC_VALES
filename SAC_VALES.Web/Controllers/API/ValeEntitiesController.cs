@@ -125,22 +125,15 @@ namespace SAC_VALES.Web.Controllers.API
 
         // PUT: api/ValeEntities/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutValeEntity([FromRoute] int id, [FromBody] ValeEntity valeEntity)
+        public async Task<IActionResult> CancelarVale([FromRoute] int id)
         {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
+            ValeEntity vale = _context.Vale.Where(v => v.id == id).FirstOrDefault();
 
-            if (id != valeEntity.id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(valeEntity).State = EntityState.Modified;
+            vale.status_vale = "Inactivo";
 
             try
             {
+                _context.Update(vale);
                 await _context.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)

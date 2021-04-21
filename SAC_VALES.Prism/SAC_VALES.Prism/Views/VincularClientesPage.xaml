@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:prism="http://prismlibrary.com"
              prism:ViewModelLocator.AutowireViewModel="True"
-             x:Class="SAC_VALES.Prism.Views.MisClientesPage"
+             x:Class="SAC_VALES.Prism.Views.VincularClientesPage"
              xmlns:behaviors="clr-namespace:SAC_VALES.Prism.Behaviors"
              xmlns:busyindicator="clr-namespace:Syncfusion.SfBusyIndicator.XForms;assembly=Syncfusion.SfBusyIndicator.XForms"
              Title="{Binding Title}">
@@ -27,7 +27,10 @@
                             x:Name="ClientesCollectionView"
                             Margin="5, 10, 5, 5"
                             EmptyView="No hay resultados"
-                            SelectionMode="Single">
+                            SelectionMode="Single"
+                            SelectionChangedCommand="{Binding VincularClienteCommand}"
+                            SelectionChangedCommandParameter="{Binding SelectedItem, 
+                            Source={x:Reference ClientesCollectionView}}">
                     <CollectionView.ItemsLayout>
                         <GridItemsLayout Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
@@ -42,7 +45,7 @@
                                         <ColumnDefinition Width="0.6*" />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
-                                        <RowDefinition Height="20" />
+                                        <RowDefinition Height="40" />
                                         <RowDefinition Height="35" />
                                     </Grid.RowDefinitions>
 
@@ -59,17 +62,6 @@
 
             </StackLayout>
         </ScrollView>
-
-        <ImageButton
-            AbsoluteLayout.LayoutBounds="0.95,0.95,50,50"
-            AbsoluteLayout.LayoutFlags="PositionProportional"
-            BackgroundColor="Blue"
-            CornerRadius="50"
-            HeightRequest="20"
-            Source="ic_add.png"
-            WidthRequest="50"
-            Command="{Binding AddCommand}"/>
-
         <busyindicator:SfBusyIndicator AnimationType="Ball"
                                        AbsoluteLayout.LayoutBounds=".5,.5,.5,.5"
                 	                   AbsoluteLayout.LayoutFlags="All"
@@ -82,5 +74,5 @@
                 	                   ViewBoxWidth="80"
                 	                   ViewBoxHeight="80"/>
     </AbsoluteLayout>
-  
+
 </ContentPage>

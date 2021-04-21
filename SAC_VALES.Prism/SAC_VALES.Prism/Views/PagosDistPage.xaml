@@ -8,6 +8,14 @@
              x:Class="SAC_VALES.Prism.Views.PagosDistPage"
              Title="{Binding Title}">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Example Item"
+                 IconImageSource="ic_delete.png"
+                 Order="Primary"
+                 Priority="0" 
+                     Command="{Binding CancelarCommand}"/>
+    </ContentPage.ToolbarItems>
+
     <StackLayout>
         <Label Text="FOLIO" FontAttributes="Bold" Margin="5, 0, 0, 0" />
         <Label Text="{Binding Vale.NumeroFolio}" Margin="5, 0, 0, 0" />

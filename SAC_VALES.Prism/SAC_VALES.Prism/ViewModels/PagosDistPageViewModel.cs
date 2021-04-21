@@ -18,6 +18,7 @@ namespace SAC_VALES.Prism.ViewModels
         private ValeResponse _vale;
         private List<PagoResponse> _pagos;
         private DelegateCommand<object> _MarcarPagadoCommand;
+        private DelegateCommand _CancelarCommand;
         private readonly IApiService _apiService;
         private bool _isRunning;
         private bool _showCollection;
@@ -31,6 +32,9 @@ namespace SAC_VALES.Prism.ViewModels
 
         public DelegateCommand<object> MarcarPagadoCommand => _MarcarPagadoCommand
            ?? (_MarcarPagadoCommand = new DelegateCommand<object>(MarcarPagado));
+
+        public DelegateCommand CancelarCommand => _CancelarCommand
+           ?? (_CancelarCommand = new DelegateCommand(CancelarVale));
 
         public bool IsRunning
         {
@@ -171,6 +175,11 @@ namespace SAC_VALES.Prism.ViewModels
 
             IsRunning = false;
             ShowCollection = true;
+        }
+
+        public async void CancelarVale() 
+        {
+            await App.Current.MainPage.DisplayAlert("Error", "error", "Aceptar");
         }
     }
 }

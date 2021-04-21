@@ -103,7 +103,7 @@ namespace SAC_VALES.Web.Controllers
                   
                     // ----- Start   CODIGO DE EMAIL
                     string EmailDestino = model.Email;
-                    string EmailOrigen = "EvolSoftSoporte@gmail.com";
+                    string EmailOrigen = "sacvales2021soporte@gmail.com";
                     string Contraseña = "EvolSoft12345";
                     MailMessage oMailMessage = new MailMessage(EmailOrigen, EmailDestino, "Recuperación de contraseña",
                         "<p>Correo para recuperación de contraseña</p><br>" +

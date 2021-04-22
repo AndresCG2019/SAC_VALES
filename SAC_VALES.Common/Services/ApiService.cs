@@ -727,5 +727,43 @@ namespace SAC_VALES.Common.Services
                 };
             }
         }
+
+        async Task<Response> IApiService.CancelarVale(string urlBase, string servicePrefix, string controller)
+        {
+            try
+            {
+                StringContent content = new StringContent("" , Encoding.UTF8, "application/json");
+                HttpClient client = new HttpClient
+                {
+                    BaseAddress = new Uri(urlBase),
+                };
+
+                string url = $"{servicePrefix}{controller}";
+                HttpResponseMessage response = await client.PutAsync(url, content);
+                string result = await response.Content.ReadAsStringAsync();
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = result,
+                    };
+                }
+
+                return new Response
+                {
+                    IsSuccess = true,
+                };
+            }
+            catch (Exception ex)
+            {
+                return new Response
+                {
+                    IsSuccess = false,
+                    Message = ex.Message
+                };
+            }
+        }
     }
 }

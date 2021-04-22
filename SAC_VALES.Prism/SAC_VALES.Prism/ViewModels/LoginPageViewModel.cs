@@ -137,7 +137,6 @@ namespace SAC_VALES.Prism.ViewModels
 
         private async void RegisterAsync()
         {
-            Debug.WriteLine("LLEGUE A REGISTER ASYNC");
             await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/RegisterPage");
         }
     }

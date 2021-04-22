@@ -117,8 +117,6 @@ namespace SAC_VALES.Prism.ViewModels
                 return;
             }
 
-            Debug.WriteLine("ACABE");
-
             IsRunning = false;
 
             await App.Current.MainPage.DisplayAlert("Exito", "Se ha creado la talonera exitosamente", "Aceptar");
@@ -130,7 +128,6 @@ namespace SAC_VALES.Prism.ViewModels
         void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
         {
             Empresa = parameters.GetValue<EmpresaResponse>("Empresa");
-            Debug.WriteLine("LLEGUE NAVEGANDO"); 
         }
 
         void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)

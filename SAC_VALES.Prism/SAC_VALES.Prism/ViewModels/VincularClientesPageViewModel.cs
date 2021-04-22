@@ -66,15 +66,11 @@ namespace SAC_VALES.Prism.ViewModels
             if (Settings.IsLogin)
             {
                 User = JsonConvert.DeserializeObject<UserResponse>(Settings.User);
-                Debug.WriteLine("EL ID DEL DIST ES...");
-                Debug.WriteLine(User.Dist.id);
             }
         }
 
         private async void LoadClientes()
         {
-            Debug.WriteLine("LLEGUE A LOAD Clientes");
-
             IsRunning = true;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
@@ -101,8 +97,6 @@ namespace SAC_VALES.Prism.ViewModels
                 IsRunning = false;
 
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(response.Message);
                 return;
             }
 
@@ -117,7 +111,6 @@ namespace SAC_VALES.Prism.ViewModels
         {
             bool answer = await App.Current.MainPage
                 .DisplayAlert("Vincular Cliente", "¿Deses vincularte a este cliente?", "Si", "No");
-            Debug.WriteLine("Answer: " + answer);
 
             if (answer == true)
             {
@@ -152,8 +145,6 @@ namespace SAC_VALES.Prism.ViewModels
 
                     await App.Current.MainPage
                         .DisplayAlert("Error", "Algo ha salido mal. Probablemente usted ya esta vinculado a este cliente", "Aceptar");
-                    Debug.WriteLine("MENSAJE DE ERROR");
-                    Debug.WriteLine(response.Message);
                     return;
                 }
 

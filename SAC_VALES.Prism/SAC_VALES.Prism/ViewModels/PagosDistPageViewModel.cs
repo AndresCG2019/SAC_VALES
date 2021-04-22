@@ -20,6 +20,7 @@ namespace SAC_VALES.Prism.ViewModels
         private DelegateCommand<object> _MarcarPagadoCommand;
         private DelegateCommand _CancelarCommand;
         private readonly IApiService _apiService;
+        private readonly INavigationService _navigationService;
         private bool _isRunning;
         private bool _showCollection;
 
@@ -27,6 +28,7 @@ namespace SAC_VALES.Prism.ViewModels
         {
             Title = "Pagos";
             _apiService = apiService;
+            _navigationService = navigationService;
             ShowCollection = true;
         }
 
@@ -70,15 +72,10 @@ namespace SAC_VALES.Prism.ViewModels
 
             for (int i = 0; i < Vale.Pagos.Count; i++)
             {
-                Debug.WriteLine("HOLA ITERANDO PAGOS");
-                Debug.WriteLine(Vale.Pagos[i].id);
                 pagos.Add(Vale.Pagos[i]);
             }
 
             Pagos = pagos;
-
-
-            Debug.WriteLine("LLEGUE A NAVEGANDO");
         }
 
         void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)
@@ -88,13 +85,10 @@ namespace SAC_VALES.Prism.ViewModels
 
         public async void MarcarPagado(object parameter)
         {
-            Debug.WriteLine("LLEGUE A MARCAR PAGADO");
-
             string url = App.Current.Resources["UrlAPI"].ToString();
 
             bool answer = await App.Current.MainPage
                 .DisplayAlert("Marcar Pago", "¿Quieres cambiar el estado de este pago?", "Si", "No");
-            Debug.WriteLine("Answer: " + answer);
 
             if (answer == true)
             {
@@ -119,8 +113,6 @@ namespace SAC_VALES.Prism.ViewModels
                     ShowCollection = true;
 
                     await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                    Debug.WriteLine("MENSAJE DE ERROR");
-                    Debug.WriteLine(response.Message);
                     return;
                 }
 
@@ -137,8 +129,6 @@ namespace SAC_VALES.Prism.ViewModels
                     ShowCollection = true;
 
                     await App.Current.MainPage.DisplayAlert("Error", responsePagos.Message, "Aceptar");
-                    Debug.WriteLine("MENSAJE DE ERROR");
-                    Debug.WriteLine(responsePagos.Message);
                     return;
                 }
 
@@ -146,8 +136,6 @@ namespace SAC_VALES.Prism.ViewModels
 
                 IsRunning = false;
                 ShowCollection = true;
-
-                Debug.WriteLine("ACABE");
             }
 
             IsRunning = true;
@@ -166,8 +154,6 @@ namespace SAC_VALES.Prism.ViewModels
                 ShowCollection = true;
 
                 await App.Current.MainPage.DisplayAlert("Error", responsePagos2.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(responsePagos2.Message);
                 return;
             }
 
@@ -179,7 +165,44 @@ namespace SAC_VALES.Prism.ViewModels
 
         public async void CancelarVale() 
         {
-            await App.Current.MainPage.DisplayAlert("Error", "error", "Aceptar");
+            string url = App.Current.Resources["UrlAPI"].ToString();
+
+            bool answer = await App.Current.MainPage
+                .DisplayAlert("Cancelar Vale", "¿Deseas cancelar este vale?", "Si", "No");
+
+            if (answer == true)
+            {
+                IsRunning = true;
+                ShowCollection = false;
+
+                var connection = await _apiService.CheckConnectionAsync(url);
+                if (!connection)
+                {
+                    IsRunning = false;
+                    ShowCollection = true;
+
+                    await App.Current.MainPage.DisplayAlert("Error", "Compruebe la conexión a internet.", "Aceptar");
+                    return;
+                }
+
+                Response response = await _apiService.CancelarVale(url, "/api/ValeEntities", ("/") + Vale.id);
+
+                if (!response.IsSuccess)
+                {
+                    IsRunning = false;
+                    ShowCollection = true;
+
+                    await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
+                    return;
+                }
+
+                IsRunning = false;
+                ShowCollection = true;
+
+                await App.Current.MainPage.DisplayAlert("Exito", "Se ha cancelado el vale exitosamente", "Aceptar");
+
+                await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/ValesDistPage");
+            } 
         }
     }
 }

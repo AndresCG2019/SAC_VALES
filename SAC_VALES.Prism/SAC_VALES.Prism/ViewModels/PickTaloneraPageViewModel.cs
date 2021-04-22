@@ -82,15 +82,11 @@ namespace SAC_VALES.Prism.ViewModels
             if (Settings.IsLogin)
             {
                 User = JsonConvert.DeserializeObject<UserResponse>(Settings.User);
-                Debug.WriteLine("EL ID DEL DIST ES...");
-                Debug.WriteLine(User.Dist.id);
             }
         }
 
         private async void LoadTaloneras()
         {
-            Debug.WriteLine("LLEGUE A LOAD TALONERAS");
-
             IsRunning = true;
             ShowCollection = false;
 
@@ -120,8 +116,6 @@ namespace SAC_VALES.Prism.ViewModels
                 ShowCollection = true;
 
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(response.Message);
                 return;
             }
 
@@ -149,8 +143,6 @@ namespace SAC_VALES.Prism.ViewModels
             p.Add("Talonera", parameter);
             p.Add("Cliente", Cliente);
 
-            Debug.WriteLine("LLEGUE A IR A CREAR VALE");
-
             await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/CreateValePage", p);
         }
 
@@ -158,8 +150,6 @@ namespace SAC_VALES.Prism.ViewModels
         {
             Cliente = new ClieResponse();
             Cliente = parameters.GetValue<ClieResponse>("Cliente");
-
-            Debug.WriteLine("LLEGUE");
         }
 
         void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)

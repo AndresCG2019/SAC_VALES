@@ -107,7 +107,6 @@ namespace SAC_VALES.Prism.ViewModels
 
             if (!response.IsSuccess)
             {
-                Debug.WriteLine("LLEGUE AL ERROR");
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
                 return;
             }

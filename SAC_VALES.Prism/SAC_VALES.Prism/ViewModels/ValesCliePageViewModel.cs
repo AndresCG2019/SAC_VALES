@@ -85,15 +85,11 @@ namespace SAC_VALES.Prism.ViewModels
             if (Settings.IsLogin)
             {
                 User = JsonConvert.DeserializeObject<UserResponse>(Settings.User);
-                Debug.WriteLine("EL ID DEL CLIENTE ES...");
-                Debug.WriteLine(User.Clie.id);
             }
         }
 
         private async void LoadVales()
         {
-            Debug.WriteLine("LLEGUE A LOAD VALES");
-
             IsRunning = true;
             ShowCollection = false;
 
@@ -122,8 +118,6 @@ namespace SAC_VALES.Prism.ViewModels
                 ShowCollection = true;
 
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(response.Message);
                 return;
             }
 
@@ -132,14 +126,10 @@ namespace SAC_VALES.Prism.ViewModels
 
             for (int i = 0; i < Vales.Count; i++)
             {
-                Debug.WriteLine("HOLA");
                 for (int j = 0; j < Vales[i].Pagos.Count; j++)
                 {
-                    Debug.WriteLine("HOLA");
-                    Debug.WriteLine(Vales[i].Pagos[j].id);
                     Pagos.Add(Vales[i].Pagos[j]);
                 }
-                Debug.WriteLine("HOLA");
             }
 
             ValesFiltered = (List<ValeResponse>)response.Result;

@@ -23,6 +23,7 @@ namespace SAC_VALES.Common.Services
         Task<Response> RegisterClient(string urlBase, string servicePrefix, string controller, PostClieAsDistRequest userRequest);
         Task<Response> GetAllClients(string urlBase, string servicePrefix, string controller);
         Task<Response> VincularCliente(string urlBase, string servicePrefix, string controller, VincularClienteRequest request);
+        Task<Response> CancelarVale(string urlBase, string servicePrefix, string controller);
         Task<bool> CheckConnectionAsync(string url);
 
     }

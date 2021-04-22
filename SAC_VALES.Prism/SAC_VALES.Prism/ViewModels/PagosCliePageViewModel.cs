@@ -52,15 +52,10 @@ namespace SAC_VALES.Prism.ViewModels
 
             for (int i = 0; i < Vale.Pagos.Count; i++)
             {
-                Debug.WriteLine("HOLA ITERANDO PAGOS");
-                Debug.WriteLine(Vale.Pagos[i].id);
                 pagos.Add(Vale.Pagos[i]);
             }
 
             Pagos = pagos;
-
-
-            Debug.WriteLine("LLEGUE A NAVEGANDO");
         }
 
         void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)

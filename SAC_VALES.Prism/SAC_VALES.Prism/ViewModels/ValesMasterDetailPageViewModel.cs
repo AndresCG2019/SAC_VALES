@@ -27,18 +27,15 @@ namespace SAC_VALES.Prism.ViewModels
             {
                 if (User.UserType == UserType.Distribuidor)
                 {
-                    Debug.WriteLine("entre al if de menu dist");
                     LoadMenusDist();
                 }
                 else if (User.UserType == UserType.Cliente)
                 {
-                    Debug.WriteLine("entre al if de menu cliente");
                     LoadMenusCliente();
                 }
             }
             else 
             {
-                Debug.WriteLine("entre al if de menu no logeado");
                 LoadMenusLoggedOut();
             }
         }

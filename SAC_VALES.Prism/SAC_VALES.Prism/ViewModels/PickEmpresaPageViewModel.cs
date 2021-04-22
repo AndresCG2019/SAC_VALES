@@ -67,15 +67,11 @@ namespace SAC_VALES.Prism.ViewModels
             if (Settings.IsLogin)
             {
                 User = JsonConvert.DeserializeObject<UserResponse>(Settings.User);
-                Debug.WriteLine("EL ID DEL DIST ES...");
-                Debug.WriteLine(User.Dist.id);
             }
         }
 
         private async void LoadEmpresas() 
         {
-            Debug.WriteLine("LLEGUE A LOAD Empresas");
-
             IsRunning = true;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
@@ -101,8 +97,6 @@ namespace SAC_VALES.Prism.ViewModels
                 IsRunning = false;
 
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(response.Message);
                 return;
             }
 
@@ -126,8 +120,6 @@ namespace SAC_VALES.Prism.ViewModels
         {
             var p = new NavigationParameters();
             p.Add("Empresa", parameter);
-
-            Debug.WriteLine("LLEGUE A IR A CREAR TALONERA");
 
             await _navigationService.NavigateAsync("CreateTaloneraPage", p);
         }

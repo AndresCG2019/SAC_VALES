@@ -65,15 +65,11 @@ namespace SAC_VALES.Prism.ViewModels
             if (Settings.IsLogin)
             {
                 User = JsonConvert.DeserializeObject<UserResponse>(Settings.User);
-                Debug.WriteLine("EL ID DEL DIST ES...");
-                Debug.WriteLine(User.Dist.id);
             }
         }
 
         private async void LoadClientes()
         {
-            Debug.WriteLine("LLEGUE A LOAD Clientes");
-
             IsRunning = true;
 
             string url = App.Current.Resources["UrlAPI"].ToString();
@@ -100,8 +96,6 @@ namespace SAC_VALES.Prism.ViewModels
                 IsRunning = false;
 
                 await App.Current.MainPage.DisplayAlert("Error", response.Message, "Aceptar");
-                Debug.WriteLine("MENSAJE DE ERROR");
-                Debug.WriteLine(response.Message);
                 return;
             }
 
@@ -124,11 +118,9 @@ namespace SAC_VALES.Prism.ViewModels
 
         private async void AddCliente()
         {
-            Debug.WriteLine("LLEGUE A ADD CLIENTE");
             bool answer = await App.Current.MainPage
                .DisplayAlert("Agregar Cliente", "¿Deseas Registrar un nuevo cliente o vincularte a uno existente?", 
                "Registrar", "Vincular");
-            Debug.WriteLine("Answer: " + answer);
 
             if (answer == true)
             {

@@ -152,8 +152,6 @@ namespace SAC_VALES.Prism.ViewModels
 
         private async void AddVale()
         {
-            Debug.WriteLine("LLEGUE A ADD VALE");
-
             await _navigationService.NavigateAsync("PickClientPage");
         }
 

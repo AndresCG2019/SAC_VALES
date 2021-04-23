@@ -41,19 +41,16 @@
                             HasShadow="False">
                                 <Grid>
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="0.4*"  />
-                                        <ColumnDefinition Width="0.6*" />
+                                        <ColumnDefinition Width="*"  />
                                     </Grid.ColumnDefinitions>
                                     <Grid.RowDefinitions>
                                         <RowDefinition Height="40" />
-                                        <RowDefinition Height="35" />
                                     </Grid.RowDefinitions>
 
                                     <Label Text="NOMBRE" FontAttributes="Bold" />
-                                    <Label Grid.Column="1" Text="CORREO" FontAttributes="Bold" />
 
                                     <Label Grid.Row="1" Text="{Binding ClieDisplay }" />
-                                    <Label Grid.Column="1" Grid.Row="1" Text="{Binding Email}" />
+
                                 </Grid>
                             </Frame>
                         </DataTemplate>

@@ -8,18 +8,30 @@
     <h1>Dashboard</h1>
 </div>
 
-<div id="chart_div"></div>
+
+<div id="chart_div4"></div>
+
+<table class="default">
+
+    <tr>
+
+        <td><div id="chart_div"></div></td>
+
+        <td><div id="chart_div3"></div></td>
+
+    </tr>
+
+</table>
+
 <div id="chart_div2"></div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
     <script type="text/javascript">
-
-
         google.charts.load('current', { 'packages': ['corechart'] });
-
         $(document).ready(function () {
             $.ajax({
                 type: "POST",
@@ -33,11 +45,23 @@
                 }
             });
         });
-
-            google.charts.setOnLoadCallback(drawValesChart);
-
+        //GRÁFICA ADEUDOS
+         $(document).ready(function () {
+            $.ajax({
+                type: "POST",
+                dataType: "json",
+                contentType: "application/json",
+                url: '@Url.Action("getAdeudos", "Home")',
+                success: function (result) {
+                    google.charts.setOnLoadCallback(function () {
+                        drawAdeudos(result);
+                    });
+                }
+            });
+         });
+        //GRÁFICA DE VALES
+        google.charts.setOnLoadCallback(drawValesChart);
             function drawValesChart() {
-
                 var data = new google.visualization.DataTable();
                 data.addColumn('string', 'TipoVale');
                 data.addColumn('number', 'Cantidad');
@@ -45,48 +69,82 @@
                     ['Pagados', @ViewBag.valesActivos],
                     ['No pagados', @ViewBag.valesFalsos]
                 ]);
-
                 var options = {
                     'title': 'VALES',
-                    'width': 1000,
+                    'width': 600,
                     'height': 400
                 };
-
                 var chart = new google.visualization.PieChart(document.getElementById('chart_div'));
                 chart.draw(data, options);
         }
-
-        function drawChartTaloneras(result) {
-
+        //GRÁFICA DE PAGOS
+        google.charts.setOnLoadCallback(drawPagosChart);
+        function drawPagosChart() {
+                var data = new google.visualization.DataTable();
+                data.addColumn('string', 'TipoVale');
+                data.addColumn('number', 'Cantidad');
+                data.addRows([
+                    ['Pendientes', @ViewBag.pagosfalse],
+                    ['No pendientes', @ViewBag.pagostrue]
+                ]);
+                var options = {
+                    'title': 'PAGOS',
+                    'width': 600,
+                    'height': 400
+                };
+                var chart = new google.visualization.PieChart(document.getElementById('chart_div3'));
+            chart.draw(data, options);
+        }
+        // GRÁFICA DE ADEUDOS
+        function drawAdeudos(result) {
+            console.log("fijate aqui jaja");
             console.log(result);
             var data = new google.visualization.DataTable();
-            
+
+            data.addColumn('string', 'display');
+            //data.addColumn('number', '');
+            data.addColumn('number', 'Adeudo de $');
+
+            var dataArray = [];
+            $.each(result, function (i, obj) {
+                dataArray.push([obj.emailCliente, obj.adeudoCliente]);
+            });
+            data.addRows(dataArray);
+            console.log(dataArray);
+            console.log(data)
+            var columnChartOptions = {
+                title: "Adeudos de mis clientes",
+                width: 1000,
+                height: 400,
+                bar: { groupWidth: "20%" },
+            };
+            var columnChart = new google.visualization.ColumnChart(document
+                .getElementById('chart_div4'));
+            columnChart.draw(data, columnChartOptions);
+        }
+        //GRÁFICA DE TALONERAS
+        function drawChartTaloneras(result) {
+            console.log(result);
+            var data = new google.visualization.DataTable();
             data.addColumn('string', 'display');
             data.addColumn('number', 'Folios Disponibles');
             data.addColumn('number', 'Folios no Disponibles');
-
             var dataArray = [];
-
             $.each(result, function (i, obj) {
                 dataArray.push([ obj.emailEmpresa ,obj.foliosDisponible, obj.foliosOcupados]);
             });
             data.addRows(dataArray);
-
             console.log(dataArray);
             console.log(data)
-
             var columnChartOptions = {
                 title: "Disponibilidad de Taloneras",
                 width: 1000,
                 height: 400,
                 bar: { groupWidth: "20%" },
             };
-
             var columnChart = new google.visualization.ColumnChart(document
                 .getElementById('chart_div2'));
-
             columnChart.draw(data, columnChartOptions);
         }
-
     </script>
 }

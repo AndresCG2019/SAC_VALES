@@ -53,14 +53,76 @@ namespace SAC_VALES.Web.Controllers
                 data.NumFolios = taloneras[i].RangoFin - taloneras[i].RangoInicio;
                 data.FoliosOcupados = vales.Count;
                 data.FoliosDisponible = data.NumFolios - data.FoliosOcupados;
-                data.EmailEmpresa = taloneras[i].Empresa.Email + ": " + 
+                data.EmailEmpresa = taloneras[i].Empresa.NombreEmpresa + ": " + 
                     taloneras[i].RangoInicio + " - " + taloneras[i].RangoFin;
 
                 talonerasChartData.Add(data);
 
             }
 
-            return Json(talonerasChartData);
+            if (taloneras.Count == 0)
+            {
+                return View("TestView");
+            }
+            else
+            {
+                return Json(talonerasChartData);
+            }
+        }
+
+        public async Task<IActionResult> getAdeudos()
+        {
+            //OBTENER USUARIO LOGUEADO
+            DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+            List<AdeudosClientesChartData> AdeudosChartData = new List<AdeudosClientesChartData>();
+
+
+            //Obtener adeudos
+            List<PagoEntity> adeudos = _context.Pago
+                .Include(p => p.Vale.Cliente)
+                .Include(p => p.Vale.Talonera)
+                .Include(p => p.Vale.Talonera.Empresa)
+                .Where(p => p.Distribuidor.id == distribuidor.id && p.Pagado == false)
+                .ToList();
+
+
+            for (int i = 0; i < adeudos.Count; i++)
+            {
+
+                AdeudosClientesChartData data = new AdeudosClientesChartData();
+                data.AdeudoCliente = adeudos[i].Cantidad;
+                data.EmailCliente = adeudos[i].Vale.Cliente.Nombre + " " + adeudos[i].Vale.Cliente.Apellidos + ": " + adeudos[i].Vale.Talonera.Empresa.NombreEmpresa +
+                   " " + adeudos[i].Vale.Talonera.RangoInicio.ToString() +
+                  "-" + adeudos[i].Vale.Talonera.RangoFin.ToString();
+
+
+
+
+                AdeudosChartData.Add(data);
+            }
+
+
+            //obtener correos
+            List<ClienteDistribuidor> clienteDistribuidor = await _context.ClienteDistribuidor
+                    .Include(item => item.Cliente)
+                    .Where(cd => cd.DistribuidorId == distribuidor.id)
+                    .ToListAsync();
+
+
+
+            Debug.WriteLine("apara aqui");
+
+
+            if (adeudos.Count == 0)
+            {
+                return View("TestView");
+            }
+            else
+            {
+                return Json(AdeudosChartData);
+            }
+
         }
         public IActionResult About()
         {
@@ -90,26 +152,70 @@ namespace SAC_VALES.Web.Controllers
         }
         public async Task<IActionResult> Index(int? id)
         {
-
-           if (User.IsInRole("Distribuidor"))
+            if (User.IsInRole("Distribuidor"))
             {
-                
+
                 // DATOS PARA LA GRAFICA DE VALES ACTIVOS E INACTIVOS
-                
+
                 List<ValeEntity> valesActivos = await _context.Vale
-                   .Where(v => v.Pagado == true)
+                   .Where(v => v.Pagado == true && v.Distribuidor.Email == User.Identity.Name)
                    .ToListAsync();
 
-                
+
                 List<ValeEntity> valesFalsos = await _context.Vale
-                  .Where(v => v.Pagado == false)
+                  .Where(v => v.Pagado == false && v.Distribuidor.Email == User.Identity.Name)
                   .ToListAsync();
 
                 ViewBag.valesActivos = valesActivos.Count;
                 ViewBag.valesFalsos = valesFalsos.Count;
-                ViewBag.texto1 = "Dashboard del distribuidor";
 
-                return View();
+
+                // DATOS PARA PAGOS GRAFICA...
+
+                //DistribuidorEntity distribuidor1 = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+
+                List<PagoEntity> pagosTrue = await _context.Pago
+                    .Include(p => p.Distribuidor)
+                   .Where(p => p.Pagado == true && p.Distribuidor.Email == User.Identity.Name)
+                   .ToListAsync();
+                List<PagoEntity> pagosFalse = await _context.Pago
+                  .Where(p => p.Pagado == false && p.Distribuidor.Email == User.Identity.Name)
+                  .ToListAsync();
+
+
+                ViewBag.pagostrue = pagosTrue.Count;
+                ViewBag.pagosfalse = pagosFalse.Count;
+
+
+
+                //Gráfica de adeudos
+
+                /*DistribuidorEntity distribuidor = _context.Distribuidor.Where(d => d.Email == User.Identity.Name).FirstOrDefault();
+                List<PagoEntity> adeudosClienteDistribuidor = await _context.Pago
+                    .Where(p => p.Pagado == false)
+                    .ToListAsync();
+                var adeudos = adeudosClienteDistribuidor[0].Cantidad;
+                
+                for (int i = 0; i < adeudosClienteDistribuidor.Count; i++)
+                {
+                    adeudos = adeudosClienteDistribuidor[i].Cantidad;
+                    Debug.WriteLine("adeudos: " + adeudos);
+                }*/
+
+                if (valesActivos.Count == 0 && valesFalsos.Count == 0 && pagosFalse.Count == 0 && pagosTrue.Count == 0)
+                {
+                    return View("TestView");
+                }
+                else
+                {
+                    return View();
+                }
+
+            }
+            else if (User.IsInRole("Cliente"))
+            {
+                ViewBag.texto2 = "Dashboard del cliente";
+                return View("TestView");
             }
 
             return View("TestView");

@@ -295,7 +295,8 @@ namespace SAC_VALES.Web.Controllers.API
                 {
                     Cantidad = division,
                     FechaLimite = Fecha,
-                    Vale = valeInsert
+                    Vale = valeInsert,
+                    Distribuidor = dist
 
                 });
                 //ENERO

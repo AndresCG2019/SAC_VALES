@@ -3,7 +3,8 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - SAC_VALES.Web</title>
+
+    <title>@ViewData["Title"] SAC Vales</title>
 
     <environment include="Development">
         <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
@@ -16,7 +17,10 @@
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
     </environment>
 </head>
+
+
 <body>
+
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -26,13 +30,17 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">SAC_VALES.Web</a>
+                <img src="/images/sacLogoMenu.png" alt="Avatar" width="60" height="60" />
+
+                <!--<a asp-area="" asp-controller="Home" asp-action="Index" class="navbar-brand">SAC_VALES.Web</a>-->
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
+                    <li><a asp-controller="Home" asp-action="Index">SAC Vales</a></li>
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
+
                         <li><a asp-controller="Account" asp-action="Register">Registrar nuevo Usuario</a></li>
                         <li><a asp-controller="Administradores" asp-action="Index">Ver Administradores</a></li>
                         <li><a asp-controller="Empresas" asp-action="Index">Ver Empresas</a></li>
@@ -79,7 +87,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; 2021 - SAC_VALES.Web</p>
+            <p>SAC Vales</p>
         </footer>
     </div>
 

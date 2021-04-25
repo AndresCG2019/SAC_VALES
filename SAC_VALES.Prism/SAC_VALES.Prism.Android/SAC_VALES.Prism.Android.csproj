@@ -98,6 +98,10 @@
     <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SAC_VALES_TEST\SAC_VALES.Common\SAC_VALES.Common.csproj">
+      <Project>{3abe6d7d-5deb-4670-ac1e-44a15805557b}</Project>
+      <Name>SAC_VALES.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SAC_VALES.Prism\SAC_VALES.Prism.csproj">
       <Project>{A682884C-CB44-4A89-B752-27BB634E0ABE}</Project>
       <Name>SAC_VALES.Prism</Name>

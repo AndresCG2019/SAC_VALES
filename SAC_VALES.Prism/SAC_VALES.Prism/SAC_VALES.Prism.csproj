@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\SAC_VALES_TEST\SAC_VALES.Common\SAC_VALES.Common.csproj" />
     <ProjectReference Include="..\..\SAC_VALES.Common\SAC_VALES.Common.csproj" />
   </ItemGroup>
 

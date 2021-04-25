@@ -64,7 +64,7 @@
 
                         <Label Grid.Row="5"
                                Grid.Column="0"
-                               Text="Telefono"
+                               Text="Teléfono"
                                VerticalOptions="Center"/>
                         <Entry Grid.Row="5" 
                                Grid.Column="1"

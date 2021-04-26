@@ -83,7 +83,7 @@ namespace SAC_VALES.Web.Controllers
                 .Include(p => p.Vale.Cliente)
                 .Include(p => p.Vale.Talonera)
                 .Include(p => p.Vale.Talonera.Empresa)
-                .Where(p => p.Distribuidor.id == distribuidor.id && p.Pagado == false)
+                .Where(p => p.Distribuidor.id == distribuidor.id && p.Pagado == false & p.Vale.status_vale == "Activo")
                 .ToList();
 
 

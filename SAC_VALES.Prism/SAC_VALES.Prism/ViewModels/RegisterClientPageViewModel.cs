@@ -103,7 +103,7 @@ namespace SAC_VALES.Prism.ViewModels
                 return;
             }
 
-            await App.Current.MainPage.DisplayAlert("Éxito", "El cliente se registro exitosamente,", "Aceptar");
+            await App.Current.MainPage.DisplayAlert("Éxito", "El cliente se registro exitosamente", "Aceptar");
             await _navigationService.NavigateAsync("/ValesMasterDetailPage/NavigationPage/MisClientesPage");
         }
 
